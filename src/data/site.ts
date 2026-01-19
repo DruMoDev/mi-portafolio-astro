@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
   author: {
     realName: 'Roger Morera',
     displayName: 'Dru',
-    email: 'dev.morera@gmail.com',
+    email: 'contacto@drumorera.com',
     avatar: '/images/profile.jpg',
   },
   social: [
@@ -22,7 +22,7 @@ export const siteConfig: SiteConfig = {
     },
     {
       platform: 'email',
-      url: 'mailto:dev.morera@gmail.com',
+      url: 'mailto:contacto@drumorera.com',
       label: 'Email',
     },
   ],

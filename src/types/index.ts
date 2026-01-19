@@ -101,6 +101,18 @@ export interface Translations {
     subtitle: string;
     cta: string;
     email: string;
+    form: {
+      name: string;
+      namePlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
+      message: string;
+      messagePlaceholder: string;
+      send: string;
+      sending: string;
+      success: string;
+      error: string;
+    };
   };
   footer: {
     rights: string;

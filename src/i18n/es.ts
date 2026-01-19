@@ -37,6 +37,18 @@ export const es: Translations = {
     subtitle: '¿Tienes un proyecto en mente? ¡Hablemos!',
     cta: 'Envíame un mensaje',
     email: 'O escríbeme directamente a',
+    form: {
+      name: 'Nombre',
+      namePlaceholder: 'Tu nombre',
+      email: 'Email',
+      emailPlaceholder: 'tu@email.com',
+      message: 'Mensaje',
+      messagePlaceholder: 'Cuéntame sobre tu proyecto...',
+      send: 'Enviar mensaje',
+      sending: 'Enviando...',
+      success: '¡Mensaje enviado! Te responderé pronto.',
+      error: 'Error al enviar. Intenta de nuevo.',
+    },
   },
   footer: {
     rights: 'Todos los derechos reservados.',

@@ -37,6 +37,18 @@ export const en: Translations = {
     subtitle: "Have a project in mind? Let's talk!",
     cta: 'Send me a message',
     email: 'Or email me directly at',
+    form: {
+      name: 'Name',
+      namePlaceholder: 'Your name',
+      email: 'Email',
+      emailPlaceholder: 'you@email.com',
+      message: 'Message',
+      messagePlaceholder: 'Tell me about your project...',
+      send: 'Send message',
+      sending: 'Sending...',
+      success: 'Message sent! I will reply soon.',
+      error: 'Error sending. Please try again.',
+    },
   },
   footer: {
     rights: 'All rights reserved.',
