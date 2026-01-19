@@ -1,0 +1,52 @@
+---
+import SectionTitle from '../ui/SectionTitle.astro';
+import SkillCard from '../SkillCard.astro';
+import { getTranslations } from '../../i18n';
+import { resumeData, skillCategories } from '../../data/resume';
+import type { Locale, SkillCategory } from '../../types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const categories = skillCategories[locale];
+
+// Group skills by category
+const groupedSkills = resumeData.skills.reduce((acc, skill) => {
+  if (!acc[skill.category]) {
+    acc[skill.category] = [];
+  }
+  acc[skill.category].push(skill);
+  return acc;
+}, {} as Record<SkillCategory, typeof resumeData.skills>);
+
+const categoryOrder: SkillCategory[] = ['frontend', 'backend', 'database', 'devops', 'tools'];
+---
+
+<section id="stack" class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50">
+  <div class="max-w-6xl mx-auto">
+    <SectionTitle title={t.stack.title} subtitle={t.stack.subtitle} />
+
+    <div class="space-y-10">
+      {categoryOrder.map((category) => {
+        const skills = groupedSkills[category];
+        if (!skills || skills.length === 0) return null;
+
+        return (
+          <div>
+            <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
+              {categories[category]}
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {skills.map((skill) => (
+                <SkillCard skill={skill} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

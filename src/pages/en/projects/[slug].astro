@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from 'astro:content';
+import { ArrowLeft, ExternalLink, Github } from '@lucide/astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Badge from '../../../components/ui/Badge.astro';
+import Button from '../../../components/ui/Button.astro';
+import { getTranslations } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const locale = 'en';
+const t = getTranslations(locale);
+
+const { data } = project;
+const title = data.title[locale];
+const description = data.description[locale];
+---
+
+<BaseLayout
+  locale={locale}
+  seo={{
+    title,
+    description,
+    image: data.thumbnail,
+  }}
+>
+  <article class="pt-24 pb-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Back button -->
+      <a
+        href={`/${locale}#portfolio`}
+        class="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8"
+      >
+        <ArrowLeft class="w-4 h-4" />
+        {t.project.backToProjects}
+      </a>
+
+      <!-- Header -->
+      <header class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+          {title}
+        </h1>
+        <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
+          {description}
+        </p>
+
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          {data.tags.map((tag) => (
+            <Badge variant="secondary">{tag}</Badge>
+          ))}
+        </div>
+
+        <!-- Links -->
+        <div class="flex flex-wrap gap-3">
+          {data.liveUrl && (
+            <Button href={data.liveUrl} variant="primary" class="gap-2">
+              <ExternalLink class="w-4 h-4" />
+              {t.project.viewDemo}
+            </Button>
+          )}
+          {data.repoUrl && (
+            <Button href={data.repoUrl} variant="outline" class="gap-2">
+              <Github class="w-4 h-4" />
+              {t.project.viewCode}
+            </Button>
+          )}
+        </div>
+      </header>
+
+      <!-- Thumbnail -->
+      <div class="mb-10 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800">
+        <img
+          src={data.thumbnail}
+          alt={data.thumbnailAlt[locale]}
+          class="w-full h-auto"
+        />
+      </div>
+
+      <!-- Tech Stack -->
+      <section class="mb-10">
+        <h2 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
+          {t.project.techStack}
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {data.stack.map((tech) => (
+            <Badge>{tech}</Badge>
+          ))}
+        </div>
+      </section>
+
+      <!-- Content -->
+      <section class="prose prose-zinc dark:prose-invert max-w-none">
+        <Content />
+      </section>
+    </div>
+  </article>
+</BaseLayout>

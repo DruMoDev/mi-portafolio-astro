@@ -1,0 +1,63 @@
+---
+import { Mail, Send } from '@lucide/astro';
+import Button from '../ui/Button.astro';
+import SocialLinks from '../SocialLinks.astro';
+import { getTranslations } from '../../i18n';
+import { siteConfig } from '../../data/site';
+import type { Locale } from '../../types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+---
+
+<section id="contact" class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50">
+  <div class="max-w-2xl mx-auto text-center">
+    <!-- Icon -->
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 mb-6">
+      <Mail class="w-8 h-8" />
+    </div>
+
+    <!-- Title -->
+    <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+      {t.contact.title}
+    </h2>
+
+    <!-- Subtitle -->
+    <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-8 max-w-lg mx-auto">
+      {t.contact.subtitle}
+    </p>
+
+    <!-- CTA Button -->
+    <div class="mb-8">
+      <Button
+        href={`mailto:${siteConfig.author.email}`}
+        variant="primary"
+        size="lg"
+        class="gap-2"
+      >
+        <Send class="w-5 h-5" />
+        {t.contact.cta}
+      </Button>
+    </div>
+
+    <!-- Email display -->
+    <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+      {t.contact.email}
+      <a
+        href={`mailto:${siteConfig.author.email}`}
+        class="font-medium text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+      >
+        {siteConfig.author.email}
+      </a>
+    </p>
+
+    <!-- Social Links -->
+    <div class="flex justify-center">
+      <SocialLinks size="md" />
+    </div>
+  </div>
+</section>

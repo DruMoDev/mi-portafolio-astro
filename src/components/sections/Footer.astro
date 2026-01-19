@@ -1,0 +1,40 @@
+---
+import { Heart } from '@lucide/astro';
+import { getTranslations } from '../../i18n';
+import { siteConfig } from '../../data/site';
+import type { Locale } from '../../types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="py-8 px-4 border-t border-zinc-200 dark:border-zinc-800">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <!-- Copyright -->
+      <p class="text-sm text-zinc-600 dark:text-zinc-400">
+        &copy; {currentYear} {siteConfig.author.displayName}. {t.footer.rights}
+      </p>
+
+      <!-- Built with -->
+      <p class="flex items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+        {t.footer.builtWith}
+        <Heart class="w-4 h-4 text-red-500 fill-red-500" />
+        &
+        <a
+          href="https://astro.build"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+        >
+          Astro
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

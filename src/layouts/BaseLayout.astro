@@ -1,0 +1,42 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Head from '../components/Head.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/sections/Footer.astro';
+import '../styles/global.css';
+import type { SEOProps, Locale } from '../types';
+
+interface Props {
+  seo?: SEOProps;
+  locale: Locale;
+}
+
+const { seo = {}, locale } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale} class="scroll-smooth">
+  <head>
+    <Head {...seo} locale={locale} />
+    <ViewTransitions />
+  </head>
+  <body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+    <Navigation locale={locale} />
+    <main>
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <script is:inline>
+      // Dark mode initialization (runs before render to prevent flash)
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+  </body>
+</html>

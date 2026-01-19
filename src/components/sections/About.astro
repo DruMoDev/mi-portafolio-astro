@@ -1,0 +1,66 @@
+---
+import SectionTitle from '../ui/SectionTitle.astro';
+import { getTranslations } from '../../i18n';
+import { siteConfig } from '../../data/site';
+import type { Locale } from '../../types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+---
+
+<section id="about" class="py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+    <SectionTitle title={t.about.title} subtitle={t.about.subtitle} />
+
+    <div class="grid md:grid-cols-5 gap-8 items-center">
+      <!-- Profile placeholder (left side on desktop) -->
+      <div class="md:col-span-2 flex justify-center">
+        <div class="relative">
+          <div class="w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 p-1">
+            <div class="w-full h-full rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-6xl font-bold text-zinc-300 dark:text-zinc-700">
+              {siteConfig.author.displayName.charAt(0)}
+            </div>
+          </div>
+          <!-- Decorative elements -->
+          <div class="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-60"></div>
+          <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-purple-500 rounded-full opacity-60"></div>
+        </div>
+      </div>
+
+      <!-- Bio text (right side on desktop) -->
+      <div class="md:col-span-3">
+        <div class="prose prose-zinc dark:prose-invert max-w-none">
+          <p class="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            {t.about.bio}
+          </p>
+        </div>
+
+        <!-- Quick stats/highlights -->
+        <div class="grid grid-cols-3 gap-4 mt-8">
+          <div class="text-center p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">2+</p>
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              {locale === 'es' ? 'Años exp.' : 'Years exp.'}
+            </p>
+          </div>
+          <div class="text-center p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">3</p>
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              {locale === 'es' ? 'Empresas' : 'Companies'}
+            </p>
+          </div>
+          <div class="text-center p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+            <p class="text-2xl font-bold text-green-600 dark:text-green-400">25+</p>
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              {locale === 'es' ? 'Tecnologías' : 'Technologies'}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import SectionTitle from '../ui/SectionTitle.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { getTranslations } from '../../i18n';
+import type { Locale } from '../../types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+
+// Get all non-draft projects
+const projects = await getCollection('projects', ({ data }) => !data.draft);
+
+// Sort: featured first, then by order, then by date
+const sortedProjects = projects.sort((a, b) => {
+  if (a.data.featured !== b.data.featured) {
+    return b.data.featured ? 1 : -1;
+  }
+  if (a.data.order !== b.data.order) {
+    return a.data.order - b.data.order;
+  }
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+---
+
+<section id="portfolio" class="py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    <SectionTitle title={t.portfolio.title} subtitle={t.portfolio.subtitle} />
+
+    {sortedProjects.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedProjects.map((project) => (
+          <ProjectCard project={project} locale={locale} />
+        ))}
+      </div>
+    ) : (
+      <p class="text-center text-zinc-500 dark:text-zinc-400">
+        {locale === 'es' ? 'No hay proyectos disponibles.' : 'No projects available.'}
+      </p>
+    )}
+  </div>
+</section>

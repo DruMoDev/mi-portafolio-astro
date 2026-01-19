@@ -1,0 +1,20 @@
+---
+import * as Icons from '@lucide/astro';
+import type { Skill } from '../types';
+
+interface Props {
+  skill: Skill;
+}
+
+const { skill } = Astro.props;
+
+// Dynamically get the icon component
+const IconComponent = (Icons as Record<string, unknown>)[skill.icon] as typeof Icons.Code || Icons.Code;
+---
+
+<div class="flex flex-col items-center gap-2 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group">
+  <div class="p-2 rounded-lg bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+    <IconComponent class="w-6 h-6" />
+  </div>
+  <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{skill.name}</span>
+</div>

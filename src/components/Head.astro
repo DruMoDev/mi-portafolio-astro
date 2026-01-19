@@ -1,0 +1,84 @@
+---
+import { siteConfig } from '../data/site';
+import type { SEOProps, Locale } from '../types';
+
+interface Props extends SEOProps {
+  locale: Locale;
+}
+
+const {
+  title,
+  description,
+  image = '/og-image.png',
+  canonicalUrl = Astro.url.href,
+  type = 'website',
+  locale = 'es',
+} = Astro.props;
+
+const defaultTitle = locale === 'es'
+  ? `${siteConfig.author.displayName} | Full Stack Developer`
+  : `${siteConfig.author.displayName} | Full Stack Developer`;
+
+const defaultDescription = locale === 'es'
+  ? `Portfolio de ${siteConfig.author.displayName} (${siteConfig.author.realName}), desarrollador Full Stack especializado en crear experiencias web modernas y escalables.`
+  : `Portfolio of ${siteConfig.author.displayName} (${siteConfig.author.realName}), Full Stack Developer specialized in building modern and scalable web experiences.`;
+
+const finalTitle = title ?? defaultTitle;
+const finalDescription = description ?? defaultDescription;
+const absoluteImage = new URL(image, siteConfig.url).href;
+const langCode = locale === 'es' ? 'es-ES' : 'en-US';
+const alternateLocale = locale === 'es' ? 'en' : 'es';
+const alternateLangCode = alternateLocale === 'es' ? 'es-ES' : 'en-US';
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Primary Meta Tags -->
+<title>{finalTitle}</title>
+<meta name="title" content={finalTitle} />
+<meta name="description" content={finalDescription} />
+<meta name="author" content={siteConfig.author.realName} />
+
+<!-- Canonical & Language Alternates -->
+<link rel="canonical" href={canonicalUrl} />
+<link rel="alternate" hreflang={langCode} href={canonicalUrl} />
+<link rel="alternate" hreflang={alternateLangCode} href={canonicalUrl.replace(`/${locale}/`, `/${alternateLocale}/`)} />
+<link rel="alternate" hreflang="x-default" href={siteConfig.url} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={finalTitle} />
+<meta property="og:description" content={finalDescription} />
+<meta property="og:image" content={absoluteImage} />
+<meta property="og:site_name" content={siteConfig.name} />
+<meta property="og:locale" content={langCode} />
+<meta property="og:locale:alternate" content={alternateLangCode} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={finalTitle} />
+<meta name="twitter:description" content={finalDescription} />
+<meta name="twitter:image" content={absoluteImage} />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": siteConfig.author.realName,
+  "alternateName": siteConfig.author.displayName,
+  "description": finalDescription,
+  "url": siteConfig.url,
+  "jobTitle": "Full Stack Developer",
+  "sameAs": siteConfig.social.map(s => s.url).filter(u => !u.startsWith('mailto:')),
+})} />
