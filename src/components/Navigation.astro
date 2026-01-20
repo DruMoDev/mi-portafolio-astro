@@ -20,9 +20,8 @@ const navItems = [
   { label: t.nav.contact, href: '#contact' },
 ];
 
-// Get current path without locale prefix
-const currentPath = Astro.url.pathname.replace(`/${locale}`, '') || '/';
-const alternatePath = getLocalePath(alternateLocale, currentPath === '/' ? '' : currentPath);
+// Get alternate language path (ES has no prefix, EN has /en prefix)
+const alternatePath = locale === 'es' ? '/en' : '/';
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800">

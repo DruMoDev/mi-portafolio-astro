@@ -1,10 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import { ArrowLeft, ExternalLink, Github } from '@lucide/astro';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Badge from '../../../components/ui/Badge.astro';
-import Button from '../../../components/ui/Button.astro';
-import { getTranslations } from '../../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Button from '../../components/ui/Button.astro';
+import { getTranslations } from '../../i18n';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -36,7 +36,7 @@ const description = data.description[locale];
     <div class="max-w-4xl mx-auto">
       <!-- Back button -->
       <a
-        href={`/${locale}#portfolio`}
+        href="/#portfolio"
         class="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8"
       >
         <ArrowLeft class="w-4 h-4" />

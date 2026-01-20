@@ -15,6 +15,10 @@ const { project, locale } = Astro.props;
 const t = getTranslations(locale);
 const projectsPath = getProjectsPath(locale);
 
+// ES (default) has no prefix, EN has /en prefix
+const basePath = locale === 'es' ? '' : '/en';
+const projectUrl = `${basePath}/${projectsPath}/${project.id}`;
+
 const { data } = project;
 const title = data.title[locale];
 const description = data.description[locale];
@@ -22,7 +26,7 @@ const description = data.description[locale];
 
 <Card class="flex flex-col h-full">
   <!-- Thumbnail -->
-  <a href={`/${locale}/${projectsPath}/${project.id}`} class="block relative overflow-hidden aspect-video">
+  <a href={{projectUrl}} class="block relative overflow-hidden aspect-video">
     <img
       src={data.thumbnail}
       alt={data.thumbnailAlt[locale]}
@@ -40,7 +44,7 @@ const description = data.description[locale];
   <div class="flex flex-col flex-1 p-5">
     <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">
       <a
-        href={`/${locale}/${projectsPath}/${project.id}`}
+        href={{projectUrl}}
         class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
       >
         {title}

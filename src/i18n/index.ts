@@ -15,6 +15,10 @@ export function getTranslations(locale: Locale): Translations {
 
 export function getLocalePath(locale: Locale, path: string = ''): string {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  // Spanish is the default locale, no prefix needed
+  if (locale === 'es') {
+    return cleanPath ? `/${cleanPath}` : '/';
+  }
   return `/${locale}${cleanPath ? `/${cleanPath}` : ''}`;
 }
 
@@ -27,9 +31,10 @@ export function getProjectsPath(locale: Locale): string {
 }
 
 export function getLocaleFromUrl(url: URL): Locale {
-  const [, locale] = url.pathname.split('/');
-  if (locale === 'es' || locale === 'en') {
-    return locale;
+  const [, segment] = url.pathname.split('/');
+  // Only 'en' has prefix, everything else is Spanish
+  if (segment === 'en') {
+    return 'en';
   }
   return defaultLocale;
 }

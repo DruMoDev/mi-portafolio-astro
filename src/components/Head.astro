@@ -141,6 +141,9 @@ const serviceSchema = {
   }
 };
 
+// ES has no prefix (default), EN has /en prefix
+const homeUrl = locale === 'es' ? siteConfig.url : `${siteConfig.url}/en`;
+
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -149,7 +152,7 @@ const breadcrumbSchema = {
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": `${siteConfig.url}/${locale}`
+      "item": homeUrl
     }
   ]
 };
@@ -180,9 +183,9 @@ const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema
 
 <!-- Canonical & Language Alternates -->
 <link rel="canonical" href={canonicalUrl} />
-<link rel="alternate" hreflang={langCode} href={canonicalUrl} />
-<link rel="alternate" hreflang={alternateLangCode} href={canonicalUrl.replace(`/${locale}/`, `/${alternateLocale}/`)} />
-<link rel="alternate" hreflang="x-default" href={`${siteConfig.url}/es`} />
+<link rel="alternate" hreflang="es-ES" href={siteConfig.url} />
+<link rel="alternate" hreflang="en-US" href={`${siteConfig.url}/en`} />
+<link rel="alternate" hreflang="x-default" href={siteConfig.url} />
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
