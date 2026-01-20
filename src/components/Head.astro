@@ -15,20 +15,146 @@ const {
   locale = 'es',
 } = Astro.props;
 
-const defaultTitle = locale === 'es'
-  ? `${siteConfig.author.displayName} | Full Stack Developer`
-  : `${siteConfig.author.displayName} | Full Stack Developer`;
+// SEO-optimized titles and descriptions with keywords
+const seoData = {
+  es: {
+    title: 'Dru | Desarrollador Web Barcelona - Webs, Apps y SaaS a Medida',
+    description: 'Desarrollador Full Stack en Barcelona. Creo páginas web económicas, aplicaciones web y SaaS personalizados. React, Node.js, TypeScript. Presupuesto sin compromiso.',
+    keywords: 'desarrollador web barcelona, programador freelance barcelona, crear pagina web barata, desarrollo web economico, aplicaciones web a medida, saas desarrollo, react developer barcelona, full stack developer españa',
+  },
+  en: {
+    title: 'Dru | Web Developer Barcelona - Websites, Apps & SaaS',
+    description: 'Full Stack Developer in Barcelona. I build affordable websites, web applications and custom SaaS. React, Node.js, TypeScript. Free quote.',
+    keywords: 'web developer barcelona, freelance programmer spain, affordable website development, custom web applications, saas development, react developer spain, full stack developer barcelona',
+  },
+};
 
-const defaultDescription = locale === 'es'
-  ? `Portfolio de ${siteConfig.author.displayName} (${siteConfig.author.realName}), desarrollador Full Stack especializado en crear experiencias web modernas y escalables.`
-  : `Portfolio of ${siteConfig.author.displayName} (${siteConfig.author.realName}), Full Stack Developer specialized in building modern and scalable web experiences.`;
-
-const finalTitle = title ?? defaultTitle;
-const finalDescription = description ?? defaultDescription;
+const currentSeo = seoData[locale];
+const finalTitle = title ?? currentSeo.title;
+const finalDescription = description ?? currentSeo.description;
 const absoluteImage = new URL(image, siteConfig.url).href;
 const langCode = locale === 'es' ? 'es-ES' : 'en-US';
 const alternateLocale = locale === 'es' ? 'en' : 'es';
 const alternateLangCode = alternateLocale === 'es' ? 'es-ES' : 'en-US';
+
+// Structured Data for AI Search Engines and Google
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${siteConfig.url}/#person`,
+  "name": siteConfig.author.realName,
+  "alternateName": siteConfig.author.displayName,
+  "description": locale === 'es'
+    ? "Desarrollador Full Stack en Barcelona especializado en crear páginas web, aplicaciones y SaaS. Experto en React, Node.js, TypeScript y arquitectura de software."
+    : "Full Stack Developer in Barcelona specialized in building websites, applications and SaaS. Expert in React, Node.js, TypeScript and software architecture.",
+  "url": siteConfig.url,
+  "image": `${siteConfig.url}/images/profile.jpg`,
+  "jobTitle": "Full Stack Developer",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Freelance"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Barcelona",
+    "addressRegion": "Cataluña",
+    "addressCountry": "ES"
+  },
+  "knowsAbout": [
+    "React", "Next.js", "Node.js", "TypeScript", "JavaScript",
+    "Web Development", "SaaS Development", "API Development",
+    "PostgreSQL", "MongoDB", "TailwindCSS", "Shopify"
+  ],
+  "sameAs": siteConfig.social.map(s => s.url).filter(u => !u.startsWith('mailto:')),
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteConfig.url}/#website`,
+  "url": siteConfig.url,
+  "name": siteConfig.name,
+  "description": currentSeo.description,
+  "publisher": { "@id": `${siteConfig.url}/#person` },
+  "inLanguage": [langCode, alternateLangCode],
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${siteConfig.url}/#service`,
+  "serviceType": locale === 'es' ? "Desarrollo Web y Software" : "Web and Software Development",
+  "provider": { "@id": `${siteConfig.url}/#person` },
+  "areaServed": {
+    "@type": "City",
+    "name": "Barcelona",
+    "containedInPlace": {
+      "@type": "Country",
+      "name": "Spain"
+    }
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": locale === 'es' ? "Servicios de Desarrollo" : "Development Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": locale === 'es' ? "Desarrollo de Páginas Web" : "Website Development",
+          "description": locale === 'es'
+            ? "Páginas web modernas, rápidas y optimizadas para SEO"
+            : "Modern, fast and SEO-optimized websites"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": locale === 'es' ? "Desarrollo de Aplicaciones Web" : "Web Application Development",
+          "description": locale === 'es'
+            ? "Aplicaciones web a medida con React, Next.js y Node.js"
+            : "Custom web applications with React, Next.js and Node.js"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": locale === 'es' ? "Desarrollo de SaaS" : "SaaS Development",
+          "description": locale === 'es'
+            ? "Plataformas SaaS escalables y mantenibles"
+            : "Scalable and maintainable SaaS platforms"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": locale === 'es' ? "Aplicaciones Shopify" : "Shopify Apps",
+          "description": locale === 'es'
+            ? "Apps personalizadas para tiendas Shopify"
+            : "Custom apps for Shopify stores"
+        }
+      }
+    ]
+  }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": `${siteConfig.url}/${locale}`
+    }
+  ]
+};
+
+const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema];
 ---
 
 <meta charset="UTF-8" />
@@ -39,16 +165,26 @@ const alternateLangCode = alternateLocale === 'es' ? 'es-ES' : 'en-US';
 <title>{finalTitle}</title>
 <meta name="title" content={finalTitle} />
 <meta name="description" content={finalDescription} />
+<meta name="keywords" content={currentSeo.keywords} />
 <meta name="author" content={siteConfig.author.realName} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
+
+<!-- Geo Tags for Local SEO -->
+<meta name="geo.region" content="ES-CT" />
+<meta name="geo.placename" content="Barcelona" />
+<meta name="geo.position" content="41.3851;2.1734" />
+<meta name="ICBM" content="41.3851, 2.1734" />
 
 <!-- Canonical & Language Alternates -->
 <link rel="canonical" href={canonicalUrl} />
 <link rel="alternate" hreflang={langCode} href={canonicalUrl} />
 <link rel="alternate" hreflang={alternateLangCode} href={canonicalUrl.replace(`/${locale}/`, `/${alternateLocale}/`)} />
-<link rel="alternate" hreflang="x-default" href={siteConfig.url} />
+<link rel="alternate" hreflang="x-default" href={`${siteConfig.url}/es`} />
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
@@ -56,6 +192,9 @@ const alternateLangCode = alternateLocale === 'es' ? 'es-ES' : 'en-US';
 <meta property="og:title" content={finalTitle} />
 <meta property="og:description" content={finalDescription} />
 <meta property="og:image" content={absoluteImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${siteConfig.author.displayName} - Full Stack Developer Barcelona`} />
 <meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:locale" content={langCode} />
 <meta property="og:locale:alternate" content={alternateLangCode} />
@@ -66,19 +205,22 @@ const alternateLangCode = alternateLocale === 'es' ? 'es-ES' : 'en-US';
 <meta name="twitter:title" content={finalTitle} />
 <meta name="twitter:description" content={finalDescription} />
 <meta name="twitter:image" content={absoluteImage} />
+<meta name="twitter:image:alt" content={`${siteConfig.author.displayName} - Full Stack Developer Barcelona`} />
 
 <!-- Theme Color -->
 <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="msapplication-TileColor" content="#3b82f6" />
 
-<!-- Structured Data -->
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": siteConfig.author.realName,
-  "alternateName": siteConfig.author.displayName,
-  "description": finalDescription,
-  "url": siteConfig.url,
-  "jobTitle": "Full Stack Developer",
-  "sameAs": siteConfig.social.map(s => s.url).filter(u => !u.startsWith('mailto:')),
-})} />
+<!-- Preconnect for performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://api.web3forms.com" />
+
+<!-- Structured Data for SEO & AI Search Engines -->
+{allSchemas.map(schema => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+))}
+
+<!-- AI Search Engine Hints (Perplexity, ChatGPT, Claude) -->
+<meta name="ai-content-declaration" content="This is a portfolio website of a professional web developer offering services in Barcelona, Spain." />
