@@ -25,8 +25,8 @@ export default defineConfig({
   ],
 
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'viewport',
+    prefetchAll: false,
+    defaultStrategy: 'hover',
   },
 
   i18n: {
