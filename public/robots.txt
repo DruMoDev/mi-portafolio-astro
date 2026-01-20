@@ -31,3 +31,13 @@ Allow: /
 
 User-agent: Applebot-Extended
 Allow: /
+
+# Bing crawlers (important for ChatGPT search)
+User-agent: bingbot
+Allow: /
+
+User-agent: msnbot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
