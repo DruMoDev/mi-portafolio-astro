@@ -64,4 +64,10 @@ export const en: Translations = {
   common: {
     switchLang: 'ES',
   },
+  experience: {
+    title: 'Experience',
+    subtitle: 'My professional journey',
+    present: 'Present',
+    downloadCV: 'Download CV',
+  },
 };

@@ -42,10 +42,20 @@ export type SkillCategory =
 
 export interface Experience {
   company: string;
-  role: string;
+  role: {
+    es: string;
+    en: string;
+  };
+  location: {
+    es: string;
+    en: string;
+  };
   startDate: string;
   endDate: string | 'present';
-  description: string;
+  highlights: {
+    es: string[];
+    en: string[];
+  };
   technologies: string[];
 }
 
@@ -127,5 +137,11 @@ export interface Translations {
   };
   common: {
     switchLang: string;
+  };
+  experience: {
+    title: string;
+    subtitle: string;
+    present: string;
+    downloadCV: string;
   };
 }

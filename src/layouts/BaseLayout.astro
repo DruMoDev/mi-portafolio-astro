@@ -1,10 +1,10 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import Head from '../components/Head.astro';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/sections/Footer.astro';
-import '../styles/global.css';
-import type { SEOProps, Locale } from '../types';
+import { ViewTransitions } from "astro:transitions";
+import Head from "../components/Head.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/sections/Footer.astro";
+import "../styles/global.css";
+import type { SEOProps, Locale } from "../types";
 
 interface Props {
   seo?: SEOProps;
@@ -20,7 +20,9 @@ const { seo = {}, locale } = Astro.props;
     <Head {...seo} locale={locale} />
     <ViewTransitions />
   </head>
-  <body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+  <body
+    class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300"
+  >
     <Navigation locale={locale} />
     <main>
       <slot />
@@ -29,15 +31,20 @@ const { seo = {}, locale } = Astro.props;
 
     <script is:inline>
       // Dark mode initialization (runs before render to prevent flash)
-      (function() {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
+      (function () {
+        const theme = localStorage.getItem("theme");
+        if (
+          theme === "dark" ||
+          (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
         } else {
-          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.remove("dark");
         }
       })();
     </script>
-    <script src="https://university-chatbot.pages.dev/widget-loader.js"></script>
+    <script
+      src="https://university-chatbot.pages.dev/widget-loader.js"
+      data-key="pk_live_z8Tg93yd2P1Ztf3psYfy2k2uqobTfRDX"></script>
   </body>
 </html>
