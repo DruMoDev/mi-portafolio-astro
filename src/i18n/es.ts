@@ -19,7 +19,7 @@ export const es: Translations = {
   about: {
     title: "Sobre mí",
     subtitle: "Conoce un poco más sobre mi trayectoria",
-    bio: "Mis responsables siempre me han definido como alguien que no se conforma con lo obvio: soy un desarrollador proactivo, autónomo y con un pensamiento crítico que lleva cada proyecto un paso más allá. Tengo una comunicación clara y directa, lo que me permite alinear expectativas, colaborar con equipos diversos y transformar ideas complejas en decisiones accionables. Disfruto especialmente en entornos donde puedo aportar ideas, desafiar supuestos y trabajar con código limpio y escalable.",
+    bio: "Desarrollador Full Stack con experiencia en React, TypeScript, Node.js y Python. Especializado en Clean Architecture, DDD y arquitectura hexagonal. Integro herramientas de IA (Claude, Cursor, Copilot) en mi flujo de trabajo para maximizar eficiencia y calidad de código. Me definen como alguien proactivo, autónomo y con pensamiento crítico. Disfruto en entornos donde puedo aportar ideas, desafiar supuestos y colaborar en equipos que valoran código limpio y mejora continua.",
   },
   stack: {
     title: "Mi Stack",

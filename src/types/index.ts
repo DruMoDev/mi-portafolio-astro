@@ -13,10 +13,10 @@ export interface SiteConfig {
   locales: Locale[];
 }
 
-export type Locale = 'es' | 'en';
+export type Locale = "es" | "en";
 
 export interface SocialLink {
-  platform: 'github' | 'linkedin' | 'twitter' | 'email';
+  platform: "github" | "linkedin" | "twitter" | "email";
   url: string;
   label: string;
 }
@@ -34,11 +34,12 @@ export interface Skill {
 }
 
 export type SkillCategory =
-  | 'frontend'
-  | 'backend'
-  | 'database'
-  | 'devops'
-  | 'tools';
+  | "frontend"
+  | "backend"
+  | "database"
+  | "devops"
+  | "ai"
+  | "tools";
 
 export interface Experience {
   company: string;
@@ -51,7 +52,7 @@ export interface Experience {
     en: string;
   };
   startDate: string;
-  endDate: string | 'present';
+  endDate: string | "present";
   highlights: {
     es: string[];
     en: string[];
@@ -70,7 +71,7 @@ export interface SEOProps {
   description?: string;
   image?: string;
   canonicalUrl?: string;
-  type?: 'website' | 'article';
+  type?: "website" | "article";
   locale?: Locale;
 }
 
