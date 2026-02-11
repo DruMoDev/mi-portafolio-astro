@@ -27,22 +27,38 @@ export const resumeData: ResumeData = {
   skillCategories: skillCategoriesEs,
   skills: [
     // Frontend
-    { name: "React", icon: "Atom", category: "frontend" },
-    { name: "Next.js", icon: "Globe", category: "frontend" },
-    { name: "TypeScript", icon: "FileCode", category: "frontend" },
-    { name: "JavaScript", icon: "Braces", category: "frontend" },
-    { name: "TailwindCSS", icon: "Paintbrush", category: "frontend" },
-    { name: "CSS", icon: "Palette", category: "frontend" },
-    { name: "HTML", icon: "Code", category: "frontend" },
-    { name: "Liquid", icon: "Droplet", category: "frontend" },
-    { name: "Polaris", icon: "Star", category: "frontend" },
+    { name: "React", icon: "logos:react", category: "frontend" },
+    { name: "Next.js", icon: "logos:nextjs-icon", category: "frontend" },
+    {
+      name: "TypeScript",
+      icon: "logos:typescript-icon",
+      category: "frontend",
+    },
+    {
+      name: "JavaScript",
+      icon: "logos:javascript",
+      category: "frontend",
+    },
+    {
+      name: "TailwindCSS",
+      icon: "logos:tailwindcss-icon",
+      category: "frontend",
+    },
+    { name: "CSS", icon: "logos:css-3", category: "frontend" },
+    { name: "HTML", icon: "logos:html-5", category: "frontend" },
+    { name: "Liquid", icon: "logos:shopify", category: "frontend" },
+    { name: "Polaris", icon: "logos:shopify", category: "frontend" },
 
     // Backend
-    { name: "Node.js", icon: "Server", category: "backend" },
-    { name: "Express", icon: "Layers", category: "backend" },
-    { name: "Python", icon: "FileJson", category: "backend" },
+    { name: "Node.js", icon: "logos:nodejs-icon", category: "backend" },
+    {
+      name: "Express",
+      icon: "devicon:express",
+      category: "backend",
+    },
+    { name: "Python", icon: "logos:python", category: "backend" },
     { name: "REST APIs", icon: "ArrowRightLeft", category: "backend" },
-    { name: "GraphQL", icon: "Share2", category: "backend" },
+    { name: "GraphQL", icon: "logos:graphql", category: "backend" },
     { name: "OOP", icon: "Box", category: "backend" },
     { name: "Hexagonal Arch", icon: "Hexagon", category: "backend" },
     { name: "Clean Arch", icon: "ShieldCheck", category: "backend" },
@@ -51,22 +67,26 @@ export const resumeData: ResumeData = {
     { name: "SOLID", icon: "CheckSquare", category: "backend" },
 
     // DevOps
-    { name: "Docker", icon: "Container", category: "devops" },
+    { name: "Docker", icon: "logos:docker-icon", category: "devops" },
     { name: "CI/CD", icon: "GitMerge", category: "devops" },
-    { name: "Git", icon: "GitBranch", category: "devops" },
+    { name: "Git", icon: "logos:git-icon", category: "devops" },
     { name: "Testing", icon: "FlaskConical", category: "devops" },
     { name: "Agile/Scrum", icon: "Users", category: "devops" },
 
     // Database
-    { name: "PostgreSQL", icon: "Database", category: "database" },
-    { name: "MongoDB", icon: "Leaf", category: "database" },
-    { name: "MySQL", icon: "Cylinder", category: "database" },
-    { name: "SQLite", icon: "HardDrive", category: "database" },
+    {
+      name: "PostgreSQL",
+      icon: "logos:postgresql",
+      category: "database",
+    },
+    { name: "MongoDB", icon: "logos:mongodb-icon", category: "database" },
+    { name: "MySQL", icon: "logos:mysql-icon", category: "database" },
+    { name: "SQLite", icon: "logos:sqlite", category: "database" },
 
     // AI & Agents
-    { name: "Claude", icon: "Bot", category: "ai" },
+    { name: "Claude", icon: "logos:claude-icon", category: "ai" },
     { name: "Cursor IDE", icon: "Terminal", category: "ai" },
-    { name: "GitHub Copilot", icon: "Github", category: "ai" },
+    { name: "GitHub Copilot", icon: "logos:github-copilot", category: "ai" },
     { name: "Antigravity", icon: "Rocket", category: "ai" },
     { name: "Prompt Eng.", icon: "MessageSquare", category: "ai" },
     { name: "AI Agents", icon: "Bot", category: "ai" },

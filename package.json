@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
+    "@iconify-json/devicon": "^1.2.58",
+    "@iconify-json/logos": "^1.2.10",
     "@lucide/astro": "^0.562.0",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.16.11",
+    "astro-icon": "^1.1.5",
     "tailwindcss": "^4.1.18"
   }
 }
