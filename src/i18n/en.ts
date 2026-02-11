@@ -15,6 +15,7 @@ export const en: Translations = {
       "Proactive and autonomous developer with critical thinking. I specialize in software architecture, AI-powered applications, and clean, scalable code.",
     viewProjects: "View Projects",
     contact: "Get in Touch",
+    aiCheck: "Or ask my AI anything about me",
   },
   about: {
     title: "About Me",

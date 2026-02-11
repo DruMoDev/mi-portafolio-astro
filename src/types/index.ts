@@ -90,6 +90,7 @@ export interface Translations {
     description: string;
     viewProjects: string;
     contact: string;
+    aiCheck: string;
   };
   about: {
     title: string;
