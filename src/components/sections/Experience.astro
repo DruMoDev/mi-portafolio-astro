@@ -1,5 +1,5 @@
 ---
-import { Briefcase, MapPin, Calendar, Download } from '@lucide/astro';
+import { Briefcase, MapPin, Calendar, ExternalLink } from '@lucide/astro';
 import SectionTitle from '../ui/SectionTitle.astro';
 import Badge from '../ui/Badge.astro';
 import { getTranslations } from '../../i18n';
@@ -13,7 +13,7 @@ interface Props {
 const { locale } = Astro.props;
 const t = getTranslations(locale);
 
-const cvUrl = locale === 'es' ? '/docs/es-cv-roger-morera.pdf' : '/docs/en-cv-roger-morera.pdf';
+const cvUrl = locale === 'es' ? 'https://rxresu.me/dev.morera/es-cv-roger-morera' : 'https://rxresu.me/dev.morera/en-cv-roger-morera';
 
 function formatDate(dateStr: string | 'present', locale: Locale): string {
   if (dateStr === 'present') {
@@ -34,10 +34,11 @@ function formatDate(dateStr: string | 'present', locale: Locale): string {
       <SectionTitle title={t.experience.title} subtitle={t.experience.subtitle} class="mb-0" />
       <a
         href={cvUrl}
-        download
+        target="_blank"
+        rel="noopener noreferrer"
         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-sm font-medium"
       >
-        <Download class="w-4 h-4" />
+        <ExternalLink class="w-4 h-4" />
         {t.experience.downloadCV}
       </a>
     </div>
