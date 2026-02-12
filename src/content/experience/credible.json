@@ -24,12 +24,5 @@
       "Selected by EWOR, a top-tier European accelerator for high-potential founders."
     ]
   },
-  "technologies": [
-    "React",
-    "TypeScript",
-    "Python",
-    "Clean Architecture",
-    "SaaS",
-    "AI"
-  ]
+  "technologies": ["React", "TypeScript", "Python", "Clean Architecture", "SaaS", "AI"]
 }

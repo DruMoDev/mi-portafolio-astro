@@ -24,11 +24,5 @@
       "Pixel-perfect implementation of Figma designs with accessibility best practices."
     ]
   },
-  "technologies": [
-    "Next.js",
-    "TypeScript",
-    "Figma",
-    "ESG",
-    "Data Automation"
-  ]
+  "technologies": ["Next.js", "TypeScript", "Figma", "ESG", "Data Automation"]
 }

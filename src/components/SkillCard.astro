@@ -11,8 +11,7 @@ const { skill } = Astro.props;
 
 const isIconify = skill.icon.includes(":");
 const IconComponent = !isIconify
-  ? ((Icons as Record<string, unknown>)[skill.icon] as typeof Icons.Code) ||
-    Icons.Code
+  ? ((Icons as Record<string, unknown>)[skill.icon] as typeof Icons.Code) || Icons.Code
   : null;
 ---
 
@@ -31,7 +30,5 @@ const IconComponent = !isIconify
       )
     )
   }
-  <span class="text-sm text-nowrap font-medium text-zinc-700 dark:text-zinc-300"
-    >{skill.name}</span
-  >
+  <span class="text-sm text-nowrap font-medium text-zinc-700 dark:text-zinc-300">{skill.name}</span>
 </div>

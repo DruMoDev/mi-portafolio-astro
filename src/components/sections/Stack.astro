@@ -24,17 +24,10 @@ const groupedSkills = skills.reduce(
     acc[category].push(skill.data);
     return acc;
   },
-  {} as Record<SkillCategory, (typeof skills)[0]["data"][]>,
+  {} as Record<SkillCategory, (typeof skills)[0]["data"][]>
 );
 
-const categoryOrder: SkillCategory[] = [
-  "ai",
-  "frontend",
-  "backend",
-  "database",
-  "devops",
-  "tools",
-];
+const categoryOrder: SkillCategory[] = ["ai", "frontend", "backend", "database", "devops", "tools"];
 ---
 
 <section id="stack" class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50">

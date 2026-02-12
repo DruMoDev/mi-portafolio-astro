@@ -26,13 +26,5 @@
       "Build custom components with Liquid, Polaris and React for unique merchant experiences."
     ]
   },
-  "technologies": [
-    "React",
-    "TypeScript",
-    "Node.js",
-    "Shopify",
-    "Azure",
-    "Docker",
-    "Hexagonal Arch"
-  ]
+  "technologies": ["React", "TypeScript", "Node.js", "Shopify", "Azure", "Docker", "Hexagonal Arch"]
 }

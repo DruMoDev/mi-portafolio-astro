@@ -59,14 +59,7 @@ export const collections = {
     schema: z.object({
       name: z.string(),
       icon: z.string(),
-      category: z.enum([
-        "frontend",
-        "backend",
-        "database",
-        "devops",
-        "ai",
-        "tools",
-      ]),
+      category: z.enum(["frontend", "backend", "database", "devops", "ai", "tools"]),
     }),
   }),
 };

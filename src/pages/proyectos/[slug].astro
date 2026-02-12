@@ -9,9 +9,7 @@ import { getTranslations } from "../../i18n";
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
   // Filter only Spanish projects (those starting with "es/")
-  const spanishProjects = projects.filter((project) =>
-    project.id.startsWith("es/"),
-  );
+  const spanishProjects = projects.filter((project) => project.id.startsWith("es/"));
 
   return spanishProjects.map((project) => {
     // Extract the slug without the "es/" prefix for the URL
@@ -50,9 +48,7 @@ const description = data.description;
           href="/#portfolio"
           class="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
         >
-          <ArrowLeft
-            class="w-4 h-4 group-hover:-translate-x-1 transition-transform"
-          />
+          <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           {t.project.backToProjects}
         </a>
       </div>
@@ -158,9 +154,7 @@ const description = data.description;
             >
               {title}
             </h1>
-            <p
-              class="text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-3xl"
-            >
+            <p class="text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-3xl">
               {description}
             </p>
           </header>
