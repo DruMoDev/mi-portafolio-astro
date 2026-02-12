@@ -10,7 +10,9 @@ Follow these steps to generate a new project entry in the portfolio.
 
 - Ask the user for the project description or the GitHub repository URL/name (e.g., `user/repo`).
 - If a repository is provided:
-  1. Clone it to a temporary directory: `gh repo clone <repo> .tmp/<repo_name>`
+  1. Clone it to a temporary directory:
+     - First try: `gh repo clone <repo> .tmp/<repo_name> -- --depth 1`
+     - **Fallback if `gh` auth fails**: `git clone git@github.com:<repo>.git .tmp/<repo_name> --depth 1`
   2. Analyze the codebase to understand the stack, features, and architecture.
      - Read `README.md`, `package.json` (or equivalent), and other key configuration files.
      - Explore the source code structure.
