@@ -276,6 +276,13 @@ const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="msapplication-TileColor" content="#3b82f6" />
 
+<!-- Security -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' https://university-chatbot.pages.dev; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.web3forms.com https://university-chatbot.pages.dev https://api-chatbot-ai.drumorera.com; frame-src https://university-chatbot.pages.dev"
+/>
+
 <!-- Preconnect for performance -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
