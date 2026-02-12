@@ -2,7 +2,7 @@
 title: "DateWhen"
 description: "App de Shopify para selección de fechas de entrega con validación inteligente, franjas horarias y gestión de fechas bloqueadas."
 publishedAt: 2026-02-12
-thumbnail: "/images/projects/datewhen.webp"
+thumbnail: "/images/projects/default.svg"
 thumbnailAlt: "Panel de configuración de DateWhen mostrando el calendario de fechas de entrega"
 tags:
   - "shopify-app"

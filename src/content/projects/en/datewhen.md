@@ -2,7 +2,7 @@
 title: "DateWhen"
 description: "Shopify App for delivery date selection with smart validation, time slots, and blackout date management."
 publishedAt: 2026-02-12
-thumbnail: "/images/projects/datewhen.webp"
+thumbnail: "/images/projects/default.svg"
 thumbnailAlt: "DateWhen configuration dashboard showing delivery date calendar settings"
 tags:
   - "shopify-app"

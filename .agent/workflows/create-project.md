@@ -25,8 +25,8 @@ Use the following template for both files, translating the content appropriately
 title: "Project Title"
 description: "Short description (120-160 chars) for the project card."
 publishedAt: YYYY-MM-DD
-thumbnail: "/images/projects/[slug].webp" # Placeholder or ask user for image
-thumbnailAlt: "Descriptive alt text"
+thumbnail: "/images/projects/default.svg" # Default image
+thumbnailAlt: "Project thumbnail"
 tags:
   - "category1"
   - "category2"
