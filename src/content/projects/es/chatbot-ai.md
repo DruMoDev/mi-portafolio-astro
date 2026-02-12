@@ -4,12 +4,12 @@ description: "Plataforma RAG multi-tenant completa que permite a empresas desple
 publishedAt: 2024-10-01
 thumbnail: "/images/projects/chatbot-ai.png"
 thumbnailAlt: "Interfaz del Chatbot AI y Panel de Administración"
+inProgress: true
 tags:
   - "ai"
   - "rag"
   - "fullstack"
   - "python"
-  - "in-progress"
 stack:
   - "FastAPI"
   - "React"

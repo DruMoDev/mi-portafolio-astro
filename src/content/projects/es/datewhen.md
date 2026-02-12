@@ -4,6 +4,7 @@ description: "App de Shopify para selección de fechas de entrega con validació
 publishedAt: 2026-02-12
 thumbnail: "/images/projects/default.svg"
 thumbnailAlt: "Panel de configuración de DateWhen mostrando el calendario de fechas de entrega"
+inProgress: true
 tags:
   - "shopify-app"
   - "fullstack"
@@ -15,8 +16,8 @@ stack:
   - "MongoDB"
   - "Shopify Polaris"
   - "GraphQL"
-liveUrl: "https://delivery-date-picker-app.onrender.com"
-repoUrl: "https://github.com/DruMoDev/date-picker-shopify"
+# liveUrl: "https://delivery-date-picker-app.onrender.com"
+# repoUrl: "https://github.com/DruMoDev/date-picker-shopify"
 featured: true
 draft: false
 order: 3

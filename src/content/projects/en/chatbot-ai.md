@@ -4,12 +4,12 @@ description: "A production-ready multi-tenant RAG platform empowering businesses
 publishedAt: 2024-10-01
 thumbnail: "/images/projects/chatbot-ai.png"
 thumbnailAlt: "AI Chatbot Interface and Admin Dashboard"
+inProgress: true
 tags:
   - "ai"
   - "rag"
   - "fullstack"
   - "python"
-  - "in-progress"
 stack:
   - "FastAPI"
   - "React"

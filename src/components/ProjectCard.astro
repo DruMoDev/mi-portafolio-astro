@@ -45,7 +45,7 @@ const description = data.description;
       )
     }
     {
-      data.tags.includes("in-progress") && (
+      data.inProgress && (
         <div class="absolute top-3 left-3">
           <Badge variant="secondary">In Progress</Badge>
         </div>
@@ -65,7 +65,7 @@ const description = data.description;
     </h3>
 
     <p
-      class="text-sm text-zinc-600 dark:text-zinc-400 mb-4 flex-1 line-clamp-2"
+      class="text-sm text-zinc-600 dark:text-zinc-400 mb-4 h-[3.75rem] line-clamp-3 leading-5"
     >
       {description}
     </p>
@@ -79,7 +79,7 @@ const description = data.description;
     <!-- Links -->
     {
       (data.liveUrl || data.repoUrl) && (
-        <div class="flex items-center gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+        <div class="mt-auto flex items-center gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
           {data.liveUrl && (
             <a
               href={data.liveUrl}

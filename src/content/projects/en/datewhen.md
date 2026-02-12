@@ -4,6 +4,7 @@ description: "Shopify App for delivery date selection with smart validation, tim
 publishedAt: 2026-02-12
 thumbnail: "/images/projects/default.svg"
 thumbnailAlt: "DateWhen configuration dashboard showing delivery date calendar settings"
+inProgress: true
 tags:
   - "shopify-app"
   - "fullstack"
@@ -15,8 +16,8 @@ stack:
   - "MongoDB"
   - "Shopify Polaris"
   - "GraphQL"
-liveUrl: "https://delivery-date-picker-app.onrender.com"
-repoUrl: "https://github.com/DruMoDev/date-picker-shopify"
+# liveUrl: "https://delivery-date-picker-app.onrender.com"
+# repoUrl: "https://github.com/DruMoDev/date-picker-shopify"
 featured: true
 draft: false
 order: 3

@@ -37,6 +37,7 @@ stack:
 liveUrl: "https://demo.com" # Optional
 repoUrl: "https://github.com/user/repo" # Optional
 featured: false
+inProgress: false
 draft: false
 order: 10 # Check other files to determine next order
 ---

@@ -25,6 +25,7 @@ const projectsCollection = defineCollection({
 
     // Metadata
     featured: z.boolean().default(false),
+    inProgress: z.boolean().default(false),
     draft: z.boolean().default(false),
     order: z.number().default(0),
   }),
