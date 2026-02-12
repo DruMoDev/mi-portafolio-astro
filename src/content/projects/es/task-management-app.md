@@ -1,15 +1,9 @@
 ---
-title:
-  es: "App de Gestión de Tareas"
-  en: "Task Management App"
-description:
-  es: "Aplicación colaborativa de gestión de proyectos con tableros Kanban, asignación de tareas en tiempo real y seguimiento de progreso."
-  en: "Collaborative project management app with Kanban boards, real-time task assignment, and progress tracking."
+title: "App de Gestión de Tareas"
+description: "Aplicación colaborativa de gestión de proyectos con tableros Kanban, asignación de tareas en tiempo real y seguimiento de progreso."
 publishedAt: 2024-06-20
 thumbnail: "/images/projects/taskapp.svg"
-thumbnailAlt:
-  es: "Captura de pantalla de la app de gestión de tareas"
-  en: "Task management app screenshot"
+thumbnailAlt: "Captura de pantalla de la app de gestión de tareas"
 tags:
   - "fullstack"
   - "productivity"
@@ -28,15 +22,11 @@ draft: false
 order: 2
 ---
 
-## Descripción del Proyecto / Project Description
+## Descripción del Proyecto
 
-### ES
 Una aplicación de gestión de tareas y proyectos inspirada en Trello y Notion. Permite crear espacios de trabajo colaborativos con tableros Kanban, listas de tareas y seguimiento de progreso en tiempo real usando WebSockets.
 
-### EN
-A task and project management application inspired by Trello and Notion. Allows creating collaborative workspaces with Kanban boards, task lists, and real-time progress tracking using WebSockets.
-
-## Características principales / Key Features
+## Características principales
 
 - Tableros Kanban con drag & drop
 - Colaboración en tiempo real con WebSockets

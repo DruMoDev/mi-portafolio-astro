@@ -1,27 +1,37 @@
 ---
-import { getCollection, render } from 'astro:content';
-import { ArrowLeft, ExternalLink, Github } from '@lucide/astro';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Badge from '../../../components/ui/Badge.astro';
-import Button from '../../../components/ui/Button.astro';
-import { getTranslations } from '../../../i18n';
+import { getCollection, render } from "astro:content";
+import { ArrowLeft, ExternalLink, Github } from "@lucide/astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Badge from "../../../components/ui/Badge.astro";
+import Button from "../../../components/ui/Button.astro";
+import { getTranslations } from "../../../i18n";
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((project) => ({
-    params: { slug: project.id },
-    props: { project },
-  }));
+  const projects = await getCollection("projects");
+  // Filter only English projects (those starting with "en/")
+  const englishProjects = projects.filter((project) =>
+    project.id.startsWith("en/"),
+  );
+
+  return englishProjects.map((project) => {
+    // Extract the slug without the "en/" prefix for the URL
+    const slug = project.id.split("/")[1];
+    return {
+      params: { slug },
+      props: { project },
+    };
+  });
 }
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const locale = 'en';
+const locale = "en";
 const t = getTranslations(locale);
 
 const { data } = project;
-const title = data.title[locale];
-const description = data.description[locale];
+// Data is now direct strings, no [locale] needed
+const title = data.title;
+const description = data.description;
 ---
 
 <BaseLayout
@@ -45,7 +55,9 @@ const description = data.description[locale];
 
       <!-- Header -->
       <header class="mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+        <h1
+          class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4"
+        >
           {title}
         </h1>
         <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
@@ -54,33 +66,37 @@ const description = data.description[locale];
 
         <!-- Tags -->
         <div class="flex flex-wrap gap-2 mb-6">
-          {data.tags.map((tag) => (
-            <Badge variant="secondary">{tag}</Badge>
-          ))}
+          {data.tags.map((tag) => <Badge variant="secondary">{tag}</Badge>)}
         </div>
 
         <!-- Links -->
         <div class="flex flex-wrap gap-3">
-          {data.liveUrl && (
-            <Button href={data.liveUrl} variant="primary" class="gap-2">
-              <ExternalLink class="w-4 h-4" />
-              {t.project.viewDemo}
-            </Button>
-          )}
-          {data.repoUrl && (
-            <Button href={data.repoUrl} variant="outline" class="gap-2">
-              <Github class="w-4 h-4" />
-              {t.project.viewCode}
-            </Button>
-          )}
+          {
+            data.liveUrl && (
+              <Button href={data.liveUrl} variant="primary" class="gap-2">
+                <ExternalLink class="w-4 h-4" />
+                {t.project.viewDemo}
+              </Button>
+            )
+          }
+          {
+            data.repoUrl && (
+              <Button href={data.repoUrl} variant="outline" class="gap-2">
+                <Github class="w-4 h-4" />
+                {t.project.viewCode}
+              </Button>
+            )
+          }
         </div>
       </header>
 
       <!-- Thumbnail -->
-      <div class="mb-10 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800">
+      <div
+        class="mb-10 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800"
+      >
         <img
           src={data.thumbnail}
-          alt={data.thumbnailAlt[locale]}
+          alt={data.thumbnailAlt}
           class="w-full h-auto"
         />
       </div>
@@ -91,9 +107,7 @@ const description = data.description[locale];
           {t.project.techStack}
         </h2>
         <div class="flex flex-wrap gap-2">
-          {data.stack.map((tech) => (
-            <Badge>{tech}</Badge>
-          ))}
+          {data.stack.map((tech) => <Badge>{tech}</Badge>)}
         </div>
       </section>
 

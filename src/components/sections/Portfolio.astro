@@ -1,9 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
-import SectionTitle from '../ui/SectionTitle.astro';
-import ProjectCard from '../ProjectCard.astro';
-import { getTranslations } from '../../i18n';
-import type { Locale } from '../../types';
+import { getCollection } from "astro:content";
+import SectionTitle from "../ui/SectionTitle.astro";
+import ProjectCard from "../ProjectCard.astro";
+import { getTranslations } from "../../i18n";
+import type { Locale } from "../../types";
 
 interface Props {
   locale: Locale;
@@ -12,8 +12,10 @@ interface Props {
 const { locale } = Astro.props;
 const t = getTranslations(locale);
 
-// Get all non-draft projects
-const projects = await getCollection('projects', ({ data }) => !data.draft);
+// Get all non-draft projects for current locale
+const projects = await getCollection("projects", ({ data, id }) => {
+  return !data.draft && id.startsWith(`${locale}/`);
+});
 
 // Sort: featured first, then by order, then by date
 const sortedProjects = projects.sort((a, b) => {
@@ -31,16 +33,20 @@ const sortedProjects = projects.sort((a, b) => {
   <div class="max-w-6xl mx-auto">
     <SectionTitle title={t.portfolio.title} subtitle={t.portfolio.subtitle} />
 
-    {sortedProjects.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedProjects.map((project) => (
-          <ProjectCard project={project} locale={locale} />
-        ))}
-      </div>
-    ) : (
-      <p class="text-center text-zinc-500 dark:text-zinc-400">
-        {locale === 'es' ? 'No hay proyectos disponibles.' : 'No projects available.'}
-      </p>
-    )}
+    {
+      sortedProjects.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedProjects.map((project) => (
+            <ProjectCard project={project} locale={locale} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-center text-zinc-500 dark:text-zinc-400">
+          {locale === "es"
+            ? "No hay proyectos disponibles."
+            : "No projects available."}
+        </p>
+      )
+    }
   </div>
 </section>

@@ -1,13 +1,13 @@
 ---
-import { ExternalLink, Github } from '@lucide/astro';
-import Badge from './ui/Badge.astro';
-import Card from './ui/Card.astro';
-import type { Locale } from '../types';
-import { getTranslations, getProjectsPath } from '../i18n';
-import type { CollectionEntry } from 'astro:content';
+import { ExternalLink, Github } from "@lucide/astro";
+import Badge from "./ui/Badge.astro";
+import Card from "./ui/Card.astro";
+import type { Locale } from "../types";
+import { getTranslations, getProjectsPath } from "../i18n";
+import type { CollectionEntry } from "astro:content";
 
 interface Props {
-  project: CollectionEntry<'projects'>;
+  project: CollectionEntry<"projects">;
   locale: Locale;
 }
 
@@ -15,80 +15,90 @@ const { project, locale } = Astro.props;
 const t = getTranslations(locale);
 const projectsPath = getProjectsPath(locale);
 
+// Extract slug from folder-based ID (e.g. "es/slug" -> "slug")
+const slug = project.id.split("/")[1];
+
 // ES (default) has no prefix, EN has /en prefix
-const basePath = locale === 'es' ? '' : '/en';
-const projectUrl = `${basePath}/${projectsPath}/${project.id}`;
+const basePath = locale === "es" ? "" : "/en";
+const projectUrl = `${basePath}/${projectsPath}/${slug}`;
 
 const { data } = project;
-const title = data.title[locale];
-const description = data.description[locale];
+// Direct access to string properties (no longer localized objects)
+const title = data.title;
+const description = data.description;
 ---
 
 <Card class="flex flex-col h-full">
   <!-- Thumbnail -->
-  <a href={{projectUrl}} class="block relative overflow-hidden aspect-video">
+  <a href={projectUrl} class="block relative overflow-hidden aspect-video">
     <img
       src={data.thumbnail}
-      alt={data.thumbnailAlt[locale]}
+      alt={data.thumbnailAlt}
       class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
       loading="lazy"
     />
-    {data.featured && (
-      <div class="absolute top-3 right-3">
-        <Badge variant="primary">Featured</Badge>
-      </div>
-    )}
+    {
+      data.featured && (
+        <div class="absolute top-3 right-3">
+          <Badge variant="primary">Featured</Badge>
+        </div>
+      )
+    }
   </a>
 
   <!-- Content -->
   <div class="flex flex-col flex-1 p-5">
     <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">
       <a
-        href={{projectUrl}}
+        href={projectUrl}
         class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
       >
         {title}
       </a>
     </h3>
 
-    <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4 flex-1 line-clamp-2">
+    <p
+      class="text-sm text-zinc-600 dark:text-zinc-400 mb-4 flex-1 line-clamp-2"
+    >
       {description}
     </p>
 
     <!-- Stack tags -->
     <div class="flex flex-wrap gap-1.5 mb-4">
-      {data.stack.slice(0, 4).map((tech) => (
-        <Badge>{tech}</Badge>
-      ))}
-      {data.stack.length > 4 && (
-        <Badge>+{data.stack.length - 4}</Badge>
-      )}
+      {data.stack.slice(0, 4).map((tech) => <Badge>{tech}</Badge>)}
+      {data.stack.length > 4 && <Badge>+{data.stack.length - 4}</Badge>}
     </div>
 
     <!-- Links -->
-    <div class="flex items-center gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
-      {data.liveUrl && (
-        <a
-          href={data.liveUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-        >
-          <ExternalLink class="w-4 h-4" />
-          {t.portfolio.viewDemo}
-        </a>
-      )}
-      {data.repoUrl && (
-        <a
-          href={data.repoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-        >
-          <Github class="w-4 h-4" />
-          {t.portfolio.viewCode}
-        </a>
-      )}
+    <div
+      class="flex items-center gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800"
+    >
+      {
+        data.liveUrl && (
+          <a
+            href={data.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          >
+            <ExternalLink class="w-4 h-4" />
+            {t.portfolio.viewDemo}
+          </a>
+        )
+      }
+      {
+        data.repoUrl && (
+          <a
+            href={data.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          >
+            <Github class="w-4 h-4" />
+            {t.portfolio.viewCode}
+          </a>
+        )
+      }
     </div>
   </div>
 </Card>
