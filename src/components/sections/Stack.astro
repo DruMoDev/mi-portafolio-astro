@@ -1,8 +1,8 @@
 ---
+import { getCollection } from "astro:content";
 import SectionTitle from "../ui/SectionTitle.astro";
 import SkillCard from "../SkillCard.astro";
 import { getTranslations } from "../../i18n";
-import { resumeData, skillCategories } from "../../data/resume";
 import type { Locale, SkillCategory } from "../../types";
 
 interface Props {
@@ -11,18 +11,20 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = getTranslations(locale);
-const categories = skillCategories[locale];
+
+const skills = await getCollection("skills");
 
 // Group skills by category
-const groupedSkills = resumeData.skills.reduce(
+const groupedSkills = skills.reduce(
   (acc, skill) => {
-    if (!acc[skill.category]) {
-      acc[skill.category] = [];
+    const { category } = skill.data;
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[skill.category].push(skill);
+    acc[category].push(skill.data);
     return acc;
   },
-  {} as Record<SkillCategory, typeof resumeData.skills>,
+  {} as Record<SkillCategory, (typeof skills)[0]["data"][]>,
 );
 
 const categoryOrder: SkillCategory[] = [
@@ -48,7 +50,7 @@ const categoryOrder: SkillCategory[] = [
           return (
             <div>
               <h3 class="text-lg font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-                {categories[category]}
+                {t.skillCategories[category]}
               </h3>
               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                 {skills.map((skill) => (

@@ -1,8 +1,8 @@
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const projectsCollection = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
+  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
   schema: z.object({
     // Required fields
     title: z.object({
@@ -41,4 +41,40 @@ const projectsCollection = defineCollection({
 
 export const collections = {
   projects: projectsCollection,
+  experience: defineCollection({
+    loader: glob({ pattern: "**/*.json", base: "./src/content/experience" }),
+    schema: z.object({
+      company: z.string(),
+      role: z.object({
+        es: z.string(),
+        en: z.string(),
+      }),
+      location: z.object({
+        es: z.string(),
+        en: z.string(),
+      }),
+      startDate: z.string(),
+      endDate: z.string(),
+      highlights: z.object({
+        es: z.array(z.string()),
+        en: z.array(z.string()),
+      }),
+      technologies: z.array(z.string()),
+    }),
+  }),
+  skills: defineCollection({
+    loader: glob({ pattern: "**/*.json", base: "./src/content/skills" }),
+    schema: z.object({
+      name: z.string(),
+      icon: z.string(),
+      category: z.enum([
+        "frontend",
+        "backend",
+        "database",
+        "devops",
+        "ai",
+        "tools",
+      ]),
+    }),
+  }),
 };

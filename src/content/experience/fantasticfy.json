@@ -1,0 +1,38 @@
+{
+  "company": "Fantasticfy",
+  "role": {
+    "es": "Desarrollador Full Stack",
+    "en": "Full Stack Developer"
+  },
+  "location": {
+    "es": "Barcelona",
+    "en": "Barcelona"
+  },
+  "startDate": "2025-04",
+  "endDate": "present",
+  "highlights": {
+    "es": [
+      "Lidero la adopción de herramientas IA (Claude, Cursor) formando a un equipo de 5 personas, mejorando la eficiencia en un 50%.",
+      "Desarrollo aplicaciones Shopify end-to-end (frontend y backend) con CI/CD en Azure y Docker.",
+      "Implemento Arquitectura Hexagonal y DDD, facilitando el trabajo en equipo y mejorando la escalabilidad.",
+      "Actúo como punto de contacto con clientes, traduciendo requisitos de negocio en soluciones técnicas.",
+      "Construyo componentes personalizados con Liquid, Polaris y React para experiencias de comerciante únicas."
+    ],
+    "en": [
+      "Lead the adoption of AI tools (Claude, Cursor) training a team of 5, improving efficiency by 50%.",
+      "Develop Shopify applications end-to-end (frontend and backend) with CI/CD on Azure and Docker.",
+      "Implement Hexagonal Architecture and DDD, enabling better team collaboration and improving scalability.",
+      "Act as the main contact point with clients, translating business requirements into technical solutions.",
+      "Build custom components with Liquid, Polaris and React for unique merchant experiences."
+    ]
+  },
+  "technologies": [
+    "React",
+    "TypeScript",
+    "Node.js",
+    "Shopify",
+    "Azure",
+    "Docker",
+    "Hexagonal Arch"
+  ]
+}

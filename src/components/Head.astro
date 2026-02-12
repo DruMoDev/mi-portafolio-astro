@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from "../data/site";
-import { resumeData } from "../data/resume";
+import { getCollection } from "astro:content";
 import type { SEOProps, Locale } from "../types";
 
 interface Props extends SEOProps {
@@ -46,8 +46,11 @@ const alternateLangCode = alternateLocale === "es" ? "es-ES" : "en-US";
 const socialLinks = siteConfig.social
   .map((s) => s.url)
   .filter((u) => !u.startsWith("mailto:"));
+// ...
+
 // Get skills for knowsAbout
-const skillsList = resumeData.skills.map((s) => s.name);
+const skills = await getCollection("skills");
+const skillsList = skills.map((s) => s.data.name);
 
 // Structured Data for AI Search Engines and Google
 const personSchema = {

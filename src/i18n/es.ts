@@ -71,4 +71,12 @@ export const es: Translations = {
     present: "Actualidad",
     downloadCV: "Ver CV",
   },
+  skillCategories: {
+    frontend: "Frontend",
+    backend: "Backend",
+    database: "Bases de Datos",
+    devops: "DevOps",
+    ai: "IA & Agentes",
+    tools: "Otras Herramientas",
+  },
 };

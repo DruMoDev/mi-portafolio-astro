@@ -1,0 +1,35 @@
+{
+  "company": "Credible",
+  "role": {
+    "es": "Cofundador y Desarrollador Full Stack",
+    "en": "Co-founder & Full Stack Developer"
+  },
+  "location": {
+    "es": "Barcelona (Remoto)",
+    "en": "Barcelona (Remote)"
+  },
+  "startDate": "2024-12",
+  "endDate": "2026-01",
+  "highlights": {
+    "es": [
+      "Cofundé una startup SaaS con equipo internacional (100% en inglés), participando en estrategia y desarrollo.",
+      "Diseñé e implementé arquitectura frontend con React, TypeScript y Clean Architecture.",
+      "Colaboré con backend en Python para integrar modelos de IA y asegurar una experiencia fluida.",
+      "Seleccionado por EWOR, acelerador europeo de primer nivel para fundadores de alto potencial."
+    ],
+    "en": [
+      "Co-founded a SaaS startup with an international team (100% English), contributing to strategy and development.",
+      "Designed and implemented frontend architecture with React, TypeScript and Clean Architecture.",
+      "Collaborated with Python backend to integrate AI models and ensure a seamless user experience.",
+      "Selected by EWOR, a top-tier European accelerator for high-potential founders."
+    ]
+  },
+  "technologies": [
+    "React",
+    "TypeScript",
+    "Python",
+    "Clean Architecture",
+    "SaaS",
+    "AI"
+  ]
+}

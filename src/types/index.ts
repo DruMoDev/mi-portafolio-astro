@@ -146,4 +146,12 @@ export interface Translations {
     present: string;
     downloadCV: string;
   };
+  skillCategories: {
+    frontend: string;
+    backend: string;
+    database: string;
+    devops: string;
+    ai: string;
+    tools: string;
+  };
 }

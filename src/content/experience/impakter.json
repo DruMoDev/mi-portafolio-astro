@@ -1,0 +1,34 @@
+{
+  "company": "IMPAKTER",
+  "role": {
+    "es": "Desarrollador Full Stack",
+    "en": "Full Stack Developer"
+  },
+  "location": {
+    "es": "Londres (Remoto)",
+    "en": "London (Remote)"
+  },
+  "startDate": "2024-09",
+  "endDate": "2025-04",
+  "highlights": {
+    "es": [
+      "Lideré el desarrollo de plataforma de sostenibilidad con datos de +3.000 empresas, usando Next.js y TypeScript.",
+      "Diseñé un motor de comparación para análisis de métricas ESG entre empresas.",
+      "Automaticé la migración de datos y gestioné el flujo de información con el equipo de analistas.",
+      "Implementación pixel-perfect de diseños en Figma con buenas prácticas de accesibilidad."
+    ],
+    "en": [
+      "Led full development of sustainability platform with data from 3,000+ companies, using Next.js and TypeScript.",
+      "Designed a comparison engine for ESG metrics analysis across companies.",
+      "Automated data migration and managed information flow with the analyst team.",
+      "Pixel-perfect implementation of Figma designs with accessibility best practices."
+    ]
+  },
+  "technologies": [
+    "Next.js",
+    "TypeScript",
+    "Figma",
+    "ESG",
+    "Data Automation"
+  ]
+}
