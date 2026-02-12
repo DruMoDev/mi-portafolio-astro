@@ -13,6 +13,7 @@ tags:
 stack:
   - "FastAPI"
   - "React"
+  - "TypeScript"
   - "Supabase"
   - "Pinecone"
   - "OpenAI"
