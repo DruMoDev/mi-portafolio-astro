@@ -18,13 +18,15 @@ stack:
   - "Pinecone"
   - "OpenAI"
   - "Docker"
-liveUrl: "https://university-chatbot-im7j.onrender.com"
+# liveUrl: removed, the demo is this site's chatbot
 featured: true
 draft: false
 order: 1
 ---
 
 ## Descripción del Proyecto
+
+> **🚀 Pruébalo ahora:** ¡Este mismo portafolio utiliza una instancia del Chatbot AI! Puedes interactuar con él haciendo clic en la burbuja de chat en la esquina inferior derecha.
 
 Una plataforma **RAG (Retrieval-Augmented Generation)** multi-tenant lista para producción. Permite a negocios crear chatbots inteligentes entrenados con su propia base de conocimiento (PDFs, DOCX, Webs). Cada 'tenant' tiene su propia base de datos vectorial aislada, una personalidad de IA configurable y un widget embebible.
 
