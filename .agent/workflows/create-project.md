@@ -8,8 +8,13 @@ Follow these steps to generate a new project entry in the portfolio.
 
 ## 1. Gather Information
 
-- Ask the user for the project description or the absolute path to the local repository.
-- If a repository path is provided, use `ls -R` or `view_file` on `README.md` and other key files to understand the project stack and features.
+- Ask the user for the project description or the GitHub repository URL/name (e.g., `user/repo`).
+- If a repository is provided:
+  1. Clone it to a temporary directory: `gh repo clone <repo> .tmp/<repo_name>`
+  2. Analyze the codebase to understand the stack, features, and architecture.
+     - Read `README.md`, `package.json` (or equivalent), and other key configuration files.
+     - Explore the source code structure.
+  3. **Important:** After analysis, remove the temporary directory to keep the workspace clean: `rm -rf .tmp/<repo_name>`
 
 ## 2. Generate Content
 
