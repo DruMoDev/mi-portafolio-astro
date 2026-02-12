@@ -16,6 +16,7 @@ stack:
   - "JavaScript"
 
 repoUrl: "https://github.com/DruMoDev/adn-sports-web"
+liveUrl: "https://adnsports.es/"
 featured: false
 inProgress: false
 draft: false
