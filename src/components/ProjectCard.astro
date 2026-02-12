@@ -77,35 +77,33 @@ const description = data.description;
     </div>
 
     <!-- Links -->
-    <div
-      class="flex items-center gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800"
-    >
-      {
-        data.liveUrl && (
-          <a
-            href={data.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-          >
-            <ExternalLink class="w-4 h-4" />
-            {t.portfolio.viewDemo}
-          </a>
-        )
-      }
-      {
-        data.repoUrl && (
-          <a
-            href={data.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-          >
-            <Github class="w-4 h-4" />
-            {t.portfolio.viewCode}
-          </a>
-        )
-      }
-    </div>
+    {
+      (data.liveUrl || data.repoUrl) && (
+        <div class="flex items-center gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+          {data.liveUrl && (
+            <a
+              href={data.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              <ExternalLink class="w-4 h-4" />
+              {t.portfolio.viewDemo}
+            </a>
+          )}
+          {data.repoUrl && (
+            <a
+              href={data.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              <Github class="w-4 h-4" />
+              {t.portfolio.viewCode}
+            </a>
+          )}
+        </div>
+      )
+    }
   </div>
 </Card>

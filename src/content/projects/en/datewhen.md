@@ -24,7 +24,7 @@ order: 3
 
 ## Project Description
 
-**DateWhen** (formerly Delivery Date Picker) is a comprehensive Shopify application designed to solve a critical e-commerce challenge: allowing customers to choose exactly when they receive their orders. Built with a clean architecture (DDD + Hexagonal) and modern technology stack, this app provides a seamless user experience for both shoppers and merchants.
+**DateWhen** is a comprehensive Shopify application designed to solve a critical e-commerce challenge: allowing customers to choose exactly when they receive their orders. Built with a clean architecture (DDD + Hexagonal) and modern technology stack, this app provides a seamless user experience for both shoppers and merchants.
 
 The application integrates deeply into the Shopify ecosystem using Metafields to store configurations, avoiding unnecessary external databases for store settings, ensuring speed and reliability.
 
