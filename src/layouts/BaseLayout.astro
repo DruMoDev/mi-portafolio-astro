@@ -45,9 +45,20 @@ const { seo = {}, locale } = Astro.props;
         } catch (e) {}
       })();
     </script>
-    <script
-      defer
-      src="https://university-chatbot.pages.dev/widget-loader.js"
-      data-key="pk_live_z8Tg93yd2P1Ztf3psYfy2k2uqobTfRDX"></script>
+    <script is:inline>
+      document.addEventListener("astro:page-load", () => {
+        // Skip if the chatbot widget is already in the DOM
+        if (document.querySelector("iframe[src*='university-chatbot']")) return;
+
+        // Remove any previous widget-loader script to allow re-execution
+        var old = document.querySelector("script[src*='widget-loader']");
+        if (old) old.remove();
+
+        var s = document.createElement("script");
+        s.src = "https://university-chatbot.pages.dev/widget-loader.js";
+        s.dataset.key = "pk_live_z8Tg93yd2P1Ztf3psYfy2k2uqobTfRDX";
+        document.body.appendChild(s);
+      });
+    </script>
   </body>
 </html>
