@@ -24,7 +24,7 @@ const { seo = {}, locale } = Astro.props;
     class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300"
   >
     <Navigation locale={locale} />
-    <main>
+    <main id="main">
       <slot />
     </main>
     <Footer locale={locale} />
@@ -32,18 +32,21 @@ const { seo = {}, locale } = Astro.props;
     <script is:inline>
       // Dark mode initialization (runs before render to prevent flash)
       (function () {
-        const theme = localStorage.getItem("theme");
-        if (
-          theme === "dark" ||
-          (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
+        try {
+          const theme = localStorage.getItem("theme");
+          if (
+            theme === "dark" ||
+            (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (e) {}
       })();
     </script>
     <script
+      defer
       src="https://university-chatbot.pages.dev/widget-loader.js"
       data-key="pk_live_z8Tg93yd2P1Ztf3psYfy2k2uqobTfRDX"></script>
   </body>

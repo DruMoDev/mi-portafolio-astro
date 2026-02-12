@@ -27,6 +27,12 @@ const alternatePath = locale === "es" ? "/en" : "/";
 <header
   class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800"
 >
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg"
+  >
+    {t.nav.skipToContent}
+  </a>
   <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
@@ -43,7 +49,7 @@ const alternatePath = locale === "es" ? "/en" : "/";
           navItems.map((item) => (
             <a
               href={item.href}
-              class="px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+              class="px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 rounded"
             >
               {item.label}
             </a>
@@ -57,6 +63,7 @@ const alternatePath = locale === "es" ? "/en" : "/";
         <a
           href={alternatePath}
           class="w-9 h-9 flex items-center justify-center text-sm font-medium rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+          aria-label={t.common.switchLangLabel}
         >
           {t.common.switchLang}
         </a>
@@ -68,14 +75,11 @@ const alternatePath = locale === "es" ? "/en" : "/";
           id="mobile-menu-btn"
           type="button"
           class="md:hidden p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-          aria-label="Open menu"
+          aria-label={t.common.openMenu}
+          aria-expanded="false"
+          aria-controls="mobile-menu"
         >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -93,7 +97,7 @@ const alternatePath = locale === "es" ? "/en" : "/";
           navItems.map((item) => (
             <a
               href={item.href}
-              class="px-3 py-2 text-base font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              class="px-3 py-2 text-base font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
             >
               {item.label}
             </a>
@@ -112,6 +116,8 @@ const alternatePath = locale === "es" ? "/en" : "/";
     if (!btn || !menu) return;
 
     btn.addEventListener("click", () => {
+      const isExpanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!isExpanded));
       menu.classList.toggle("hidden");
     });
 

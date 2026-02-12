@@ -10,7 +10,7 @@ interface Props extends SEOProps {
 const {
   title,
   description,
-  image = "/og-image.png",
+  image = "/og-image.jpg",
   canonicalUrl = Astro.url.href,
   type = "website",
   locale = "es",
@@ -42,10 +42,32 @@ const langCode = locale === "es" ? "es-ES" : "en-US";
 const alternateLocale = locale === "es" ? "en" : "es";
 const alternateLangCode = alternateLocale === "es" ? "es-ES" : "en-US";
 
+// Compute dynamic hreflang paths based on current page
+const currentPath = Astro.url.pathname;
+let esPath = currentPath;
+let enPath = currentPath;
+
+if (locale === "es") {
+  // Current page is Spanish, compute English alternate
+  enPath = currentPath === "/" ? "/en/" : `/en${currentPath}`;
+  // Handle project pages: /proyectos/slug/ → /en/projects/slug/
+  if (currentPath.startsWith("/proyectos/")) {
+    enPath = currentPath.replace("/proyectos/", "/en/projects/");
+  }
+} else {
+  // Current page is English, compute Spanish alternate
+  esPath = currentPath === "/en/" ? "/" : currentPath.replace(/^\/en/, "");
+  // Handle project pages: /en/projects/slug/ → /proyectos/slug/
+  if (currentPath.startsWith("/en/projects/")) {
+    esPath = currentPath.replace("/en/projects/", "/proyectos/");
+  }
+}
+
+const esUrl = `${siteConfig.url}${esPath}`;
+const enUrl = `${siteConfig.url}${enPath}`;
+
 // Get social links for sameAs
-const socialLinks = siteConfig.social
-  .map((s) => s.url)
-  .filter((u) => !u.startsWith("mailto:"));
+const socialLinks = siteConfig.social.map((s) => s.url).filter((u) => !u.startsWith("mailto:"));
 // ...
 
 // Get skills for knowsAbout
@@ -104,10 +126,7 @@ const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   "@id": `${siteConfig.url}/#service`,
-  serviceType:
-    locale === "es"
-      ? "Desarrollo Web y Software"
-      : "Web and Software Development",
+  serviceType: locale === "es" ? "Desarrollo Web y Software" : "Web and Software Development",
   provider: { "@id": `${siteConfig.url}/#person` },
   areaServed: {
     "@type": "City",
@@ -125,10 +144,7 @@ const serviceSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name:
-            locale === "es"
-              ? "Desarrollo de Páginas Web"
-              : "Website Development",
+          name: locale === "es" ? "Desarrollo de Páginas Web" : "Website Development",
           description:
             locale === "es"
               ? "Páginas web modernas, rápidas y optimizadas para SEO, construidas con Astro y TailwindCSS."
@@ -139,10 +155,7 @@ const serviceSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name:
-            locale === "es"
-              ? "Desarrollo de Aplicaciones Web"
-              : "Web Application Development",
+          name: locale === "es" ? "Desarrollo de Aplicaciones Web" : "Web Application Development",
           description:
             locale === "es"
               ? "Aplicaciones web a medida, dashboards y herramientas internas con React, Next.js y Node.js."
@@ -185,18 +198,13 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       position: 1,
-      name: "Home",
+      name: locale === "es" ? "Inicio" : "Home",
       item: homeUrl,
     },
   ],
 };
 
-const allSchemas = [
-  personSchema,
-  websiteSchema,
-  serviceSchema,
-  breadcrumbSchema,
-];
+const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema];
 ---
 
 <meta charset="UTF-8" />
@@ -226,15 +234,11 @@ const allSchemas = [
 <meta name="geo.position" content="41.3851;2.1734" />
 <meta name="ICBM" content="41.3851, 2.1734" />
 
-<!-- Security Headers -->
-<meta http-equiv="X-Content-Type-Options" content="nosniff" />
-<meta http-equiv="X-XSS-Protection" content="1; mode=block" />
-
 <!-- Canonical & Language Alternates -->
 <link rel="canonical" href={canonicalUrl} />
-<link rel="alternate" hreflang="es-ES" href={siteConfig.url} />
-<link rel="alternate" hreflang="en-US" href={`${siteConfig.url}/en`} />
-<link rel="alternate" hreflang="x-default" href={siteConfig.url} />
+<link rel="alternate" hreflang="es-ES" href={esUrl} />
+<link rel="alternate" hreflang="en-US" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={esUrl} />
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -268,31 +272,20 @@ const allSchemas = [
 />
 
 <!-- Theme Color -->
-<meta
-  name="theme-color"
-  content="#09090b"
-  media="(prefers-color-scheme: dark)"
-/>
-<meta
-  name="theme-color"
-  content="#ffffff"
-  media="(prefers-color-scheme: light)"
-/>
+<meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="msapplication-TileColor" content="#3b82f6" />
 
 <!-- Preconnect for performance -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="dns-prefetch" href="https://api.web3forms.com" />
+<link rel="dns-prefetch" href="https://university-chatbot.pages.dev" />
 
 <!-- Structured Data for SEO & AI Search Engines -->
 {
   allSchemas.map((schema) => (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(schema)}
-    />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
   ))
 }
 

@@ -7,6 +7,7 @@ export const en: Translations = {
     stack: "Stack",
     projects: "Projects",
     contact: "Contact",
+    skipToContent: "Skip to content",
   },
   hero: {
     greeting: "Hi, I'm",
@@ -21,6 +22,9 @@ export const en: Translations = {
     title: "About Me",
     subtitle: "Learn a bit more about my journey",
     bio: "Full Stack Developer with hands-on experience in React, TypeScript, Node.js and Python. Specialized in Clean Architecture, DDD and hexagonal architecture. I leverage AI tools (Claude, Cursor, Copilot) to maximize efficiency and code quality. Known for being proactive, autonomous and having critical thinking. I thrive in environments where I can contribute ideas, challenge assumptions and work with teams that value clean code and continuous improvement.",
+    yearsExp: "Years exp.",
+    companies: "Companies",
+    technologies: "Technologies",
   },
   stack: {
     title: "My Stack",
@@ -32,6 +36,9 @@ export const en: Translations = {
     viewProject: "View project",
     viewCode: "View code",
     viewDemo: "View demo",
+    featured: "Featured",
+    inProgress: "In Progress",
+    noProjects: "No projects available.",
   },
   contact: {
     title: "Contact",
@@ -49,6 +56,8 @@ export const en: Translations = {
       sending: "Sending...",
       success: "Message sent! I will reply soon.",
       error: "Error sending. Please try again.",
+      emailSubject: "New message from",
+      fromName: "Portfolio contact form",
     },
   },
   footer: {
@@ -61,9 +70,24 @@ export const en: Translations = {
     links: "Links",
     viewDemo: "View demo",
     viewCode: "View code",
+    tags: "Tags",
   },
   common: {
     switchLang: "ES",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    scrollToAbout: "Scroll to about section",
+    toggleDarkMode: "Toggle dark mode",
+    opensInNewWindow: "(opens in new window)",
+    home: "Home",
+    skipToContent: "Skip to main content",
+    required: "required",
+  },
+  notFound: {
+    title: "Page Not Found",
+    heading: "Page not found",
+    description: "The page you are looking for doesn't exist or has been moved.",
+    goHome: "Go home",
   },
   experience: {
     title: "Experience",

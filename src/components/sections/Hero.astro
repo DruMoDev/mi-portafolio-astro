@@ -14,15 +14,10 @@ const { locale } = Astro.props;
 const t = getTranslations(locale);
 ---
 
-<section
-  id="hero"
-  class="min-h-screen flex items-center justify-center px-4 pt-20 pb-16"
->
+<section id="hero" class="min-h-screen flex items-center justify-center px-4 pt-20 pb-16">
   <div class="max-w-4xl mx-auto text-center">
     <!-- Greeting -->
-    <p
-      class="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 mb-4 animate-fade-in"
-    >
+    <p class="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 mb-4 animate-fade-in">
       {t.hero.greeting}
     </p>
 
@@ -32,9 +27,7 @@ const t = getTranslations(locale);
     </h1>
 
     <!-- Role -->
-    <p
-      class="text-xl md:text-2xl text-zinc-700 dark:text-zinc-300 mb-4 font-medium"
-    >
+    <p class="text-xl md:text-2xl text-zinc-700 dark:text-zinc-300 mb-4 font-medium">
       {t.hero.role}
     </p>
 
@@ -44,9 +37,7 @@ const t = getTranslations(locale);
     </p>
 
     <!-- CTA Buttons -->
-    <div
-      class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-    >
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
       <Button href="#portfolio" variant="primary" size="lg">
         {t.hero.viewProjects}
       </Button>
@@ -60,16 +51,13 @@ const t = getTranslations(locale);
       class="flex items-center justify-center gap-2 mb-12 animate-fade-in"
       style="animation-delay: 0.2s;"
     >
-      <span class="relative flex h-3 w-3">
+      <span class="relative flex h-3 w-3" aria-hidden="true">
         <span
           class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
         ></span>
-        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"
-        ></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
       </span>
-      <p
-        class="text-sm text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1.5"
-      >
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1.5">
         {t.hero.aiCheck}
         <Sparkles class="w-4 h-4 text-amber-400" />
       </p>
@@ -82,7 +70,7 @@ const t = getTranslations(locale);
     <a
       href="#about"
       class="absolute bottom-8 left-1/2 -translate-x-1/2 p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors animate-bounce"
-      aria-label="Scroll to about section"
+      aria-label={t.common.scrollToAbout}
     >
       <ArrowDown class="w-6 h-6" />
     </a>

@@ -33,13 +33,7 @@ export interface Skill {
   category: SkillCategory;
 }
 
-export type SkillCategory =
-  | "frontend"
-  | "backend"
-  | "database"
-  | "devops"
-  | "ai"
-  | "tools";
+export type SkillCategory = "frontend" | "backend" | "database" | "devops" | "ai" | "tools";
 
 export interface Experience {
   company: string;
@@ -83,6 +77,7 @@ export interface Translations {
     stack: string;
     projects: string;
     contact: string;
+    skipToContent: string;
   };
   hero: {
     greeting: string;
@@ -96,6 +91,9 @@ export interface Translations {
     title: string;
     subtitle: string;
     bio: string;
+    yearsExp: string;
+    companies: string;
+    technologies: string;
   };
   stack: {
     title: string;
@@ -107,6 +105,9 @@ export interface Translations {
     viewProject: string;
     viewCode: string;
     viewDemo: string;
+    featured: string;
+    inProgress: string;
+    noProjects: string;
   };
   contact: {
     title: string;
@@ -124,6 +125,8 @@ export interface Translations {
       sending: string;
       success: string;
       error: string;
+      emailSubject: string;
+      fromName: string;
     };
   };
   footer: {
@@ -136,9 +139,24 @@ export interface Translations {
     links: string;
     viewDemo: string;
     viewCode: string;
+    tags: string;
   };
   common: {
     switchLang: string;
+    openMenu: string;
+    closeMenu: string;
+    scrollToAbout: string;
+    toggleDarkMode: string;
+    opensInNewWindow: string;
+    home: string;
+    skipToContent: string;
+    required: string;
+  };
+  notFound: {
+    title: string;
+    heading: string;
+    description: string;
+    goHome: string;
   };
   experience: {
     title: string;

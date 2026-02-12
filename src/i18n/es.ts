@@ -7,6 +7,7 @@ export const es: Translations = {
     stack: "Stack",
     projects: "Proyectos",
     contact: "Contacto",
+    skipToContent: "Saltar al contenido",
   },
   hero: {
     greeting: "Hola, soy",
@@ -21,6 +22,9 @@ export const es: Translations = {
     title: "Sobre mí",
     subtitle: "Conoce un poco más sobre mi trayectoria",
     bio: "Desarrollador Full Stack con experiencia en React, TypeScript, Node.js y Python. Especializado en Clean Architecture, DDD y arquitectura hexagonal. Integro herramientas de IA (Claude, Cursor, Copilot) en mi flujo de trabajo para maximizar eficiencia y calidad de código. Me definen como alguien proactivo, autónomo y con pensamiento crítico. Disfruto en entornos donde puedo aportar ideas, desafiar supuestos y colaborar en equipos que valoran código limpio y mejora continua.",
+    yearsExp: "Años exp.",
+    companies: "Empresas",
+    technologies: "Tecnologías",
   },
   stack: {
     title: "Mi Stack",
@@ -32,6 +36,9 @@ export const es: Translations = {
     viewProject: "Ver proyecto",
     viewCode: "Ver código",
     viewDemo: "Ver demo",
+    featured: "Destacado",
+    inProgress: "En progreso",
+    noProjects: "No hay proyectos disponibles.",
   },
   contact: {
     title: "Contacto",
@@ -49,6 +56,8 @@ export const es: Translations = {
       sending: "Enviando...",
       success: "¡Mensaje enviado! Te responderé pronto.",
       error: "Error al enviar. Intenta de nuevo.",
+      emailSubject: "Nuevo mensaje desde",
+      fromName: "Formulario de contacto del portfolio",
     },
   },
   footer: {
@@ -61,9 +70,24 @@ export const es: Translations = {
     links: "Enlaces",
     viewDemo: "Ver demo",
     viewCode: "Ver código",
+    tags: "Etiquetas",
   },
   common: {
     switchLang: "EN",
+    openMenu: "Abrir menú",
+    closeMenu: "Cerrar menú",
+    scrollToAbout: "Desplazar a sobre mí",
+    toggleDarkMode: "Cambiar modo oscuro",
+    opensInNewWindow: "(abre en nueva ventana)",
+    home: "Inicio",
+    skipToContent: "Saltar al contenido principal",
+    required: "obligatorio",
+  },
+  notFound: {
+    title: "Página no encontrada",
+    heading: "Página no encontrada",
+    description: "La página que buscas no existe o ha sido movida.",
+    goHome: "Ir al inicio",
   },
   experience: {
     title: "Experiencia",

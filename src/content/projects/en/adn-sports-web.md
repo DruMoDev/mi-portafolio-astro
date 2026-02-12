@@ -23,13 +23,13 @@ draft: false
 order: 10
 ---
 
-## Description / Descripción
+## Description
 
 This project is a modern, optimized website for a sports center, developed using the **Astro** framework to ensure maximum performance and excellent search engine optimization (SEO). The main objective was to create a fast and effective digital presence that meets the client's needs.
 
 The site features multiple pages that comprehensively detail the center's facilities and the variety of services offered, providing users with all necessary information clearly and accessibly. Being built with an island architecture and static site generation (SSG), it offers minimal load times and a smooth user experience, without relying on a complex backend.
 
-## Key Features / Características Principales
+## Key Features
 
 - **Advanced SEO Optimization**: Structure and meta tags optimized to improve search engine visibility.
 - **Maximum Performance**: Ultra-fast load times thanks to Astro's architecture and the absence of unnecessary JavaScript.

@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
-import { Briefcase, MapPin, Calendar, ExternalLink } from '@lucide/astro';
-import SectionTitle from '../ui/SectionTitle.astro';
-import Badge from '../ui/Badge.astro';
-import { getTranslations } from '../../i18n';
-import type { Locale } from '../../types';
+import { getCollection } from "astro:content";
+import { Briefcase, MapPin, Calendar, ExternalLink } from "@lucide/astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Badge from "../ui/Badge.astro";
+import { getTranslations } from "../../i18n";
+import type { Locale } from "../../types";
 
 interface Props {
   locale: Locale;
@@ -13,23 +13,26 @@ interface Props {
 const { locale } = Astro.props;
 const t = getTranslations(locale);
 
-const cvUrl = locale === 'es' ? 'https://rxresu.me/dev.morera/es-cv-roger-morera' : 'https://rxresu.me/dev.morera/en-cv-roger-morera';
+const cvUrl =
+  locale === "es"
+    ? "https://rxresu.me/dev.morera/es-cv-roger-morera"
+    : "https://rxresu.me/dev.morera/en-cv-roger-morera";
 
-const experiences = (await getCollection('experience')).sort((a, b) => {
-  const dateA = a.data.endDate === 'present' ? new Date() : new Date(a.data.endDate);
-  const dateB = b.data.endDate === 'present' ? new Date() : new Date(b.data.endDate);
+const experiences = (await getCollection("experience")).sort((a, b) => {
+  const dateA = a.data.endDate === "present" ? new Date() : new Date(a.data.endDate);
+  const dateB = b.data.endDate === "present" ? new Date() : new Date(b.data.endDate);
   return dateB.getTime() - dateA.getTime();
 });
 
-function formatDate(dateStr: string | 'present', locale: Locale): string {
-  if (dateStr === 'present') {
+function formatDate(dateStr: string | "present", locale: Locale): string {
+  if (dateStr === "present") {
     return t.experience.present;
   }
-  const [year, month] = dateStr.split('-');
+  const [year, month] = dateStr.split("-");
   const date = new Date(parseInt(year), parseInt(month) - 1);
-  return date.toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', {
-    month: 'short',
-    year: 'numeric',
+  return date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
+    month: "short",
+    year: "numeric",
   });
 }
 ---
@@ -42,6 +45,7 @@ function formatDate(dateStr: string | 'present', locale: Locale): string {
         href={cvUrl}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={`${t.experience.downloadCV} ${t.common.opensInNewWindow}`}
         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-sm font-medium"
       >
         <ExternalLink class="w-4 h-4" />
@@ -53,57 +57,57 @@ function formatDate(dateStr: string | 'present', locale: Locale): string {
       <!-- Timeline line -->
       <div class="absolute left-0 md:left-8 top-0 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800"></div>
 
-      <div class="space-y-12">
-        {experiences.map((entry) => {
-          const exp = entry.data;
-          return (
-          <div class="relative pl-8 md:pl-20">
-            <!-- Timeline dot -->
-            <div class="absolute left-0 md:left-8 -translate-x-1/2 w-4 h-4 rounded-full bg-blue-600 dark:bg-blue-500 border-4 border-white dark:border-zinc-950"></div>
+      <ol class="space-y-12">
+        {
+          experiences.map((entry) => {
+            const exp = entry.data;
+            return (
+              <li class="relative pl-8 md:pl-20">
+                <div
+                  class="absolute left-0 md:left-8 -translate-x-1/2 w-4 h-4 rounded-full bg-blue-600 dark:bg-blue-500 border-4 border-white dark:border-zinc-950"
+                  aria-hidden="true"
+                />
 
-            <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <!-- Header -->
-              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
-                <div>
-                  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                    {exp.company}
-                  </h3>
-                  <p class="text-blue-600 dark:text-blue-400 font-medium">
-                    {exp.role[locale]}
-                  </p>
+                <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                    <div>
+                      <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                        {exp.company}
+                      </h3>
+                      <p class="text-blue-600 dark:text-blue-400 font-medium">{exp.role[locale]}</p>
+                    </div>
+                    <div class="flex flex-col sm:items-end gap-1 text-sm text-zinc-500 dark:text-zinc-400">
+                      <span class="inline-flex items-center gap-1">
+                        <Calendar class="w-4 h-4" />
+                        {formatDate(exp.startDate, locale)} - {formatDate(exp.endDate, locale)}
+                      </span>
+                      <span class="inline-flex items-center gap-1">
+                        <MapPin class="w-4 h-4" />
+                        {exp.location[locale]}
+                      </span>
+                    </div>
+                  </div>
+
+                  <ul class="space-y-2 mb-4">
+                    {exp.highlights[locale].map((highlight) => (
+                      <li class="flex items-start gap-2 text-zinc-600 dark:text-zinc-400 text-sm">
+                        <span class="text-blue-600 dark:text-blue-400 mt-1.5">•</span>
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div class="flex flex-wrap gap-2">
+                    {exp.technologies.map((tech) => (
+                      <Badge>{tech}</Badge>
+                    ))}
+                  </div>
                 </div>
-                <div class="flex flex-col sm:items-end gap-1 text-sm text-zinc-500 dark:text-zinc-400">
-                  <span class="inline-flex items-center gap-1">
-                    <Calendar class="w-4 h-4" />
-                    {formatDate(exp.startDate, locale)} - {formatDate(exp.endDate, locale)}
-                  </span>
-                  <span class="inline-flex items-center gap-1">
-                    <MapPin class="w-4 h-4" />
-                    {exp.location[locale]}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Highlights -->
-              <ul class="space-y-2 mb-4">
-                {exp.highlights[locale].map((highlight) => (
-                  <li class="flex items-start gap-2 text-zinc-600 dark:text-zinc-400 text-sm">
-                    <span class="text-blue-600 dark:text-blue-400 mt-1.5">•</span>
-                    {highlight}
-                  </li>
-                ))}
-              </ul>
-
-              <!-- Technologies -->
-              <div class="flex flex-wrap gap-2">
-                {exp.technologies.map((tech) => (
-                  <Badge>{tech}</Badge>
-                ))}
-              </div>
-            </div>
-          </div>
-        )})}
-      </div>
+              </li>
+            );
+          })
+        }
+      </ol>
     </div>
   </div>
 </section>

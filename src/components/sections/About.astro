@@ -26,16 +26,21 @@ const t = getTranslations(locale);
             <img
               src="/images/yo.jpg"
               alt={siteConfig.author.displayName}
+              width="400"
+              height="400"
+              loading="lazy"
               class="w-full h-full rounded-full object-cover bg-zinc-100 dark:bg-zinc-900"
             />
           </div>
           <!-- Decorative elements -->
           <div
             class="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-60"
+            aria-hidden="true"
           >
           </div>
           <div
             class="absolute -bottom-2 -left-2 w-6 h-6 bg-purple-500 rounded-full opacity-60"
+            aria-hidden="true"
           >
           </div>
         </div>
@@ -50,38 +55,32 @@ const t = getTranslations(locale);
         </div>
 
         <!-- Quick stats/highlights -->
-        <div class="grid grid-cols-3 gap-4 mt-8">
+        <dl class="grid grid-cols-3 gap-4 mt-8">
           <div
             class="text-center p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"
           >
-            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              2+
-            </p>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">
-              {locale === "es" ? "Años exp." : "Years exp."}
-            </p>
+            <dt class="text-2xl font-bold text-blue-600 dark:text-blue-400">2+</dt>
+            <dd class="text-sm text-zinc-600 dark:text-zinc-400">
+              {t.about.yearsExp}
+            </dd>
           </div>
           <div
             class="text-center p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"
           >
-            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              3
-            </p>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">
-              {locale === "es" ? "Empresas" : "Companies"}
-            </p>
+            <dt class="text-2xl font-bold text-purple-600 dark:text-purple-400">3</dt>
+            <dd class="text-sm text-zinc-600 dark:text-zinc-400">
+              {t.about.companies}
+            </dd>
           </div>
           <div
             class="text-center p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"
           >
-            <p class="text-2xl font-bold text-green-600 dark:text-green-400">
-              25+
-            </p>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">
-              {locale === "es" ? "Tecnologías" : "Technologies"}
-            </p>
+            <dt class="text-2xl font-bold text-green-600 dark:text-green-400">25+</dt>
+            <dd class="text-sm text-zinc-600 dark:text-zinc-400">
+              {t.about.technologies}
+            </dd>
           </div>
-        </div>
+        </dl>
       </div>
     </div>
   </div>

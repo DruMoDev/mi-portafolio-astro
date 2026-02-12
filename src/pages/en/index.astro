@@ -1,16 +1,23 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/sections/Hero.astro';
-import About from '../../components/sections/About.astro';
-import Experience from '../../components/sections/Experience.astro';
-import Stack from '../../components/sections/Stack.astro';
-import Portfolio from '../../components/sections/Portfolio.astro';
-import Contact from '../../components/sections/Contact.astro';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Hero from "../../components/sections/Hero.astro";
+import About from "../../components/sections/About.astro";
+import Experience from "../../components/sections/Experience.astro";
+import Stack from "../../components/sections/Stack.astro";
+import Portfolio from "../../components/sections/Portfolio.astro";
+import Contact from "../../components/sections/Contact.astro";
 
-const locale = 'en';
+const locale = "en";
 ---
 
-<BaseLayout locale={locale}>
+<BaseLayout
+  locale={locale}
+  seo={{
+    title: "Dru | Web Developer Barcelona - Apps, SaaS & Shopify",
+    description:
+      "Full Stack Web Developer in Barcelona. Specialist in React, Node.js and Shopify. I create high-impact, high-performance custom digital solutions.",
+  }}
+>
   <Hero locale={locale} />
   <About locale={locale} />
   <Experience locale={locale} />

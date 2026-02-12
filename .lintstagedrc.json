@@ -1,0 +1,4 @@
+{
+  "*.{ts,js,json,md,css}": ["prettier --write"],
+  "*.astro": ["prettier --write --plugin prettier-plugin-astro"]
+}
