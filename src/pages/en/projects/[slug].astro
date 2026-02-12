@@ -42,79 +42,138 @@ const description = data.description;
     image: data.thumbnail,
   }}
 >
-  <article class="pt-24 pb-16 px-4">
-    <div class="max-w-4xl mx-auto">
-      <!-- Back button -->
-      <a
-        href="/en#portfolio"
-        class="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8"
-      >
-        <ArrowLeft class="w-4 h-4" />
-        {t.project.backToProjects}
-      </a>
-
-      <!-- Header -->
-      <header class="mb-8">
-        <h1
-          class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4"
+  <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      {/* Back button */}
+      <div class="mb-8">
+        <a
+          href="/en#portfolio"
+          class="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
         >
-          {title}
-        </h1>
-        <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
-          {description}
-        </p>
-
-        <!-- Tags -->
-        <div class="flex flex-wrap gap-2 mb-6">
-          {data.tags.map((tag) => <Badge variant="secondary">{tag}</Badge>)}
-        </div>
-
-        <!-- Links -->
-        <div class="flex flex-wrap gap-3">
-          {
-            data.liveUrl && (
-              <Button href={data.liveUrl} variant="primary" class="gap-2">
-                <ExternalLink class="w-4 h-4" />
-                {t.project.viewDemo}
-              </Button>
-            )
-          }
-          {
-            data.repoUrl && (
-              <Button href={data.repoUrl} variant="outline" class="gap-2">
-                <Github class="w-4 h-4" />
-                {t.project.viewCode}
-              </Button>
-            )
-          }
-        </div>
-      </header>
-
-      <!-- Thumbnail -->
-      <div
-        class="mb-10 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800"
-      >
-        <img
-          src={data.thumbnail}
-          alt={data.thumbnailAlt}
-          class="w-full h-auto"
-        />
+          <ArrowLeft
+            class="w-4 h-4 group-hover:-translate-x-1 transition-transform"
+          />
+          {t.project.backToProjects}
+        </a>
       </div>
 
-      <!-- Tech Stack -->
-      <section class="mb-10">
-        <h2 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
-          {t.project.techStack}
-        </h2>
-        <div class="flex flex-wrap gap-2">
-          {data.stack.map((tech) => <Badge>{tech}</Badge>)}
-        </div>
-      </section>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        {/* Sidebar - Meta Info */}
+        <aside class="lg:col-span-4 space-y-8 order-2 lg:order-1">
+          {/* Thumbnail */}
+          <div
+            class="rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm bg-zinc-50 dark:bg-zinc-900/50"
+          >
+            <img
+              src={data.thumbnail}
+              alt={data.thumbnailAlt}
+              class="w-full h-auto object-cover aspect-video lg:aspect-auto"
+            />
+          </div>
 
-      <!-- Content -->
-      <section class="prose prose-zinc dark:prose-invert max-w-none">
-        <Content />
-      </section>
+          {/* Links */}
+          <div class="flex flex-col gap-3">
+            {
+              data.liveUrl && (
+                <Button
+                  href={data.liveUrl}
+                  variant="primary"
+                  class="w-full justify-center gap-2 shadow-sm shadow-blue-500/20"
+                >
+                  <ExternalLink class="w-4 h-4" />
+                  {t.project.viewDemo}
+                </Button>
+              )
+            }
+            {
+              data.repoUrl && (
+                <Button
+                  href={data.repoUrl}
+                  variant="outline"
+                  class="w-full justify-center gap-2"
+                >
+                  <Github class="w-4 h-4" />
+                  {t.project.viewCode}
+                </Button>
+              )
+            }
+          </div>
+
+          {/* Tech Stack */}
+          <div
+            class="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800"
+          >
+            <h3
+              class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-4"
+            >
+              {t.project.techStack}
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {
+                data.stack.map((tech) => (
+                  <Badge
+                    variant="secondary"
+                    class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-sm"
+                  >
+                    {tech}
+                  </Badge>
+                ))
+              }
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div
+            class="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800"
+          >
+            <h3
+              class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-4"
+            >
+              Tags
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {
+                data.tags.map((tag) => (
+                  <Badge
+                    variant="default"
+                    class="bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300"
+                  >
+                    {tag}
+                  </Badge>
+                ))
+              }
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main class="lg:col-span-8 order-1 lg:order-2">
+          <header class="mb-10">
+            <h1
+              class="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 leading-tight"
+            >
+              {title}
+            </h1>
+            <p
+              class="text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-3xl"
+            >
+              {description}
+            </p>
+          </header>
+
+          <div
+            class="prose prose-lg prose-zinc dark:prose-invert max-w-none
+            prose-headings:font-bold prose-headings:text-zinc-900 dark:prose-headings:text-zinc-100
+            prose-p:text-zinc-600 dark:prose-p:text-zinc-300 prose-p:leading-relaxed
+            prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-zinc-900 dark:prose-strong:text-zinc-100
+            prose-li:text-zinc-600 dark:prose-li:text-zinc-300
+            prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-zinc-200 dark:prose-img:border-zinc-800"
+          >
+            <Content />
+          </div>
+        </main>
+      </div>
     </div>
-  </article>
+  </div>
 </BaseLayout>

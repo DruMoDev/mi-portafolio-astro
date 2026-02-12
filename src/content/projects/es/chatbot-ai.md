@@ -2,7 +2,7 @@
 title: "Plataforma Chatbot AI"
 description: "Plataforma RAG multi-tenant completa que permite a empresas desplegar chatbots entrenados con sus propios documentos y web, con widgets personalizables."
 publishedAt: 2024-10-01
-thumbnail: "/images/projects/chatbot-ai.webp"
+thumbnail: "/images/projects/chatbot-ai.png"
 thumbnailAlt: "Interfaz del Chatbot AI y Panel de Administración"
 tags:
   - "ai"

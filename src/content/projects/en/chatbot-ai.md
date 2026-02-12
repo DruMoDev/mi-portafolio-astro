@@ -2,7 +2,7 @@
 title: "AI Chatbot Platform"
 description: "A production-ready multi-tenant RAG platform empowering businesses to deploy custom AI chatbots trained on their own documents and websites."
 publishedAt: 2024-10-01
-thumbnail: "/images/projects/chatbot-ai.webp"
+thumbnail: "/images/projects/chatbot-ai.png"
 thumbnailAlt: "AI Chatbot Interface and Admin Dashboard"
 tags:
   - "ai"
