@@ -44,6 +44,13 @@ const description = data.description;
         </div>
       )
     }
+    {
+      data.tags.includes("in-progress") && (
+        <div class="absolute top-3 left-3">
+          <Badge variant="secondary">In Progress</Badge>
+        </div>
+      )
+    }
   </a>
 
   <!-- Content -->
