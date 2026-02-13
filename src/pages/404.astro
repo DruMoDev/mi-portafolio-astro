@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/ui/Button.astro";
-import { getLocaleFromUrl, getTranslations, getLocalePath } from "../i18n";
+import { getTranslations, defaultLocale } from "../i18n";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import type { Locale } from "../types";
 
-const locale = getLocaleFromUrl(Astro.url);
+const locale = (Astro.currentLocale ?? defaultLocale) as Locale;
 const t = getTranslations(locale);
 ---
 
@@ -18,7 +20,7 @@ const t = getTranslations(locale);
         {t.notFound.description}
       </p>
       <div class="flex gap-4 justify-center">
-        <Button href={getLocalePath(locale)}>
+        <Button href={getRelativeLocaleUrl(locale)}>
           {t.notFound.goHome}
         </Button>
       </div>

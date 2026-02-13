@@ -5,6 +5,7 @@ import {
   getAlternateLocale,
   getProjectsPath,
   getLocaleFromUrl,
+  getAlternatePath,
   defaultLocale,
 } from "./index";
 
@@ -99,6 +100,30 @@ describe("getLocaleFromUrl", () => {
   it("should not match partial locale segments", () => {
     const url = new URL("https://example.com/enterprise/page");
     expect(getLocaleFromUrl(url)).toBe("es");
+  });
+});
+
+describe("getAlternatePath", () => {
+  it("should switch home from ES to EN", () => {
+    expect(getAlternatePath("/", "es")).toBe("/en");
+  });
+
+  it("should switch home from EN to ES", () => {
+    expect(getAlternatePath("/en", "en")).toBe("/");
+    expect(getAlternatePath("/en/", "en")).toBe("/");
+  });
+
+  it("should map /proyectos/slug to /en/projects/slug", () => {
+    expect(getAlternatePath("/proyectos/datewhen", "es")).toBe("/en/projects/datewhen");
+  });
+
+  it("should map /en/projects/slug to /proyectos/slug", () => {
+    expect(getAlternatePath("/en/projects/datewhen", "en")).toBe("/proyectos/datewhen");
+  });
+
+  it("should handle paths without locale-specific segments", () => {
+    expect(getAlternatePath("/about", "es")).toBe("/en/about");
+    expect(getAlternatePath("/en/about", "en")).toBe("/about");
   });
 });
 

@@ -38,3 +38,24 @@ export function getLocaleFromUrl(url: URL): Locale {
   }
   return defaultLocale;
 }
+
+// Route segment mapping between locales
+const routeMap: Record<string, string> = {
+  proyectos: "projects",
+  projects: "proyectos",
+};
+
+export function getAlternatePath(pathname: string, currentLocale: Locale): string {
+  if (currentLocale === "es") {
+    // Spanish → English: add /en prefix and map segments
+    const segments = pathname.split("/").filter(Boolean);
+    const mapped = segments.map((s) => routeMap[s] ?? s);
+    return `/en${mapped.length ? `/${mapped.join("/")}` : ""}`;
+  }
+
+  // English → Spanish: strip /en prefix and map segments
+  const withoutPrefix = pathname.replace(/^\/en\/?/, "/");
+  const segments = withoutPrefix.split("/").filter(Boolean);
+  const mapped = segments.map((s) => routeMap[s] ?? s);
+  return mapped.length ? `/${mapped.join("/")}` : "/";
+}
