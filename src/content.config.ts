@@ -21,6 +21,7 @@ const projectsCollection = defineCollection({
 
     // Links
     liveUrl: z.string().url().optional(),
+    webUrl: z.string().url().optional(),
     repoUrl: z.string().url().optional(),
 
     // Metadata

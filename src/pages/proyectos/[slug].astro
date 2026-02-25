@@ -84,6 +84,20 @@ const description = data.description;
               )
             }
             {
+              data.webUrl && (
+                <Button
+                  href={data.webUrl}
+                  variant="outline"
+                  class="w-full justify-center gap-2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink class="w-4 h-4" />
+                  Ver web
+                </Button>
+              )
+            }
+            {
               data.repoUrl && (
                 <Button
                   href={data.repoUrl}
