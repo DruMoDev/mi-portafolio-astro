@@ -2,7 +2,7 @@
 title: "Net7"
 description: "SaaS for invoicing and tax management for Spanish freelancers. Full app + marketing website with SEO blog. Simplifies taxes, invoices and clients for €7.99/month."
 publishedAt: 2026-02-25
-thumbnail: "/images/projects/default.svg"
+thumbnail: "../../../assets/images/projects/default.png"
 thumbnailAlt: "Net7 dashboard showing monthly KPIs, invoicing and tax simulator"
 inProgress: true
 tags:

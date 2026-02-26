@@ -2,7 +2,7 @@
 title: "Net7"
 description: "SaaS de facturación y gestión fiscal para autónomos españoles. App completa + web de marketing con blog SEO. Simplifica impuestos, facturas y clientes por 7,99 €/mes."
 publishedAt: 2026-02-25
-thumbnail: "/images/projects/default.svg"
+thumbnail: "../../../assets/images/projects/default.png"
 thumbnailAlt: "Dashboard de Net7 mostrando KPIs mensuales, facturación y simulador fiscal"
 inProgress: true
 tags:

@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { ExternalLink, Github } from "@lucide/astro";
 import Badge from "./ui/Badge.astro";
 import Card from "./ui/Card.astro";
@@ -36,11 +37,11 @@ const description = data.description;
     tabindex="-1"
     aria-hidden="true"
   >
-    <img
+    <Image
       src={data.thumbnail}
       alt=""
-      width="600"
-      height="338"
+      width={600}
+      height={338}
       class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
       loading="lazy"
       decoding="async"

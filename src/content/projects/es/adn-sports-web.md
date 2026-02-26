@@ -2,7 +2,7 @@
 title: "ADN Sports Web"
 description: "Sitio web de alto rendimiento desarrollado con Astro para un centro deportivo, enfocado en SEO y velocidad."
 publishedAt: 2024-01-01
-thumbnail: "/images/projects/adn-sports.png"
+thumbnail: "../../../assets/images/projects/adn-sports.png"
 thumbnailAlt: "Miniatura del proyecto ADN Sports Web"
 tags:
   - "web"
