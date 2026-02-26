@@ -14,7 +14,11 @@ const { locale } = Astro.props;
 const t = getTranslations(locale);
 ---
 
-<section id="hero" class="min-h-screen flex items-center justify-center px-4 pt-20 pb-16">
+<section
+  id="hero"
+  aria-label={t.nav.home}
+  class="min-h-screen flex items-center justify-center px-4 pt-20 pb-16"
+>
   <div class="max-w-4xl mx-auto text-center">
     <!-- Greeting -->
     <p class="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 mb-4 animate-fade-in">
@@ -64,7 +68,7 @@ const t = getTranslations(locale);
     </div>
 
     <!-- Social Links -->
-    <SocialLinks size="lg" />
+    <SocialLinks size="lg" locale={locale} />
 
     <!-- Scroll indicator -->
     <a

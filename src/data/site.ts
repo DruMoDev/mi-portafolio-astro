@@ -7,7 +7,7 @@ export const siteConfig: SiteConfig = {
     realName: "Roger Morera",
     displayName: "Dru",
     email: "contacto@drumorera.com",
-    avatar: "/images/profile.jpg",
+    avatar: "/images/yo.jpg",
   },
   social: [
     {

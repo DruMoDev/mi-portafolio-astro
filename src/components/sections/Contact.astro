@@ -15,7 +15,11 @@ const t = getTranslations(locale);
 const WEB3FORMS_KEY = "8d42850c-2326-43c2-9a46-3f9438415bea";
 ---
 
-<section id="contact" class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50">
+<section
+  id="contact"
+  aria-labelledby="contact-title"
+  class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50"
+>
   <div class="max-w-2xl mx-auto">
     <!-- Header -->
     <div class="text-center mb-10">
@@ -24,7 +28,10 @@ const WEB3FORMS_KEY = "8d42850c-2326-43c2-9a46-3f9438415bea";
       >
         <Mail class="w-8 h-8" />
       </div>
-      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+      <h2
+        id="contact-title"
+        class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4"
+      >
         {t.contact.title}
       </h2>
       <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-lg mx-auto">
@@ -149,7 +156,7 @@ const WEB3FORMS_KEY = "8d42850c-2326-43c2-9a46-3f9438415bea";
         </a>
       </p>
       <div class="flex justify-center">
-        <SocialLinks size="md" />
+        <SocialLinks size="md" locale={locale} />
       </div>
     </div>
   </div>

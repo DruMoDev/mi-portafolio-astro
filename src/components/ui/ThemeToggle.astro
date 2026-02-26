@@ -1,11 +1,19 @@
 ---
-// No props needed - client-side only component
+import { getTranslations } from "../../i18n";
+import type { Locale } from "../../types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
 ---
 
 <button
   id="theme-toggle"
   type="button"
-  aria-label="Toggle dark mode"
+  aria-label={t.common.toggleDarkMode}
   aria-pressed="false"
   class="w-9 h-9 flex items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
 >

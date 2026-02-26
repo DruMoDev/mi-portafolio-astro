@@ -30,9 +30,9 @@ const groupedSkills = skills.reduce(
 const categoryOrder: SkillCategory[] = ["ai", "frontend", "backend", "database", "devops", "tools"];
 ---
 
-<section id="stack" class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50">
+<section id="stack" aria-labelledby="stack-title" class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900/50">
   <div class="max-w-6xl mx-auto">
-    <SectionTitle title={t.stack.title} subtitle={t.stack.subtitle} />
+    <SectionTitle title={t.stack.title} subtitle={t.stack.subtitle} id="stack-title" />
 
     <div class="space-y-10">
       {

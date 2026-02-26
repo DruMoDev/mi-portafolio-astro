@@ -37,10 +37,14 @@ function formatDate(dateStr: string | "present", locale: Locale): string {
 }
 ---
 
-<section id="experience" class="py-20 px-4">
+<section id="experience" aria-labelledby="experience-title" class="py-20 px-4">
   <div class="max-w-4xl mx-auto">
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
-      <SectionTitle title={t.experience.title} subtitle={t.experience.subtitle} class="mb-0" />
+      <SectionTitle
+        title={t.experience.title}
+        subtitle={t.experience.subtitle}
+        id="experience-title"
+      />
       <a
         href={cvUrl}
         target="_blank"

@@ -12,12 +12,16 @@ interface Props {
 const { locale } = Astro.props;
 const t = getTranslations(locale);
 
+// Use absolute paths so nav works from project detail pages too
+const homeBase = locale === "es" ? "/" : "/en/";
+
 const navItems = [
-  { label: t.nav.home, href: "#hero" },
-  { label: t.nav.about, href: "#about" },
-  { label: t.nav.stack, href: "#stack" },
-  { label: t.nav.projects, href: "#portfolio" },
-  { label: t.nav.contact, href: "#contact" },
+  { label: t.nav.home, href: `${homeBase}#hero` },
+  { label: t.nav.about, href: `${homeBase}#about` },
+  { label: t.nav.stack, href: `${homeBase}#stack` },
+  { label: t.experience.title, href: `${homeBase}#experience` },
+  { label: t.nav.projects, href: `${homeBase}#portfolio` },
+  { label: t.nav.contact, href: `${homeBase}#contact` },
 ];
 
 const alternatePath = getAlternatePath(Astro.url.pathname, locale);
@@ -67,7 +71,7 @@ const alternatePath = getAlternatePath(Astro.url.pathname, locale);
           {t.common.switchLang}
         </a>
 
-        <ThemeToggle />
+        <ThemeToggle locale={locale} />
 
         <!-- Mobile menu button -->
         <button

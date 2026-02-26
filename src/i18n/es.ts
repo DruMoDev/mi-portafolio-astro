@@ -70,6 +70,7 @@ export const es: Translations = {
     links: "Enlaces",
     viewDemo: "Ver demo",
     viewCode: "Ver código",
+    viewWeb: "Ver web",
     tags: "Etiquetas",
   },
   common: {

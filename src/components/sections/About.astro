@@ -1,8 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import SectionTitle from "../ui/SectionTitle.astro";
 import { getTranslations } from "../../i18n";
 import { siteConfig } from "../../data/site";
 import type { Locale } from "../../types";
+import profilePhoto from "../../assets/images/yo.jpg";
 
 interface Props {
   locale: Locale;
@@ -12,9 +14,9 @@ const { locale } = Astro.props;
 const t = getTranslations(locale);
 ---
 
-<section id="about" class="py-20 px-4">
+<section id="about" aria-labelledby="about-title" class="py-20 px-4">
   <div class="max-w-4xl mx-auto">
-    <SectionTitle title={t.about.title} subtitle={t.about.subtitle} />
+    <SectionTitle title={t.about.title} subtitle={t.about.subtitle} id="about-title" />
 
     <div class="grid md:grid-cols-5 gap-8 items-center">
       <!-- Profile placeholder (left side on desktop) -->
@@ -23,12 +25,13 @@ const t = getTranslations(locale);
           <div
             class="w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 p-1"
           >
-            <img
-              src="/images/yo.jpg"
+            <Image
+              src={profilePhoto}
               alt={siteConfig.author.displayName}
-              width="400"
-              height="400"
-              loading="lazy"
+              width={224}
+              height={224}
+              loading="eager"
+              fetchpriority="high"
               class="w-full h-full rounded-full object-cover bg-zinc-100 dark:bg-zinc-900"
             />
           </div>

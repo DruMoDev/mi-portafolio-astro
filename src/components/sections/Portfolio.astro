@@ -29,9 +29,9 @@ const sortedProjects = projects.sort((a, b) => {
 });
 ---
 
-<section id="portfolio" class="py-20 px-4">
+<section id="portfolio" aria-labelledby="portfolio-title" class="py-20 px-4">
   <div class="max-w-6xl mx-auto">
-    <SectionTitle title={t.portfolio.title} subtitle={t.portfolio.subtitle} />
+    <SectionTitle title={t.portfolio.title} subtitle={t.portfolio.subtitle} id="portfolio-title" />
 
     {
       sortedProjects.length > 0 ? (

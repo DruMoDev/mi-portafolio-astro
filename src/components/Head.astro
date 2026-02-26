@@ -86,7 +86,7 @@ const personSchema = {
       ? "Desarrollador Full Stack en Barcelona especializado en crear páginas web, aplicaciones y SaaS. Experto en React, Node.js, TypeScript y arquitectura de software."
       : "Full Stack Developer in Barcelona specialized in building websites, applications and SaaS. Expert in React, Node.js, TypeScript and software architecture.",
   url: siteConfig.url,
-  image: `${siteConfig.url}/images/profile.jpg`,
+  image: `${siteConfig.url}/images/yo.jpg`,
   jobTitle: "Full Stack Developer",
   worksFor: {
     "@type": "Organization",
@@ -242,7 +242,7 @@ const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
@@ -250,8 +250,8 @@ const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema
 <meta property="og:title" content={finalTitle} />
 <meta property="og:description" content={finalDescription} />
 <meta property="og:image" content={absoluteImage} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content="800" />
+<meta property="og:image:height" content="600" />
 <meta
   property="og:image:alt"
   content={`${siteConfig.author.displayName} - Full Stack Developer Barcelona`}
@@ -270,6 +270,8 @@ const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema
   name="twitter:image:alt"
   content={`${siteConfig.author.displayName} - Full Stack Developer Barcelona`}
 />
+<meta name="twitter:site" content="@drumorera" />
+<meta name="twitter:creator" content="@drumorera" />
 
 <!-- Theme Color -->
 <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
@@ -284,8 +286,6 @@ const allSchemas = [personSchema, websiteSchema, serviceSchema, breadcrumbSchema
 />
 
 <!-- Preconnect for performance -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="dns-prefetch" href="https://api.web3forms.com" />
 <link rel="dns-prefetch" href="https://university-chatbot.pages.dev" />
 

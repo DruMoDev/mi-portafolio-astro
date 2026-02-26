@@ -139,6 +139,7 @@ export interface Translations {
     links: string;
     viewDemo: string;
     viewCode: string;
+    viewWeb: string;
     tags: string;
   };
   common: {
