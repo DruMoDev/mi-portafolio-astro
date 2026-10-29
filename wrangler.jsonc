@@ -12,6 +12,10 @@
   // CONTACT_TO (el Gmail verificado como destino) se añade como secreto:
   //   npx wrangler secret put CONTACT_TO
   "send_email": [{ "name": "SEND_EMAIL" }],
+  // Analítica de redes para /api/social: el Worker de tiktok-editor, por service binding.
+  // El token de lectura se añade como secreto:
+  //   npx wrangler secret put DFORGE_ANALYTICS_TOKEN
+  "services": [{ "binding": "DFORGE", "service": "dforge-api" }],
   "vars": {
     "CONTACT_FROM": "web@drumorera.com",
   },

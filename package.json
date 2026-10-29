@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "social:sync": "node --experimental-strip-types --no-warnings scripts/sync-social.mjs && prettier --write src/data/social.json",
     "astro": "astro",
     "format": "prettier --write \"src/**/*.{ts,js,astro,json,md,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,js,astro,json,md,css}\"",

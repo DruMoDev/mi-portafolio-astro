@@ -1,23 +1,8 @@
-import realData from "../data/social.json";
-import exampleData from "../data/social.example.json";
+import data from "../data/social.json";
 import type { Network } from "../types";
+import type { SocialData, Video } from "./social-sync";
 
-export interface Video {
-  id: string;
-  network: Network;
-  title: string;
-  url: string;
-  /** Ruta local, p. ej. "src/assets/videos/<id>.jpg". Si no hay, la tarjeta usa un degradado. */
-  thumbnail?: string;
-  views: number;
-  publishedAt?: string;
-}
-
-export interface SocialData {
-  updatedAt: string;
-  followers: Record<Network, number>;
-  videos: Video[];
-}
+export type { SocialData, Video };
 
 export const networkNames: Record<Network, string> = {
   tiktok: "TikTok",
@@ -29,13 +14,9 @@ export const networkNames: Record<Network, string> = {
 export const MIN_VIDEOS = 5;
 export const MAX_VIDEOS = 8;
 
-/** Datos reales; en desarrollo, si no hay vídeos reales, los de ejemplo. */
-export function getSocial(dev: boolean = import.meta.env.DEV): SocialData {
-  const real = realData as SocialData;
-  if (dev && real.videos.length < MIN_VIDEOS) {
-    return { ...real, videos: (exampleData as SocialData).videos };
-  }
-  return real;
+/** Último resultado guardado por `npm run social:sync`. En producción se refresca con /api/social. */
+export function getSocial(): SocialData {
+  return data as SocialData;
 }
 
 const isValid = (v: Video) =>
@@ -60,8 +41,8 @@ export function selectVideoSets(videos: Video[]): { top: Video[]; latest: Video[
   return { top, latest };
 }
 
-export function hasVideoSection(dev: boolean = import.meta.env.DEV): boolean {
-  return selectVideoSets(getSocial(dev).videos) !== null;
+export function hasVideoSection(): boolean {
+  return selectVideoSets(getSocial().videos) !== null;
 }
 
 /** 5300 → "5.300" (Intl en español no agrupa los números de 4 cifras). */
@@ -81,4 +62,35 @@ export function formatViews(n: number): string {
 
 export function totalFollowers(followers: Record<Network, number>): number {
   return Object.values(followers).reduce((sum, n) => sum + n, 0);
+}
+
+/** "Instagram, TikTok, YouTube y Facebook": solo las redes con seguidores, de más a menos. */
+export function followedOn(followers: Record<Network, number>): string {
+  const names = (Object.keys(followers) as Network[])
+    .filter((n) => followers[n] > 0)
+    .sort((a, b) => followers[b] - followers[a])
+    .map((n) => networkNames[n]);
+  return names.length > 1 ? `${names.slice(0, -1).join(", ")} y ${names.at(-1)}` : (names[0] ?? "");
+}
+
+export interface PublicSocial {
+  updatedAt: string;
+  followers: number;
+  followedOn: string;
+  views: number;
+  top: Video[];
+  latest: Video[];
+}
+
+/** Lo que necesita la página: sin la lista entera de vídeos. Null si no da para la sección. */
+export function publicSocial(data: SocialData): PublicSocial | null {
+  const sets = selectVideoSets(data.videos);
+  if (!sets) return null;
+  return {
+    updatedAt: data.updatedAt,
+    followers: totalFollowers(data.followers),
+    followedOn: followedOn(data.followers),
+    views: data.views,
+    ...sets,
+  };
 }

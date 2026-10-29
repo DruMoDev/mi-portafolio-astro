@@ -9,7 +9,6 @@ import { whoOptions } from "../data/services";
       <h2 id="who-t">¿Qué te trae por aquí?</h2>
       <p>Elige una o varias y te marco los servicios que son para ti.</p>
     </div>
-    <a class="skip" href="#servicios">Ver todos los servicios</a>
   </div>
   <div class="tiles" role="group" aria-labelledby="who-t">
     {
@@ -35,6 +34,10 @@ import { whoOptions } from "../data/services";
     <span data-summary></span>
     <button type="button" class="go-btn" data-see-mine tabindex="-1">Verlos</button>
   </div>
+  <a class="more" href="#servicios">
+    <span>Mis servicios</span>
+    <span class="more-ic"><Icon name="down" size={18} /></span>
+  </a>
 </section>
 
 <script>
@@ -125,15 +128,6 @@ import { whoOptions } from "../data/services";
     color: var(--soft);
     font-size: 15px;
     margin-top: 4px;
-  }
-  .skip {
-    font-size: 15px;
-    color: var(--soft);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  .skip:hover {
-    color: var(--ink);
   }
   .tiles {
     display: grid;
@@ -261,6 +255,52 @@ import { whoOptions } from "../data/services";
   }
   .go-btn:hover {
     transform: translateY(-2px);
+  }
+  /* Pista de que hay más debajo. */
+  .more {
+    display: flex;
+    width: max-content;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 8px auto 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .more:hover {
+    color: var(--ink);
+  }
+  .more-ic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 0 0 1px var(--line);
+    animation: nudge 2.2s var(--ease) infinite;
+  }
+  .more:hover .more-ic {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: none;
+  }
+  @keyframes nudge {
+    0%,
+    60%,
+    100% {
+      transform: none;
+    }
+    30% {
+      transform: translateY(6px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .more-ic {
+      animation: none;
+    }
   }
   @media (max-width: 980px) {
     .tiles {

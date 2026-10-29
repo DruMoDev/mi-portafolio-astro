@@ -17,37 +17,57 @@ const shapeVars = (s: (typeof services)[number]) =>
   <div class="services-head">
     <div>
       <h2 class="sec" id="services-t">Mis servicios</h2>
-      <p class="sec-sub">
-        Toca cualquiera para verlo. También puedes ir con las flechas del teclado o deslizando.
-      </p>
+      <p class="sec-sub">Toca uno para verlo, usa las flechas o desliza.</p>
     </div>
-    <span class="count" data-count>1 de {services.length}</span>
   </div>
   <span class="visually-hidden" aria-live="polite" data-live></span>
 
-  <div class="tabs" role="tablist" aria-label="Servicios">
-    <span class="pill" aria-hidden="true"></span>
-    {
-      services.map((s, i) => (
-        <button
-          type="button"
-          role="tab"
-          class:list={["tab", { on: i === 0 }]}
-          id={`tab-${s.id}`}
-          aria-controls={`panel-${s.id}`}
-          aria-selected={i === 0 ? "true" : "false"}
-          tabindex={i === 0 ? 0 : -1}
-          data-i={i}
-        >
-          <Icon name={s.icon} />
-          {s.name}
-          <span class="fit">Para ti</span>
-        </button>
-      ))
-    }
-  </div>
-  <div class="bar" aria-hidden="true">
-    <i style={`width:${100 / services.length}%`}></i>
+  <div class="nav">
+    <div class="tabs-scroll">
+      <div class="tabs" role="tablist" aria-label="Servicios">
+        <span class="pill" aria-hidden="true"></span>
+        {
+          services.map((s, i) => (
+            <button
+              type="button"
+              role="tab"
+              class:list={["tab", { on: i === 0 }]}
+              id={`tab-${s.id}`}
+              aria-controls={`panel-${s.id}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              tabindex={i === 0 ? 0 : -1}
+              data-i={i}
+            >
+              <Icon name={s.icon} />
+              <span class="long">{s.name}</span>
+              <span class="short">{s.short}</span>
+              <span class="fit">Para ti</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+    <div class="arrows">
+      <button
+        type="button"
+        class="arrow"
+        data-prev
+        aria-label={`Servicio anterior: ${services.at(-1)!.name}`}
+      >
+        <Icon name="left" />
+      </button>
+      <span class="count" aria-hidden="true"
+        ><b data-count>01</b> / {String(services.length).padStart(2, "0")}</span
+      >
+      <button
+        type="button"
+        class="arrow"
+        data-next
+        aria-label={`Siguiente servicio: ${services[1].name}`}
+      >
+        <Icon name="right" />
+      </button>
+    </div>
   </div>
 
   <div class="stage" style={`--bg:${first.shape.bg}`}>
@@ -99,17 +119,6 @@ const shapeVars = (s: (typeof services)[number]) =>
         <ServiceFaces />
       </div>
     </div>
-
-    <div class="stepper">
-      <button type="button" class="step-btn" data-prev>
-        <Icon name="left" />
-        <span><small>Anterior</small><b data-prev-name>{services.at(-1)!.name}</b></span>
-      </button>
-      <button type="button" class="step-btn next" data-next>
-        <span><small>Siguiente</small><b data-next-name>{services[1].name}</b></span>
-        <Icon name="right" />
-      </button>
-    </div>
   </div>
 </section>
 
@@ -119,16 +128,16 @@ const shapeVars = (s: (typeof services)[number]) =>
 
   const section = document.getElementById("servicios")!;
   const tabsEl = section.querySelector<HTMLElement>(".tabs")!;
+  const tabsScroll = section.querySelector<HTMLElement>(".tabs-scroll")!;
   const pill = section.querySelector<HTMLElement>(".pill")!;
   const tabs = [...section.querySelectorAll<HTMLButtonElement>(".tab")];
   const panels = [...section.querySelectorAll<HTMLElement>(".panel")];
   const stage = section.querySelector<HTMLElement>(".stage")!;
   const obj = section.querySelector<HTMLElement>(".obj")!;
   const faces = [...section.querySelectorAll<HTMLElement>(".face")];
-  const barFill = section.querySelector<HTMLElement>(".bar i")!;
   const count = section.querySelector<HTMLElement>("[data-count]")!;
-  const prevName = section.querySelector<HTMLElement>("[data-prev-name]")!;
-  const nextName = section.querySelector<HTMLElement>("[data-next-name]")!;
+  const prevBtn = section.querySelector<HTMLButtonElement>("[data-prev]")!;
+  const nextBtn = section.querySelector<HTMLButtonElement>("[data-next]")!;
   const live = section.querySelector<HTMLElement>("[data-live]")!;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const N = services.length;
@@ -168,14 +177,13 @@ const shapeVars = (s: (typeof services)[number]) =>
     });
     placePill();
     const t = tabs[i];
-    tabsEl.scrollTo({
-      left: t.offsetLeft - tabsEl.clientWidth / 2 + t.offsetWidth / 2,
+    tabsScroll.scrollTo({
+      left: t.offsetLeft - tabsScroll.clientWidth / 2 + t.offsetWidth / 2,
       behavior: instant ? "auto" : "smooth",
     });
-    barFill.style.width = `${((i + 1) / N) * 100}%`;
-    count.textContent = `${i + 1} de ${N}`;
-    prevName.textContent = services[(i + N - 1) % N].name;
-    nextName.textContent = services[(i + 1) % N].name;
+    count.textContent = String(i + 1).padStart(2, "0");
+    prevBtn.setAttribute("aria-label", `Servicio anterior: ${services[(i + N - 1) % N].name}`);
+    nextBtn.setAttribute("aria-label", `Siguiente servicio: ${services[(i + 1) % N].name}`);
     history.replaceState(null, "", `#${s.id}`);
 
     // El objeto: se apaga la cara, cambia de forma inclinándose y entra la nueva.
@@ -217,8 +225,8 @@ const shapeVars = (s: (typeof services)[number]) =>
   }
 
   tabs.forEach((t, k) => t.addEventListener("click", () => go(k)));
-  section.querySelector("[data-prev]")!.addEventListener("click", () => go(cur - 1));
-  section.querySelector("[data-next]")!.addEventListener("click", () => go(cur + 1));
+  prevBtn.addEventListener("click", () => go(cur - 1));
+  nextBtn.addEventListener("click", () => go(cur + 1));
 
   // Teclado: dentro de las pestañas como un tablist; fuera, si el escenario está en pantalla.
   tabsEl.addEventListener("keydown", (e) => {
@@ -299,8 +307,19 @@ const shapeVars = (s: (typeof services)[number]) =>
     busy = false;
     go(k);
   });
+  // Sin degradado cuando ya se ve la última pestaña.
+  const edge = () =>
+    tabsScroll.classList.toggle(
+      "end",
+      tabsScroll.scrollLeft + tabsScroll.clientWidth >= tabsScroll.scrollWidth - 4
+    );
+  tabsScroll.addEventListener("scroll", edge, { passive: true });
+  edge();
   placePill();
-  addEventListener("resize", placePill);
+  addEventListener("resize", () => {
+    placePill();
+    edge();
+  });
   document.fonts?.ready.then(placePill);
 </script>
 
@@ -324,31 +343,85 @@ const shapeVars = (s: (typeof services)[number]) =>
     max-width: 52ch;
     line-height: 1.5;
   }
-  .count {
-    font-size: 15px;
-    color: var(--soft);
-    font-variant-numeric: tabular-nums;
+  /* Barra de navegación: pestañas y flechas juntas, pegada arriba mientras se lee el servicio. */
+  .nav {
+    position: sticky;
+    top: 10px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 22px;
+    background: rgba(244, 245, 248, 0.82);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.04),
+      0 10px 30px -18px rgba(0, 0, 0, 0.25);
   }
-
+  .tabs-scroll {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-radius: 16px;
+  }
+  .tabs-scroll::-webkit-scrollbar {
+    display: none;
+  }
   .tabs {
     position: relative;
     display: flex;
-    gap: 4px;
-    padding: 5px;
-    border-radius: 18px;
-    background: var(--tint);
-    overflow-x: auto;
-    scrollbar-width: none;
+    gap: 2px;
+    width: max-content;
+    min-width: 100%;
   }
-  .tabs::-webkit-scrollbar {
-    display: none;
+  .arrows {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(0, 0, 0, 0.04);
+    transition:
+      background 0.2s,
+      color 0.2s,
+      transform 0.25s var(--spring);
+  }
+  .arrow:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+  .arrow:active {
+    transform: scale(0.92);
+  }
+  .count {
+    min-width: 62px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .count b {
+    color: var(--ink);
+    font-weight: 600;
   }
   .pill {
     position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 5px;
-    border-radius: 14px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 16px;
     background: #fff;
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.08),
@@ -365,8 +438,8 @@ const shapeVars = (s: (typeof services)[number]) =>
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 12px 14px;
-    border-radius: 14px;
+    padding: 12px 16px;
+    border-radius: 16px;
     font-size: 15px;
     color: var(--soft);
     white-space: nowrap;
@@ -379,6 +452,9 @@ const shapeVars = (s: (typeof services)[number]) =>
   .tab.on {
     color: var(--ink);
     font-weight: 600;
+  }
+  .tab .short {
+    display: none;
   }
   .tab:focus-visible {
     outline-offset: -2px;
@@ -401,19 +477,6 @@ const shapeVars = (s: (typeof services)[number]) =>
       transform: scale(0);
     }
   }
-  .bar {
-    height: 2px;
-    background: var(--line);
-    margin: 14px 4px 0;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .bar i {
-    display: block;
-    height: 100%;
-    background: var(--ink);
-    transition: width 0.6s var(--ease);
-  }
 
   .stage {
     position: relative;
@@ -421,8 +484,8 @@ const shapeVars = (s: (typeof services)[number]) =>
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
     gap: 48px;
-    min-height: 600px;
-    padding: 48px 48px 96px;
+    min-height: 560px;
+    padding: 48px;
     border-radius: 28px;
     background: var(--bg, var(--tint));
     transition: background 0.8s var(--ease);
@@ -576,54 +639,8 @@ const shapeVars = (s: (typeof services)[number]) =>
   .instant .obj,
   .instant .stage,
   .instant .pill,
-  .instant .bar i,
-  .instant :global(.face),
-  .instant :global(.face .st) {
+  .instant :global(.face) {
     transition: none !important;
-  }
-
-  .stepper {
-    position: absolute;
-    left: 48px;
-    right: 48px;
-    bottom: 26px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    z-index: 3;
-  }
-  .step-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 16px 10px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    font-size: 14px;
-    text-align: left;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
-    transition:
-      background 0.2s,
-      transform 0.25s var(--spring);
-  }
-  .step-btn.next {
-    padding: 10px 12px 10px 16px;
-  }
-  .step-btn:hover {
-    background: #fff;
-    transform: translateY(-2px);
-  }
-  .step-btn small {
-    display: block;
-    font-size: 11px;
-    color: var(--soft);
-  }
-  .step-btn b {
-    font-weight: 600;
-  }
-  .step-btn.next span {
-    text-align: right;
   }
 
   @media (max-width: 980px) {
@@ -632,7 +649,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     }
     .stage {
       grid-template-columns: minmax(0, 1fr);
-      padding: 20px 20px 90px;
+      padding: 20px 20px 28px;
       gap: 20px;
       min-height: 0;
       border-radius: 22px;
@@ -647,35 +664,38 @@ const shapeVars = (s: (typeof services)[number]) =>
     .obj.morphing {
       transform: scale(calc(var(--ms, 0.7) * 0.94)) rotate(var(--tilt, 0deg));
     }
-    .stepper {
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
+    .nav {
+      gap: 6px;
+      margin-inline: -6px;
     }
-    .step-btn small {
+    /* El degradado del borde avisa de que hay más pestañas al deslizar. */
+    .tabs-scroll {
+      mask-image: linear-gradient(90deg, #000 85%, transparent);
+    }
+    .tabs-scroll.end {
+      mask-image: none;
+    }
+    /* En el móvil caben las seis: iconos, y el nombre corto solo en la activa. */
+    .arrows,
+    .tab .long {
       display: none;
     }
-    .step-btn span {
-      min-width: 0;
-    }
-    .step-btn b {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .step-btn {
-      min-width: 0;
+    .tab {
+      flex: 1 0 auto;
+      padding: 12px 10px;
       gap: 6px;
-      font-size: 13px;
     }
-    .step-btn:not(.next) {
-      flex: 0 1 auto;
-      padding-right: 14px;
+    .tab.on .short {
+      display: inline;
     }
-    .step-btn.next {
-      flex: 0 1 auto;
-      padding-left: 14px;
+    .tab .fit {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      font-size: 0;
     }
   }
 </style>

@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { formatCount, formatViews, getSocial, selectVideoSets, totalFollowers } from "./social";
+import {
+  followedOn,
+  formatCount,
+  formatViews,
+  getSocial,
+  publicSocial,
+  selectVideoSets,
+  totalFollowers,
+} from "./social";
 import type { Video } from "./social";
 
 const video = (i: number, extra: Partial<Video> = {}): Video => ({
@@ -61,15 +69,41 @@ describe("formatos", () => {
   });
 });
 
+describe("followedOn", () => {
+  it("nombra las redes con seguidores, de más a menos", () => {
+    expect(followedOn({ facebook: 2400, instagram: 2514, tiktok: 249, youtube: 295 })).toBe(
+      "Instagram, Facebook, YouTube y TikTok"
+    );
+    expect(followedOn({ facebook: 0, instagram: 10, tiktok: 0, youtube: 0 })).toBe("Instagram");
+  });
+});
+
 describe("getSocial", () => {
-  it("en producción no hay vídeos de ejemplo", () => {
-    const prod = getSocial(false);
-    expect(prod.followers.facebook).toBe(2400);
-    expect(prod.videos.every((v) => !v.id.startsWith("ejemplo"))).toBe(true);
+  it("los datos guardados son reales y dan para la sección de vídeos", () => {
+    const social = getSocial();
+    expect(social.videos.every((v) => !v.id.startsWith("ejemplo"))).toBe(true);
+    expect(selectVideoSets(social.videos)).not.toBeNull();
+    expect(social.views).toBeGreaterThan(0);
+  });
+});
+
+describe("publicSocial", () => {
+  it("resume seguidores y deja solo los conjuntos del anillo", () => {
+    const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => video(i));
+    const out = publicSocial({
+      updatedAt: "2026-10-29",
+      followers: { facebook: 2400, instagram: 2514, tiktok: 249, youtube: 295 },
+      views: 310550,
+      videos,
+    });
+    expect(out).toMatchObject({ followers: 5458, views: 310550, updatedAt: "2026-10-29" });
+    expect(out?.followedOn).toBe("Instagram, Facebook, YouTube y TikTok");
+    expect(out?.top).toHaveLength(8);
+    expect(out?.latest[0].id).toBe("v10");
   });
 
-  it("en desarrollo usa los de ejemplo si no hay reales", () => {
-    const dev = getSocial(true);
-    expect(dev.videos.length).toBeGreaterThanOrEqual(5);
+  it("null si no hay vídeos suficientes", () => {
+    const followers = { facebook: 0, instagram: 0, tiktok: 0, youtube: 0 };
+    expect(publicSocial({ updatedAt: "", followers, views: 0, videos: [] })).toBeNull();
   });
 });

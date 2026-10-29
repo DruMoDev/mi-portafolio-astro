@@ -7,13 +7,13 @@ export const siteConfig: SiteConfig = {
   realName: "Roger Morera",
   handle: "@soydruia",
   email: "hola@drumorera.com",
-  whatsapp: "",
+  whatsapp: "34617587034",
   whatsappText: "Hola Dru, vengo de tu web…",
   networks: {
-    tiktok: "",
-    instagram: "",
-    facebook: "",
-    youtube: "",
+    tiktok: "https://www.tiktok.com/@soydruia",
+    instagram: "https://www.instagram.com/soydruia",
+    facebook: "https://www.facebook.com/people/Roger-Morera/61591256000892/",
+    youtube: "https://www.youtube.com/@soydruia",
   },
   extraLinks: {
     github: "https://github.com/DruMoDev",

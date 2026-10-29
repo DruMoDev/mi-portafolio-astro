@@ -15,6 +15,8 @@ export interface Service {
   id: ServiceId;
   /** Nombre de la pestaña. */
   name: string;
+  /** Nombre corto para la pestaña en el móvil. */
+  short: string;
   /** Nombre dentro de una frase ("Te encajan 2 servicios: webs y …"). */
   inline: string;
   icon: ServiceIcon;
@@ -35,6 +37,7 @@ export const services: Service[] = [
   {
     id: "automatizaciones",
     name: "Automatizaciones e IA",
+    short: "Automatización",
     inline: "automatizaciones e IA",
     icon: "zap",
     who: ["negocio"],
@@ -51,11 +54,12 @@ export const services: Service[] = [
   {
     id: "webs",
     name: "Webs",
+    short: "Webs",
     inline: "webs",
     icon: "window",
     who: ["negocio", "vender"],
     title: "Una web profesional, en días.",
-    one: "Rápida, pensada para el móvil y para Google. El dominio y el hosting van a tu nombre.",
+    one: "Rápida, pensada para el móvil y para Google. Sin mensualidades: pagas una vez y la web es tuya.",
     fit: [
       "No tienes web o tienes una antigua",
       "Quieres que te encuentren en Google",
@@ -67,6 +71,7 @@ export const services: Service[] = [
   {
     id: "shopify",
     name: "Tiendas Shopify",
+    short: "Shopify",
     inline: "tiendas Shopify",
     icon: "bag",
     who: ["vender"],
@@ -74,8 +79,8 @@ export const services: Service[] = [
     one: "Diseño, productos, pagos y envíos configurados. Los pedidos llegan solos y ya pagados.",
     fit: [
       "Vendes por Instagram o WhatsApp",
+      "Tienes tienda física y quieres vender también online",
       "Apuntas los pedidos a mano",
-      "Quieres dar el salto a vender online",
     ],
     cta: "Pedir presupuesto",
     shape: { w: 470, h: 400, r: 22, bg: "#F5F1EC", ob: "#FFFFFF", tilt: "-1.5deg", ms: 0.62 },
@@ -83,6 +88,7 @@ export const services: Service[] = [
   {
     id: "consultoria",
     name: "Consultoría",
+    short: "Consultoría",
     inline: "consultoría",
     icon: "compass",
     who: ["negocio", "aprender"],
@@ -99,6 +105,7 @@ export const services: Service[] = [
   {
     id: "mentoria",
     name: "Mentoría",
+    short: "Mentoría",
     inline: "mentoría",
     icon: "users",
     who: ["aprender"],
@@ -116,17 +123,18 @@ export const services: Service[] = [
   {
     id: "colaboraciones",
     name: "Colaboraciones",
+    short: "Colaboraciones",
     inline: "colaboraciones",
     icon: "clapper",
     who: ["marca"],
     title: "Tu producto, contado por alguien que lo usa.",
     one: "Vídeos cortos en TikTok, Reels y Shorts, y vídeos largos en YouTube. Con métricas reales.",
     fit: [
-      "Tu producto tiene que ver con IA, tecnología o productividad",
-      "Buscas un público que quiere aprender",
-      "Prefieres contenido honesto a un anuncio",
+      "Tu producto tiene que ver con tecnología, IA o productividad",
+      "Buscas un público adulto, que trabaja y quiere aprender",
+      "Prefieres contenido cercano y honesto a un anuncio",
     ],
-    cta: "Pedir el media kit",
+    cta: "Proponer una colaboración",
     moreVideos: true,
     shape: { w: 260, h: 462, r: 22, bg: "#ECEFFC", ob: "#0B1240", tilt: "1deg", ms: 0.68 },
   },

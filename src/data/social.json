@@ -1,10 +1,632 @@
 {
-  "updatedAt": "2026-10-28",
+  "updatedAt": "2026-10-29T12:00:23.135Z",
   "followers": {
-    "facebook": 2400,
-    "instagram": 2300,
-    "tiktok": 300,
-    "youtube": 300
+    "tiktok": 249,
+    "instagram": 2514,
+    "youtube": 295,
+    "facebook": 2400
   },
-  "videos": []
+  "views": 310550,
+  "videos": [
+    {
+      "id": "project:claude-duet",
+      "network": "youtube",
+      "title": "Claude Duet: la IA que trabaja por ti (y ChatGPT ya tiene la suya)",
+      "url": "https://www.youtube.com/watch?v=7MS180Pnckw",
+      "thumbnail": "https://i.ytimg.com/vi/7MS180Pnckw/maxresdefault.jpg",
+      "views": 1148,
+      "publishedAt": "2026-10-26"
+    },
+    {
+      "id": "project:20-efectos-claude-edita",
+      "network": "instagram",
+      "title": "20 efectos de vídeo con IA editados por Claude",
+      "url": "https://www.instagram.com/reel/Deyi_GAiAUK/",
+      "thumbnail": "https://i.ytimg.com/vi/-GXOK-p4Lm8/maxresdefault.jpg",
+      "views": 5641,
+      "publishedAt": "2026-10-22"
+    },
+    {
+      "id": "carousel:palabras-ia-parte-1",
+      "network": "youtube",
+      "title": "Serie: palabras de IA que finges entender. Parte 1: token, contexto, alucinar",
+      "url": "https://www.youtube.com/watch?v=iLdcq2rPFuE",
+      "thumbnail": "https://i.ytimg.com/vi/iLdcq2rPFuE/maxresdefault.jpg",
+      "views": 1587,
+      "publishedAt": "2026-10-21"
+    },
+    {
+      "id": "project:agents-local-md",
+      "network": "instagram",
+      "title": "AGENTS.md tiene un hermano pequeño que casi nadie usa",
+      "url": "https://www.instagram.com/reel/Det3UEriPDu/",
+      "thumbnail": "https://i.ytimg.com/vi/chgYpoYYhW4/maxresdefault.jpg",
+      "views": 2038,
+      "publishedAt": "2026-10-20"
+    },
+    {
+      "id": "project:claude-y-codex-se-revisan",
+      "network": "instagram",
+      "title": "Claude y ChatGPT revisándose el trabajo entre ellos (truco de senior)",
+      "url": "https://www.instagram.com/reel/Deq67fdiONU/",
+      "thumbnail": "https://i.ytimg.com/vi/85KOK1Pp7XQ/maxresdefault.jpg",
+      "views": 182991,
+      "publishedAt": "2026-10-19"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-09-pushea-a-main",
+      "network": "tiktok",
+      "title": "Así se ACTUALIZA tu web para siempre, con una frase",
+      "url": "https://www.tiktok.com/@soydruia/video/7670480441731796246",
+      "thumbnail": "https://i.ytimg.com/vi/dDa4WadHFCs/maxresdefault.jpg",
+      "views": 1986,
+      "publishedAt": "2026-08-14"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-08-netlify",
+      "network": "tiktok",
+      "title": "Sube tu web a internet GRATIS y para siempre",
+      "url": "https://www.tiktok.com/@soydruia/video/7670480350170123542",
+      "thumbnail": "https://i.ytimg.com/vi/oTC5EQNkoa4/maxresdefault.jpg",
+      "views": 4200,
+      "publishedAt": "2026-08-13"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-07-el-resultado",
+      "network": "youtube",
+      "title": "Esto me ha CONSTRUIDO la IA en 10 minutos",
+      "url": "https://www.youtube.com/watch?v=2EPH6726_MQ",
+      "thumbnail": "https://i.ytimg.com/vi/2EPH6726_MQ/maxresdefault.jpg",
+      "views": 1469,
+      "publishedAt": "2026-08-12"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-06-un-prompt",
+      "network": "tiktok",
+      "title": "UN solo prompt y la web entera hecha",
+      "url": "https://www.tiktok.com/@soydruia/video/7670478428956675350",
+      "thumbnail": "https://i.ytimg.com/vi/6P3PnhXLYKs/maxresdefault.jpg",
+      "views": 1287,
+      "publishedAt": "2026-08-11"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-05-negocio-md",
+      "network": "tiktok",
+      "title": "El ARCHIVO con los datos de tu negocio que lo cambia todo",
+      "url": "https://www.tiktok.com/@soydruia/video/7670478317199379734",
+      "thumbnail": "https://i.ytimg.com/vi/096YTuiLEXA/maxresdefault.jpg",
+      "views": 844,
+      "publishedAt": "2026-08-10"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-04-astro",
+      "network": "tiktok",
+      "title": "El FRAMEWORK que deberías usar para la web de tu negocio",
+      "url": "https://www.tiktok.com/@soydruia/video/7670478214837341462",
+      "thumbnail": "https://i.ytimg.com/vi/WnHpaQR7dbw/maxresdefault.jpg",
+      "views": 1232,
+      "publishedAt": "2026-08-09"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-03-disena-primero",
+      "network": "youtube",
+      "title": "El PASO que todos se saltan al hacer una web con IA",
+      "url": "https://www.youtube.com/watch?v=MGxd_LCSDZ4",
+      "thumbnail": "https://i.ytimg.com/vi/MGxd_LCSDZ4/maxresdefault.jpg",
+      "views": 1433,
+      "publishedAt": "2026-08-08"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-02-requisitos",
+      "network": "tiktok",
+      "title": "Lo ÚNICO que necesitas instalar para hacer una web con IA",
+      "url": "https://www.tiktok.com/@soydruia/video/7670477984133827862",
+      "thumbnail": "https://i.ytimg.com/vi/vvD0Qfd_nwE/maxresdefault.jpg",
+      "views": 1608,
+      "publishedAt": "2026-08-07"
+    },
+    {
+      "id": "clip:web-negocio-con-ia:clip-01-precio",
+      "network": "youtube",
+      "title": "Cuánto cuesta una WEB y cómo hacerla GRATIS con IA",
+      "url": "https://www.youtube.com/watch?v=jsquKspzPWM",
+      "thumbnail": "https://i.ytimg.com/vi/jsquKspzPWM/maxresdefault.jpg",
+      "views": 1331,
+      "publishedAt": "2026-08-06"
+    },
+    {
+      "id": "project:comandos-04-compact",
+      "network": "tiktok",
+      "title": "Vacía la memoria de la IA sin perder el hilo: /compact de Claude Code",
+      "url": "https://www.tiktok.com/@soydruia/video/7668349976107289878",
+      "thumbnail": "https://i.ytimg.com/vi/SCGrQaG__0k/maxresdefault.jpg",
+      "views": 1327,
+      "publishedAt": "2026-07-30"
+    },
+    {
+      "id": "project:new-opus-5",
+      "network": "tiktok",
+      "title": "Claude Opus 5: el método que mejora sus resultados con ChatGPT",
+      "url": "https://www.tiktok.com/@soydruia/video/7667619755209116950",
+      "thumbnail": "https://i.ytimg.com/vi/jlYTO6OKHTs/maxresdefault.jpg",
+      "views": 1243,
+      "publishedAt": "2026-07-28"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-10-un-agente-entero",
+      "network": "tiktok",
+      "title": "Un AGENTE de IA entero, resumen (parte 10)",
+      "url": "https://www.tiktok.com/@soydruia/video/7661087093266943254",
+      "thumbnail": "https://i.ytimg.com/vi/RjXRtQGOJLY/maxresdefault.jpg",
+      "views": 870,
+      "publishedAt": "2026-07-24"
+    },
+    {
+      "id": "project:claude-cowork-limite-uso-5-agosto",
+      "network": "tiktok",
+      "title": "Límites de Claude: Cowork tiene el doble hasta el 5 de agosto",
+      "url": "https://www.tiktok.com/@soydruia/video/7665486952614907158",
+      "thumbnail": "https://i.ytimg.com/vi/YXnq_eWV1zQ/maxresdefault.jpg",
+      "views": 1594,
+      "publishedAt": "2026-07-24"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-09-las-skills",
+      "network": "youtube",
+      "title": "Las SKILLS: el superpoder que lo hace experto (parte 9)",
+      "url": "https://www.youtube.com/watch?v=6LZWpJBBnMs",
+      "thumbnail": "https://i.ytimg.com/vi/6LZWpJBBnMs/maxresdefault.jpg",
+      "views": 1364,
+      "publishedAt": "2026-07-23"
+    },
+    {
+      "id": "project:openai-hack-huggingface",
+      "network": "youtube",
+      "title": "OpenAI: sus modelos hackearon Hugging Face para hacer trampas",
+      "url": "https://www.youtube.com/watch?v=k9VM2XotHL4",
+      "thumbnail": "https://i.ytimg.com/vi/k9VM2XotHL4/maxresdefault.jpg",
+      "views": 2508,
+      "publishedAt": "2026-07-23"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-08-la-memoria",
+      "network": "tiktok",
+      "title": "La MEMORIA: el superpoder que cura la amnesia (parte 8)",
+      "url": "https://www.tiktok.com/@soydruia/video/7661086887947373846",
+      "thumbnail": "https://i.ytimg.com/vi/bTowSvNYHoM/maxresdefault.jpg",
+      "views": 717,
+      "publishedAt": "2026-07-22"
+    },
+    {
+      "id": "project:mejores-ias-voz-off",
+      "network": "tiktok",
+      "title": "Mejor IA para cada cosa en 2026: MALA, BUENA o PRO",
+      "url": "https://www.tiktok.com/@soydruia/video/7665311605751794966",
+      "thumbnail": "https://i.ytimg.com/vi/AMDrRrnWpIY/maxresdefault.jpg",
+      "views": 4815,
+      "publishedAt": "2026-07-22"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-07-el-system-prompt",
+      "network": "tiktok",
+      "title": "El SYSTEM PROMPT: el corazón del agente (parte 7)",
+      "url": "https://www.tiktok.com/@soydruia/video/7661086801200778518",
+      "thumbnail": "https://i.ytimg.com/vi/Wy326G-4h4w/maxresdefault.jpg",
+      "views": 738,
+      "publishedAt": "2026-07-21"
+    },
+    {
+      "id": "project:fable-5-incluido",
+      "network": "tiktok",
+      "title": "Fable 5, el modelo más potente de Claude, acaba de cambiar y afecta a tu plan.",
+      "url": "https://www.tiktok.com/@soydruia/video/7664267248797748502",
+      "thumbnail": "https://i.ytimg.com/vi/ofZOx76loyk/maxresdefault.jpg",
+      "views": 5886,
+      "publishedAt": "2026-07-21"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-06-el-loop",
+      "network": "instagram",
+      "title": "El LOOP: lo que ChatGPT NO tiene (parte 6)",
+      "url": "https://www.instagram.com/reel/DbAVlwtjL5b/",
+      "thumbnail": "https://i.ytimg.com/vi/HtzS-2Npxr4/maxresdefault.jpg",
+      "views": 897,
+      "publishedAt": "2026-07-20"
+    },
+    {
+      "id": "carousel:claude-controla-chrome",
+      "network": "tiktok",
+      "title": "Claude Code puede interactuar con Chrome y Edge mediante la integración oficial",
+      "url": "https://www.tiktok.com/@soydruia/video/7664226990202916119",
+      "thumbnail": "https://i.ytimg.com/vi/36bq3B-fH_E/maxresdefault.jpg",
+      "views": 1016,
+      "publishedAt": "2026-07-19"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-05-las-herramientas",
+      "network": "tiktok",
+      "title": "Las HERRAMIENTAS (MCP): las manos del agente (parte 5)",
+      "url": "https://www.tiktok.com/@soydruia/video/7661084832369298710",
+      "thumbnail": "https://i.ytimg.com/vi/W3yzraAOvD0/maxresdefault.jpg",
+      "views": 834,
+      "publishedAt": "2026-07-19"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-04-el-modelo",
+      "network": "tiktok",
+      "title": "El MODELO: el cerebro de un agente de IA (parte 4)",
+      "url": "https://www.tiktok.com/@soydruia/video/7661084712256982294",
+      "thumbnail": "https://i.ytimg.com/vi/DoE8q7d_Fc8/maxresdefault.jpg",
+      "views": 728,
+      "publishedAt": "2026-07-18"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-03-la-frase",
+      "network": "youtube",
+      "title": "La FRASE que define un agente de IA (parte 3)",
+      "url": "https://www.youtube.com/watch?v=phfUzv_cYQc",
+      "thumbnail": "https://i.ytimg.com/vi/phfUzv_cYQc/maxresdefault.jpg",
+      "views": 1332,
+      "publishedAt": "2026-07-17"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-02-chatbot-vs-agente",
+      "network": "youtube",
+      "title": "ChatGPT NO es un agente (parte 2)",
+      "url": "https://www.youtube.com/watch?v=35PnoUGIuJo",
+      "thumbnail": "https://i.ytimg.com/vi/35PnoUGIuJo/maxresdefault.jpg",
+      "views": 1914,
+      "publishedAt": "2026-07-16"
+    },
+    {
+      "id": "clip:que-es-un-agente:clip-01-que-es-un-agente",
+      "network": "tiktok",
+      "title": "Qué es un AGENTE de IA (parte 1)",
+      "url": "https://www.tiktok.com/@soydruia/video/7661082300842609942",
+      "thumbnail": "https://i.ytimg.com/vi/AbuGN634Z7M/maxresdefault.jpg",
+      "views": 837,
+      "publishedAt": "2026-07-15"
+    },
+    {
+      "id": "clip:mcp-largo:clip-11-resumen",
+      "network": "youtube",
+      "title": "La pregunta clave de los MCP que el 90% no sabe responder",
+      "url": "https://www.youtube.com/watch?v=X7RjCJqT2pA",
+      "thumbnail": "https://i.ytimg.com/vi/X7RjCJqT2pA/maxresdefault.jpg",
+      "views": 716,
+      "publishedAt": "2026-07-14"
+    },
+    {
+      "id": "carousel:secretos-oficiales-ia",
+      "network": "youtube",
+      "title": "Repositorio público con system prompts de Claude, ChatGPT, Gemini y otras IA",
+      "url": "https://www.youtube.com/watch?v=phNgkS80-Ps",
+      "thumbnail": "https://i.ytimg.com/vi/phNgkS80-Ps/maxresdefault.jpg",
+      "views": 425,
+      "publishedAt": "2026-07-13"
+    },
+    {
+      "id": "clip:mcp-largo:clip-10-mcp-vs-cli",
+      "network": "tiktok",
+      "title": "MCP vs CLI: cuándo usar cada uno para conectar tu IA",
+      "url": "https://www.tiktok.com/@soydruia/video/7659094692805528854",
+      "thumbnail": "https://i.ytimg.com/vi/_XMkR5IGjSA/maxresdefault.jpg",
+      "views": 595,
+      "publishedAt": "2026-07-13"
+    },
+    {
+      "id": "clip:mcp-largo:clip-09-coste-permisos",
+      "network": "youtube",
+      "title": "El coste oculto de los MCP que nadie cuenta: los permisos",
+      "url": "https://www.youtube.com/watch?v=KW40J47YsgY",
+      "thumbnail": "https://i.ytimg.com/vi/KW40J47YsgY/maxresdefault.jpg",
+      "views": 1523,
+      "publishedAt": "2026-07-12"
+    },
+    {
+      "id": "carousel:claude-ve-videos",
+      "network": "youtube",
+      "title": "claude-video permite analizar vídeos con Claude mediante el comando watch",
+      "url": "https://www.youtube.com/watch?v=WKKSOPFaohQ",
+      "thumbnail": "https://i.ytimg.com/vi/WKKSOPFaohQ/maxresdefault.jpg",
+      "views": 1376,
+      "publishedAt": "2026-07-11"
+    },
+    {
+      "id": "clip:mcp-largo:clip-08-demo-comparacion",
+      "network": "tiktok",
+      "title": "MCP de Notion en directo: una IA escribe la nota y la otra no",
+      "url": "https://www.tiktok.com/@soydruia/video/7659092612971908374",
+      "thumbnail": "https://i.ytimg.com/vi/M8AtiEr3Alg/maxresdefault.jpg",
+      "views": 804,
+      "publishedAt": "2026-07-11"
+    },
+    {
+      "id": "clip:mcp-largo:clip-07-conectar-mcp",
+      "network": "tiktok",
+      "title": "Cómo instalar un MCP en Claude Code (y por qué no te aparece)",
+      "url": "https://www.tiktok.com/@soydruia/video/7659091885083921686",
+      "thumbnail": "https://i.ytimg.com/vi/0QODX_Mih7w/maxresdefault.jpg",
+      "views": 1632,
+      "publishedAt": "2026-07-10"
+    },
+    {
+      "id": "project:gpt56-sol-terra-luna",
+      "network": "tiktok",
+      "title": "GPT-5.6 contra Claude: el precio lo cambia TODO",
+      "url": "https://www.tiktok.com/@soydruia/video/7660936685148146967",
+      "thumbnail": "https://i.ytimg.com/vi/YPepq9m0rYU/maxresdefault.jpg",
+      "views": 2235,
+      "publishedAt": "2026-07-10"
+    },
+    {
+      "id": "clip:mcp-largo:clip-06-coste-contexto",
+      "network": "tiktok",
+      "title": "El coste oculto de los MCP: se comen tu contexto",
+      "url": "https://www.tiktok.com/@soydruia/video/7659090825531395350",
+      "thumbnail": "https://i.ytimg.com/vi/UZzwzBhdweg/maxresdefault.jpg",
+      "views": 395,
+      "publishedAt": "2026-07-09"
+    },
+    {
+      "id": "project:comandos-03-context",
+      "network": "tiktok",
+      "title": "Por qué la IA se vuelve tonta y cara: el comando /context de Claude Code",
+      "url": "https://www.tiktok.com/@soydruia/video/7660472647226035478",
+      "thumbnail": "https://i.ytimg.com/vi/_q2HKTdNU3Y/maxresdefault.jpg",
+      "views": 1126,
+      "publishedAt": "2026-07-09"
+    },
+    {
+      "id": "clip:mcp-largo:clip-05-scopes",
+      "network": "youtube",
+      "title": "Los 3 scopes de un MCP: global, proyecto y local",
+      "url": "https://www.youtube.com/watch?v=PhhC35lapdI",
+      "thumbnail": "https://i.ytimg.com/vi/PhhC35lapdI/maxresdefault.jpg",
+      "views": 935,
+      "publishedAt": "2026-07-08"
+    },
+    {
+      "id": "carousel:codigo-que-aguanta",
+      "network": "tiktok",
+      "title": "La IA genera codigo que funciona pero no que aguanta: 4 prompts para que tu app escale",
+      "url": "https://www.tiktok.com/@soydruia/video/7659881043092278550",
+      "thumbnail": "https://i.ytimg.com/vi/QpRC8OcSWTg/maxresdefault.jpg",
+      "views": 1306,
+      "publishedAt": "2026-07-07"
+    },
+    {
+      "id": "clip:mcp-largo:clip-04-antes-vs-ahora",
+      "network": "tiktok",
+      "title": "Qué es un MCP y por qué existe: antes vs ahora",
+      "url": "https://www.tiktok.com/@soydruia/video/7658591982331235606",
+      "thumbnail": "https://i.ytimg.com/vi/ZQ1KJJ-GflI/maxresdefault.jpg",
+      "views": 983,
+      "publishedAt": "2026-07-07"
+    },
+    {
+      "id": "clip:mcp-largo:clip-03-que-es-mcp",
+      "network": "youtube",
+      "title": "Qué es un MCP de verdad (carpeta de herramientas con manual)",
+      "url": "https://www.youtube.com/watch?v=X-yGR0CTNDY",
+      "thumbnail": "https://i.ytimg.com/vi/X-yGR0CTNDY/maxresdefault.jpg",
+      "views": 879,
+      "publishedAt": "2026-07-06"
+    },
+    {
+      "id": "project:comandos-02-goal",
+      "network": "youtube",
+      "title": "El comando para que la IA no pare hasta terminar /goal (PARTE 2)",
+      "url": "https://www.youtube.com/watch?v=ks6qJKgXu0I",
+      "thumbnail": "https://i.ytimg.com/vi/ks6qJKgXu0I/maxresdefault.jpg",
+      "views": 2284,
+      "publishedAt": "2026-07-06"
+    },
+    {
+      "id": "clip:mcp-largo:clip-02-manos-no-cerebro",
+      "network": "youtube",
+      "title": "Un MCP no da cerebro a tu IA, le da MANOS (y cambia todo)",
+      "url": "https://www.youtube.com/watch?v=U7utj_RpukQ",
+      "thumbnail": "https://i.ytimg.com/vi/U7utj_RpukQ/maxresdefault.jpg",
+      "views": 2102,
+      "publishedAt": "2026-07-05"
+    },
+    {
+      "id": "clip:mcp-largo:clip-01-hook-lo-haceis-mal",
+      "network": "youtube",
+      "title": "Estás conectando MAL los MCP a tu IA (más cara y lenta)",
+      "url": "https://www.youtube.com/watch?v=498T8jZ_1-8",
+      "thumbnail": "https://i.ytimg.com/vi/498T8jZ_1-8/maxresdefault.jpg",
+      "views": 2030,
+      "publishedAt": "2026-07-04"
+    },
+    {
+      "id": "youtube:2hoEmutKYIo",
+      "network": "youtube",
+      "title": "El comando de Claude Code que nadie te enseña: /rewind (PARTE 1)",
+      "url": "https://www.youtube.com/watch?v=2hoEmutKYIo",
+      "thumbnail": "https://i.ytimg.com/vi/2hoEmutKYIo/maxresdefault.jpg",
+      "views": 1353,
+      "publishedAt": "2026-07-03"
+    },
+    {
+      "id": "project:comandos-01-rewind",
+      "network": "tiktok",
+      "title": "Claude Code esconde una máquina del tiempo y casi nadie la usa: el comando /rewind. Si le pides algo a la IA y te reescribe medio proyecto, no tienes que ir deshaciendo a mano ni pelearte con Git. /rewind rebobina la conversación Y el código a un punto anterior, como el checkpoint de un videojuego: eliges hasta qué mensaje volver y deja todo como estaba, con el contexto limpio. Truco pro: úsalo para lanzarte con un enfoque agresivo y, si no te convence, vuelves al punto exacto y pruebas otro de…",
+      "url": "https://www.tiktok.com/@soydruia/video/7658280249171643650",
+      "views": 1121,
+      "publishedAt": "2026-07-03"
+    },
+    {
+      "id": "carousel:carruseles-con-claude",
+      "network": "tiktok",
+      "title": "Como hacer carruseles pro con Claude Design (2.0)",
+      "url": "https://www.tiktok.com/@soydruia/video/7657919932155366678",
+      "thumbnail": "https://i.ytimg.com/vi/tFOVTMNpSH4/maxresdefault.jpg",
+      "views": 2408,
+      "publishedAt": "2026-07-02"
+    },
+    {
+      "id": "clip:tokens-largo:clip-08-consejo3-concisos",
+      "network": "youtube",
+      "title": "Consejo 3 para AHORRAR tokens: prompts concretos",
+      "url": "https://www.youtube.com/watch?v=svdXu0P5yVA",
+      "thumbnail": "https://i.ytimg.com/vi/svdXu0P5yVA/maxresdefault.jpg",
+      "views": 1218,
+      "publishedAt": "2026-07-01"
+    },
+    {
+      "id": "project:claude-free-pro-max",
+      "network": "tiktok",
+      "title": "Qué plan de Claude elegir: Free, Pro o Max",
+      "url": "https://www.tiktok.com/@soydruia/video/7657519554951679254",
+      "thumbnail": "https://i.ytimg.com/vi/422MBAsocbc/maxresdefault.jpg",
+      "views": 19477,
+      "publishedAt": "2026-07-01"
+    },
+    {
+      "id": "carousel:claude-empezar-bien",
+      "network": "tiktok",
+      "title": "5 cosas que configurar al empezar con Claude web y desktop",
+      "url": "https://www.tiktok.com/@soydruia/video/7657210903099804930",
+      "thumbnail": "https://i.ytimg.com/vi/uh1Q4GyRhnc/maxresdefault.jpg",
+      "views": 3351,
+      "publishedAt": "2026-06-30"
+    },
+    {
+      "id": "clip:tokens-largo:clip-07-consejo2-no-arrastres",
+      "network": "tiktok",
+      "title": "Consejo 2 para AHORRAR tokens: no arrastres conversaciones",
+      "url": "https://www.tiktok.com/@soydruia/video/7655440388186049814",
+      "thumbnail": "https://i.ytimg.com/vi/U4CUm5Hy9vU/maxresdefault.jpg",
+      "views": 457,
+      "publishedAt": "2026-06-30"
+    },
+    {
+      "id": "carousel:mentiras-ia",
+      "network": "tiktok",
+      "title": "5 mentiras sobre la IA que sigues creyendo",
+      "url": "https://www.tiktok.com/@soydruia/video/7656790689459571990",
+      "thumbnail": "https://i.ytimg.com/vi/6pOI-q_vpoM/maxresdefault.jpg",
+      "views": 1163,
+      "publishedAt": "2026-06-29"
+    },
+    {
+      "id": "clip:tokens-largo:clip-06-consejo1-modelo",
+      "network": "tiktok",
+      "title": "Consejo 1 para AHORRAR tokens: usa el modelo correcto",
+      "url": "https://www.tiktok.com/@soydruia/video/7655439994223381782",
+      "thumbnail": "https://i.ytimg.com/vi/pk3MF7_7Yns/maxresdefault.jpg",
+      "views": 1315,
+      "publishedAt": "2026-06-29"
+    },
+    {
+      "id": "clip:tokens-largo:clip-05-palabras-comunes",
+      "network": "youtube",
+      "title": "Truco: escríbele a la IA en INGLÉS y gasta menos tokens",
+      "url": "https://www.youtube.com/watch?v=9LZYK3abnsk",
+      "thumbnail": "https://i.ytimg.com/vi/9LZYK3abnsk/maxresdefault.jpg",
+      "views": 1322,
+      "publishedAt": "2026-06-28"
+    },
+    {
+      "id": "clip:tokens-largo:clip-04-pagas-conversacion",
+      "network": "tiktok",
+      "title": "Por qué se te ACABA la suscripción de IA tan rápido",
+      "url": "https://www.tiktok.com/@soydruia/video/7655438172607859990",
+      "thumbnail": "https://i.ytimg.com/vi/pjElEiwH0Eg/maxresdefault.jpg",
+      "views": 1250,
+      "publishedAt": "2026-06-27"
+    },
+    {
+      "id": "carousel:comandos-claude-code",
+      "network": "tiktok",
+      "title": "7 comandos de Claude Code que uso a diario",
+      "url": "https://www.tiktok.com/@soydruia/video/7655720494800325910",
+      "thumbnail": "https://i.ytimg.com/vi/xPA_jwa2N6c/maxresdefault.jpg",
+      "views": 1499,
+      "publishedAt": "2026-06-26"
+    },
+    {
+      "id": "clip:tokens-largo:clip-03-input-output",
+      "network": "tiktok",
+      "title": "Lo que RESPONDE la IA cuesta el triple que tu pregunta",
+      "url": "https://www.tiktok.com/@soydruia/video/7655437276368997654",
+      "thumbnail": "https://i.ytimg.com/vi/p6Psrt2yZrI/maxresdefault.jpg",
+      "views": 1381,
+      "publishedAt": "2026-06-26"
+    },
+    {
+      "id": "carousel:skills-claude-nivel",
+      "network": "tiktok",
+      "title": "5 skills de Claude Code que llevan tu IA a otro nivel",
+      "url": "https://www.tiktok.com/@soydruia/video/7655339908713762070",
+      "thumbnail": "https://i.ytimg.com/vi/EfK4sfMiMrE/maxresdefault.jpg",
+      "views": 1423,
+      "publishedAt": "2026-06-25"
+    },
+    {
+      "id": "clip:tokens-largo:clip-02-cada-ia-diccionario",
+      "network": "tiktok",
+      "title": "Por qué la misma frase cuesta MÁS en una IA que en otra",
+      "url": "https://www.tiktok.com/@soydruia/video/7655244332429053206",
+      "thumbnail": "https://i.ytimg.com/vi/DDK8l3PJws0/maxresdefault.jpg",
+      "views": 1915,
+      "publishedAt": "2026-06-25"
+    },
+    {
+      "id": "clip:tokens-largo:clip-01-que-es-token",
+      "network": "youtube",
+      "title": "Qué es un TOKEN de IA (y por qué casi nadie lo sabe)",
+      "url": "https://www.youtube.com/watch?v=RGEj12MiJo0",
+      "thumbnail": "https://i.ytimg.com/vi/RGEj12MiJo0/maxresdefault.jpg",
+      "views": 2166,
+      "publishedAt": "2026-06-24"
+    },
+    {
+      "id": "clip:skills:clip-05-itera-tuyas",
+      "network": "youtube",
+      "title": "Mejora tus skills de Claude de esta forma(Parte 5)",
+      "url": "https://www.youtube.com/watch?v=PdsKxnj2BCk",
+      "thumbnail": "https://i.ytimg.com/vi/PdsKxnj2BCk/maxresdefault.jpg",
+      "views": 32,
+      "publishedAt": "2026-06-22"
+    },
+    {
+      "id": "clip:skills:clip-04-donde-conseguir",
+      "network": "youtube",
+      "title": "Dónde conseguir skills de IA: el marketplace de Claude (Parte 4)",
+      "url": "https://www.youtube.com/watch?v=xF50NPCz70w",
+      "thumbnail": "https://i.ytimg.com/vi/xF50NPCz70w/maxresdefault.jpg",
+      "views": 1625,
+      "publishedAt": "2026-06-19"
+    },
+    {
+      "id": "clip:skills:clip-03-tip-scripts",
+      "network": "youtube",
+      "title": "El truco de las skills que nadie conoce: scripts para gastar menos tokens (Parte 3)",
+      "url": "https://www.youtube.com/watch?v=WbZpQH8IHx8",
+      "thumbnail": "https://i.ytimg.com/vi/WbZpQH8IHx8/maxresdefault.jpg",
+      "views": 874,
+      "publishedAt": "2026-06-18"
+    },
+    {
+      "id": "clip:skills:clip-02-crea-tu-skill",
+      "network": "tiktok",
+      "title": "Cómo crear tu primera skill de IA paso a paso (Parte 2)",
+      "url": "https://www.tiktok.com/@soydruia/video/7653122836004949251",
+      "thumbnail": "https://i.ytimg.com/vi/1IpUIRmXpqo/maxresdefault.jpg",
+      "views": 1406,
+      "publishedAt": "2026-06-17"
+    },
+    {
+      "id": "clip:skills:clip-01-que-es-skill",
+      "network": "tiktok",
+      "title": "¿Qué es una skill de IA? Explicado fácil (Parte 1)",
+      "url": "https://www.tiktok.com/@soydruia/video/7652651306334604566",
+      "thumbnail": "https://i.ytimg.com/vi/fCwV0IHtQic/maxresdefault.jpg",
+      "views": 2400,
+      "publishedAt": "2026-06-16"
+    }
+  ]
 }

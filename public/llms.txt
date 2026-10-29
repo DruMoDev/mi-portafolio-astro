@@ -5,15 +5,19 @@
 ## Servicios
 
 - [Automatizaciones e IA](https://drumorera.com/#automatizaciones): apps y herramientas a medida que responden a clientes, organizan datos o generan documentos. Para negocios que repiten tareas cada día, contestan mensajes fuera de horario o pasan datos a mano de un sitio a otro.
-- [Webs](https://drumorera.com/#webs): webs profesionales en días, rápidas, pensadas para el móvil y para Google. El dominio y el hosting van a nombre del cliente.
-- [Tiendas Shopify](https://drumorera.com/#shopify): tiendas online listas para vender, con diseño, productos, pagos y envíos configurados.
+- [Webs](https://drumorera.com/#webs): webs profesionales en días, rápidas, pensadas para el móvil y para Google. Sin mensualidades: se paga una vez y la web es del cliente.
+- [Tiendas Shopify](https://drumorera.com/#shopify): tiendas online listas para vender, con diseño, productos, pagos y envíos configurados. También para negocios con tienda física que quieren vender online.
 - [Consultoría](https://drumorera.com/#consultoria): revisión de procesos y un plan concreto de qué automatizar con IA, con qué herramientas y en qué orden.
 - [Mentoría](https://drumorera.com/#mentoria): aprender a construir con IA y agentes sobre un proyecto real propio, por videollamada. Ahora mismo con lista de espera.
-- [Colaboraciones](https://drumorera.com/#colaboraciones): vídeos cortos (TikTok, Reels, Shorts) y largos (YouTube) para marcas de IA, tecnología o productividad.
+- [Colaboraciones](https://drumorera.com/#colaboraciones): vídeos cortos (TikTok, Reels, Shorts) y largos (YouTube) para marcas de tecnología, IA o productividad, con un público adulto que trabaja y quiere aprender. Más de 5.000 seguidores entre Instagram, Facebook, YouTube y TikTok.
 
 ## Contacto
 
 - Formulario en https://drumorera.com/#contacto
 - Email: hola@drumorera.com
+- WhatsApp: https://wa.me/34617587034
+- TikTok: https://www.tiktok.com/@soydruia
+- Instagram: https://www.instagram.com/soydruia
+- YouTube: https://www.youtube.com/@soydruia
 - GitHub: https://github.com/DruMoDev
 - LinkedIn: https://www.linkedin.com/in/roger-morera/

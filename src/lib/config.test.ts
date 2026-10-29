@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getPublicConfig, whatsappUrl } from "./config";
 import { siteConfig } from "../data/site";
-import { exampleConfig } from "../data/site.example";
 
 describe("whatsappUrl", () => {
   it("deja solo los dígitos y codifica el texto", () => {
@@ -18,20 +17,8 @@ describe("whatsappUrl", () => {
 });
 
 describe("getPublicConfig", () => {
-  it("en producción usa solo los datos reales", () => {
-    const cfg = getPublicConfig(false);
-    expect(cfg.whatsapp).toBe(siteConfig.whatsapp);
-    expect(cfg.networks).toEqual(siteConfig.networks);
-  });
-
-  it("en desarrollo completa lo que falta con los datos de ejemplo", () => {
-    const cfg = getPublicConfig(true);
-    expect(cfg.whatsapp).toBe(siteConfig.whatsapp || exampleConfig.whatsapp);
-    expect(cfg.networks.tiktok).toBe(siteConfig.networks.tiktok || exampleConfig.networks.tiktok);
-  });
-
   it("da la URL de WhatsApp solo si hay número", () => {
-    const cfg = getPublicConfig(false);
-    expect(cfg.whatsappUrl).toBe(whatsappUrl(cfg.whatsapp, siteConfig.whatsappText));
+    const cfg = getPublicConfig();
+    expect(cfg.whatsappUrl).toBe(whatsappUrl(siteConfig.whatsapp, siteConfig.whatsappText));
   });
 });
