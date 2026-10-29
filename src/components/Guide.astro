@@ -1,0 +1,376 @@
+---
+// PROTOTIPO: guía animada de la entrada. Solo aparece con ?guia=chispa | ?guia=dru | ?guia=cometa.
+// Vuela rápido en círculos, como flotando, y va señalando: la frase, la foto, la pregunta y los servicios.
+import { Image } from "astro:assets";
+import avatar from "../assets/images/avatar.jpg";
+---
+
+<div class="guide-layer" hidden data-guide-layer>
+  <span class="trail" data-trail></span>
+  <div class="guide" data-guide>
+    <div class="body" data-body>
+      <span class="skin chispa">
+        <span class="antenna"></span>
+        <span class="eyes" data-eyes><i></i><i></i></span>
+      </span>
+      <span class="skin dru">
+        <Image src={avatar} alt="" width={96} height={96} class="dru-img" />
+        <span class="prop"></span>
+      </span>
+      <span class="skin cometa">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 2 C22 14 26 18 38 20 C26 22 22 26 20 38 C18 26 14 22 2 20 C14 18 18 14 20 2Z"
+          ></path>
+        </svg>
+        <span class="eyes" data-eyes><i></i><i></i></span>
+      </span>
+    </div>
+    <div class="say" data-say role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+  const param = new URLSearchParams(location.search).get("guia");
+  const skins = ["chispa", "dru", "cometa"];
+  const layer = document.querySelector<HTMLElement>("[data-guide-layer]");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (layer && param && skins.includes(param) && !reduce) {
+    layer.hidden = false;
+    layer.dataset.skin = param;
+    document.documentElement.classList.add("has-guide");
+    const guide = layer.querySelector<HTMLElement>("[data-guide]")!;
+    const body = layer.querySelector<HTMLElement>("[data-body]")!;
+    const say = layer.querySelector<HTMLElement>("[data-say]")!;
+    const trailEl = layer.querySelector<HTMLElement>("[data-trail]")!;
+    const eyes = [...layer.querySelectorAll<HTMLElement>(`.${param} [data-eyes]`)];
+
+    // Rastro: puntos que siguen las posiciones anteriores.
+    const N = 14;
+    const dots = Array.from({ length: N }, (_, k) => {
+      const d = document.createElement("i");
+      d.style.opacity = String(0.5 * (1 - k / N));
+      d.style.scale = String(1 - k / N);
+      trailEl.append(d);
+      return d;
+    });
+    const history: [number, number][] = [];
+
+    // Física: un muelle persigue un punto que gira alrededor del objetivo.
+    let x = innerWidth + 80;
+    let y = 40;
+    let vx = -900;
+    let vy = 200;
+    let angle = 0;
+    let target = { x: innerWidth / 2, y: 200, rx: 220, ry: 90, spin: 4.2 };
+    let last = performance.now();
+
+    const pageBox = (sel: string) => {
+      const el = document.querySelector<HTMLElement>(sel);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { x: r.left + scrollX, y: r.top + scrollY, w: r.width, h: r.height };
+    };
+
+    function aim(
+      sel: string,
+      opts: { dx?: number; dy?: number; rx?: number; ry?: number; spin?: number } = {}
+    ) {
+      const b = pageBox(sel);
+      if (!b) return;
+      target = {
+        x: b.x + b.w / 2 + (opts.dx ?? 0),
+        y: b.y + b.h / 2 + (opts.dy ?? 0),
+        rx: opts.rx ?? 18,
+        ry: opts.ry ?? 10,
+        spin: opts.spin ?? 2.4,
+      };
+    }
+
+    function speak(text: string, side: "left" | "right" = "right") {
+      say.classList.remove("show");
+      requestAnimationFrame(() => {
+        say.textContent = text;
+        say.dataset.side = side;
+        if (text) say.classList.add("show");
+      });
+    }
+
+    function frame(now: number) {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      angle += target.spin * dt;
+      const tx = target.x + Math.cos(angle) * target.rx;
+      const ty = target.y + Math.sin(angle) * target.ry;
+      // Muelle algo subamortiguado: llega rápido y se pasa un poco, como flotando.
+      const k = 38;
+      const c = 7.5;
+      vx += (k * (tx - x) - c * vx) * dt;
+      vy += (k * (ty - y) - c * vy) * dt;
+      x += vx * dt;
+      y += vy * dt;
+
+      const speed = Math.hypot(vx, vy);
+      const stretch = Math.min(speed / 2600, 0.28);
+      const tilt = Math.max(-28, Math.min(28, vx / 40));
+      guide.style.translate = `${x}px ${y}px`;
+      body.style.transform = `rotate(${tilt}deg) scale(${1 + stretch}, ${1 - stretch * 0.6})`;
+      // Los ojos miran hacia donde va.
+      const lx = speed > 1 ? (vx / speed) * 3 : 0;
+      const ly = speed > 1 ? (vy / speed) * 2.5 : 0;
+      eyes.forEach((e) => (e.style.translate = `${lx}px ${ly}px`));
+
+      history.unshift([x, y]);
+      history.length = Math.min(history.length, N * 2);
+      dots.forEach((d, k) => {
+        const p = history[k * 2] ?? [x, y];
+        d.style.translate = `${p[0]}px ${p[1]}px`;
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    // La coreografía.
+    const at = (ms: number, fn: () => void) => setTimeout(fn, ms);
+    const mobile = innerWidth < 980;
+    at(150, () => {
+      aim(".intro h1", { rx: mobile ? 120 : 260, ry: mobile ? 70 : 110, spin: 4.6 });
+      speak("");
+    });
+    at(900, () => speak("¡Hola! 👋"));
+    at(2100, () => {
+      aim(".me .photo", {
+        dx: mobile ? 70 : -170,
+        dy: mobile ? -10 : -40,
+        rx: 14,
+        ry: 10,
+        spin: 3,
+      });
+      speak(mobile ? "Este es Dru" : "Este es Dru 👉", mobile ? "right" : "left");
+    });
+    at(3700, () => {
+      aim(".who-head h2", { dx: mobile ? 120 : 260, dy: -6, rx: 16, ry: 9, spin: 2.6 });
+      speak("¿Qué te trae por aquí? Elige una 👇");
+    });
+
+    let idle = setTimeout(goServices, 14000);
+    function goServices() {
+      if (document.querySelector('.tile[aria-pressed="true"]')) return;
+      aim(".more", { dx: mobile ? 90 : 130, rx: 12, ry: 8, spin: 2.4 });
+      speak("O mira todos mis servicios ↓");
+    }
+    addEventListener("who:change", (e) => {
+      const picked = (e as CustomEvent<{ picked: string[] }>).detail.picked;
+      clearTimeout(idle);
+      if (picked.length) {
+        aim("[data-see-mine]", { dx: mobile ? 0 : 90, dy: mobile ? -50 : 0, rx: 12, ry: 8 });
+        speak("¡Hecho! Te los marco aquí 👉", mobile ? "right" : "left");
+      } else {
+        idle = setTimeout(goServices, 8000);
+      }
+    });
+    // Si bajas a los servicios, la guía se despide.
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        speak("");
+        layer.classList.add("bye");
+      } else layer.classList.remove("bye");
+    }).observe(document.getElementById("servicios")!);
+  }
+</script>
+
+<style>
+  .guide-layer {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0;
+    z-index: 40;
+    pointer-events: none;
+    transition: opacity 0.5s;
+  }
+  .guide-layer.bye {
+    opacity: 0;
+  }
+  :global(.has-guide) :global(.bubble) {
+    display: none !important;
+  }
+  .guide,
+  .trail :global(i) {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .guide {
+    width: 0;
+    height: 0;
+  }
+  .body {
+    position: absolute;
+    left: -27px;
+    top: -27px;
+    width: 54px;
+    height: 54px;
+  }
+  .skin {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+  [data-skin="chispa"] .chispa,
+  [data-skin="dru"] .dru,
+  [data-skin="cometa"] .cometa {
+    display: block;
+  }
+  .trail :global(i) {
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  [data-skin="dru"] .trail :global(i) {
+    background: #4ade80;
+  }
+  [data-skin="cometa"] .trail :global(i) {
+    background: #ffb020;
+  }
+
+  /* Chispa: robotito negro con antena y ojos que miran hacia donde va. */
+  .chispa {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #3a3a44, #000 70%);
+    box-shadow:
+      0 0 0 3px #fff,
+      0 10px 24px -8px rgba(36, 64, 255, 0.7);
+  }
+  .antenna {
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    width: 2px;
+    height: 10px;
+    background: #000;
+  }
+  .antenna::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: -6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  .eyes {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyes i {
+    width: 7px;
+    height: 10px;
+    border-radius: 4px;
+    background: #fff;
+    animation: blink 3.4s infinite;
+  }
+  @keyframes blink {
+    0%,
+    92%,
+    100% {
+      transform: none;
+    }
+    95% {
+      transform: scaleY(0.1);
+    }
+  }
+  @keyframes glow {
+    to {
+      box-shadow: 0 0 18px var(--accent);
+    }
+  }
+
+  /* Mini Dru: tu cara en una burbuja con una hélice. */
+  .dru-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow:
+      0 0 0 3px #fff,
+      0 10px 24px -8px rgba(0, 0, 0, 0.5);
+  }
+  .prop {
+    position: absolute;
+    left: 50%;
+    top: -9px;
+    width: 30px;
+    height: 5px;
+    margin-left: -15px;
+    border-radius: 3px;
+    background: #111;
+    animation: prop 0.12s linear infinite;
+  }
+  @keyframes prop {
+    50% {
+      transform: scaleX(0.2);
+    }
+  }
+
+  /* Cometa: la chispa de la IA con cara. */
+  .cometa svg {
+    width: 100%;
+    height: 100%;
+    fill: #ffb020;
+    filter: drop-shadow(0 6px 12px rgba(255, 140, 0, 0.55));
+    animation: twinkle 1.6s ease-in-out infinite;
+  }
+  .cometa .eyes {
+    gap: 5px;
+  }
+  .cometa .eyes i {
+    width: 4px;
+    height: 6px;
+    background: #3a2300;
+  }
+  @keyframes twinkle {
+    50% {
+      transform: rotate(12deg) scale(0.92);
+    }
+  }
+
+  /* Lo que dice. */
+  .say {
+    position: absolute;
+    left: 34px;
+    top: -58px;
+    padding: 9px 13px;
+    border-radius: 14px 14px 14px 4px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(6px) scale(0.85);
+    transform-origin: 0 100%;
+    transition:
+      opacity 0.25s,
+      transform 0.35s var(--spring);
+  }
+  .say[data-side="left"] {
+    left: auto;
+    right: 34px;
+    border-radius: 14px 14px 4px 14px;
+    transform-origin: 100% 100%;
+  }
+  .say.show {
+    opacity: 1;
+    transform: none;
+  }
+</style>
