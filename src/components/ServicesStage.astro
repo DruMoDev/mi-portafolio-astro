@@ -47,76 +47,73 @@ const shapeVars = (s: (typeof services)[number]) =>
         }
       </div>
     </div>
-    <div class="arrows">
-      <button
-        type="button"
-        class="arrow"
-        data-prev
-        aria-label={`Servicio anterior: ${services.at(-1)!.name}`}
-      >
-        <Icon name="left" />
-      </button>
-      <span class="count" aria-hidden="true"
-        ><b data-count>01</b> / {String(services.length).padStart(2, "0")}</span
-      >
-      <button
-        type="button"
-        class="arrow"
-        data-next
-        aria-label={`Siguiente servicio: ${services[1].name}`}
-      >
-        <Icon name="right" />
-      </button>
-    </div>
   </div>
 
-  <div class="stage" style={`--bg:${first.shape.bg}`}>
-    <div class="copy">
-      {
-        services.map((s, i) => (
-          <div
-            class="panel"
-            role="tabpanel"
-            id={`panel-${s.id}`}
-            aria-labelledby={`tab-${s.id}`}
-            hidden={i !== 0}
-            tabindex="-1"
-          >
-            <span class="foryou slot">Encaja con lo que buscas</span>
-            <h3 class="slot">{s.title}</h3>
-            <p class="one slot">{s.one}</p>
-            <div class="slot">
-              <h4>Es para ti si…</h4>
-              <ul>
-                {s.fit.map((f) => (
-                  <li>{f}</li>
-                ))}
-              </ul>
+  <div class="stage-wrap">
+    <button
+      type="button"
+      class="arrow side prev"
+      data-prev
+      aria-label={`Servicio anterior: ${services.at(-1)!.name}`}
+    >
+      <Icon name="left" />
+    </button>
+    <button
+      type="button"
+      class="arrow side next"
+      data-next
+      aria-label={`Siguiente servicio: ${services[1].name}`}
+    >
+      <Icon name="right" />
+    </button>
+    <div class="stage" style={`--bg:${first.shape.bg}`}>
+      <div class="copy">
+        {
+          services.map((s, i) => (
+            <div
+              class="panel"
+              role="tabpanel"
+              id={`panel-${s.id}`}
+              aria-labelledby={`tab-${s.id}`}
+              hidden={i !== 0}
+              tabindex="-1"
+            >
+              <span class="foryou slot">Encaja con lo que buscas</span>
+              <h3 class="slot">{s.title}</h3>
+              <p class="one slot">{s.one}</p>
+              <div class="slot">
+                <h4>Es para ti si…</h4>
+                <ul>
+                  {s.fit.map((f) => (
+                    <li>{f}</li>
+                  ))}
+                </ul>
+              </div>
+              <div class="actions slot">
+                <button
+                  type="button"
+                  class:list={["cta", { ghost: s.waitlist }]}
+                  data-open
+                  data-svc={s.id}
+                >
+                  {s.cta}
+                </button>
+                {s.waitlist && <span class="tag">Sin plazas ahora mismo</span>}
+                {s.moreVideos && showVideos && (
+                  <a class="linkish" href="#videos">
+                    Ver mis vídeos
+                  </a>
+                )}
+              </div>
             </div>
-            <div class="actions slot">
-              <button
-                type="button"
-                class:list={["cta", { ghost: s.waitlist }]}
-                data-open
-                data-svc={s.id}
-              >
-                {s.cta}
-              </button>
-              {s.waitlist && <span class="tag">Sin plazas ahora mismo</span>}
-              {s.moreVideos && showVideos && (
-                <a class="linkish" href="#videos">
-                  Ver mis vídeos
-                </a>
-              )}
-            </div>
-          </div>
-        ))
-      }
-    </div>
+          ))
+        }
+      </div>
 
-    <div class="view" aria-hidden="true">
-      <div class="obj" style={shapeVars(first)}>
-        <ServiceFaces />
+      <div class="view" aria-hidden="true">
+        <div class="obj" style={shapeVars(first)}>
+          <ServiceFaces />
+        </div>
       </div>
     </div>
   </div>
@@ -135,7 +132,6 @@ const shapeVars = (s: (typeof services)[number]) =>
   const stage = section.querySelector<HTMLElement>(".stage")!;
   const obj = section.querySelector<HTMLElement>(".obj")!;
   const faces = [...section.querySelectorAll<HTMLElement>(".face")];
-  const count = section.querySelector<HTMLElement>("[data-count]")!;
   const prevBtn = section.querySelector<HTMLButtonElement>("[data-prev]")!;
   const nextBtn = section.querySelector<HTMLButtonElement>("[data-next]")!;
   const live = section.querySelector<HTMLElement>("[data-live]")!;
@@ -181,7 +177,6 @@ const shapeVars = (s: (typeof services)[number]) =>
       left: t.offsetLeft - tabsScroll.clientWidth / 2 + t.offsetWidth / 2,
       behavior: instant ? "auto" : "smooth",
     });
-    count.textContent = String(i + 1).padStart(2, "0");
     prevBtn.setAttribute("aria-label", `Servicio anterior: ${services[(i + N - 1) % N].name}`);
     nextBtn.setAttribute("aria-label", `Siguiente servicio: ${services[(i + 1) % N].name}`);
     history.replaceState(null, "", `#${s.id}`);
@@ -362,6 +357,9 @@ const shapeVars = (s: (typeof services)[number]) =>
   .tabs-scroll {
     flex: 1;
     min-width: 0;
+    /* Hueco arriba para que el badge "Para ti" no se recorte. */
+    padding-top: 10px;
+    margin-top: -10px;
     overflow-x: auto;
     scrollbar-width: none;
     border-radius: 16px;
@@ -376,22 +374,36 @@ const shapeVars = (s: (typeof services)[number]) =>
     width: max-content;
     min-width: 100%;
   }
-  .arrows {
-    flex: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  /* Flechas a los lados de la tarjeta, medio fuera, centradas en altura. */
+  .stage-wrap {
+    position: relative;
+    margin-top: 16px;
+  }
+  .stage-wrap .stage {
+    margin-top: 0;
+  }
+  .side {
+    position: absolute;
+    top: 50%;
+    z-index: 5;
+    translate: 0 -50%;
+  }
+  .side.prev {
+    left: -24px;
+  }
+  .side.next {
+    right: -24px;
   }
   .arrow {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     display: grid;
     place-items: center;
     background: #fff;
     box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.08),
-      0 0 0 1px rgba(0, 0, 0, 0.04);
+      0 0 0 1px rgba(0, 0, 0, 0.05),
+      0 10px 24px -10px rgba(0, 0, 0, 0.35);
     transition:
       background 0.2s,
       color 0.2s,
@@ -403,17 +415,6 @@ const shapeVars = (s: (typeof services)[number]) =>
   }
   .arrow:active {
     transform: scale(0.92);
-  }
-  .count {
-    min-width: 62px;
-    text-align: center;
-    font-size: 14px;
-    color: var(--soft);
-    font-variant-numeric: tabular-nums;
-  }
-  .count b {
-    color: var(--ink);
-    font-weight: 600;
   }
   .pill {
     position: absolute;
@@ -456,14 +457,21 @@ const shapeVars = (s: (typeof services)[number]) =>
   .tab:focus-visible {
     outline-offset: -2px;
   }
+  /* "Para ti" flota sobre la esquina de la pestaña: no ocupa sitio. */
   .fit {
     display: none;
-    font-size: 11px;
+    position: absolute;
+    top: -9px;
+    right: 6px;
+    font-size: 10px;
     font-weight: 700;
+    line-height: 1.5;
     color: #fff;
     background: var(--accent);
     border-radius: 999px;
-    padding: 2px 7px;
+    padding: 1px 7px;
+    box-shadow: 0 0 0 2px #fff;
+    pointer-events: none;
   }
   .tab.mine .fit {
     display: inline-block;
@@ -673,7 +681,6 @@ const shapeVars = (s: (typeof services)[number]) =>
       mask-image: none;
     }
     /* En el móvil caben las seis: iconos, y el nombre corto solo en la activa. */
-    .arrows,
     .tab .long {
       display: none;
     }
@@ -686,13 +693,24 @@ const shapeVars = (s: (typeof services)[number]) =>
       display: inline;
     }
     .tab .fit {
-      position: absolute;
-      top: 4px;
+      top: -4px;
       right: 4px;
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       padding: 0;
       font-size: 0;
+    }
+    /* En el móvil, a los lados de la ilustración. */
+    .side {
+      top: 190px;
+      width: 40px;
+      height: 40px;
+    }
+    .side.prev {
+      left: -8px;
+    }
+    .side.next {
+      right: -8px;
     }
   }
 </style>
