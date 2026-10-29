@@ -2,40 +2,25 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
-import icon from "astro-icon";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://drumorera.com",
+  // Todo se prerenderiza salvo las rutas con `prerender = false` (/api/contact).
   output: "static",
+  adapter: cloudflare({ imageService: "compile" }),
+  // No usamos sesiones: así el adaptador no exige un KV.
+  session: { driver: "memory" },
 
   vite: {
     plugins: [tailwindcss()],
   },
 
-  integrations: [
-    icon(),
-    sitemap({
-      i18n: {
-        defaultLocale: "es",
-        locales: {
-          es: "es-ES",
-          en: "en-US",
-        },
-      },
-    }),
-  ],
+  integrations: [sitemap({ filter: (page) => !page.includes("/links") })],
 
   prefetch: {
     prefetchAll: false,
     defaultStrategy: "hover",
-  },
-
-  i18n: {
-    defaultLocale: "es",
-    locales: ["es", "en"],
-    routing: {
-      prefixDefaultLocale: false,
-    },
   },
 });

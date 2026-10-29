@@ -1,176 +1,19 @@
-// Site configuration types
+export type Network = "tiktok" | "instagram" | "facebook" | "youtube";
+
 export interface SiteConfig {
   name: string;
   url: string;
-  author: {
-    realName: string;
-    displayName: string;
-    email: string;
-    avatar: string;
-  };
-  social: SocialLink[];
-  defaultLocale: Locale;
-  locales: Locale[];
+  realName: string;
+  handle: string;
+  email: string;
+  /** Número de WhatsApp con prefijo de país. Vacío = no se muestra WhatsApp. */
+  whatsapp: string;
+  whatsappText: string;
+  /** URL de cada perfil. Vacío = esa red no se muestra. */
+  networks: Record<Network, string>;
+  extraLinks: { github: string; linkedin: string };
 }
 
-export type Locale = "es" | "en";
-
-export interface SocialLink {
-  platform: "github" | "linkedin" | "twitter" | "email";
-  url: string;
-  label: string;
-}
-
-export interface NavItem {
-  label: string;
-  href: string;
-}
-
-// Resume/Skills types
-export interface Skill {
-  name: string;
-  icon: string;
-  category: SkillCategory;
-}
-
-export type SkillCategory = "frontend" | "backend" | "database" | "devops" | "ai" | "tools";
-
-export interface Experience {
-  company: string;
-  role: {
-    es: string;
-    en: string;
-  };
-  location: {
-    es: string;
-    en: string;
-  };
-  startDate: string;
-  endDate: string | "present";
-  highlights: {
-    es: string[];
-    en: string[];
-  };
-  technologies: string[];
-}
-
-export interface ResumeData {
-  skills: Skill[];
-  skillCategories: Record<SkillCategory, string>;
-}
-
-// SEO types
-export interface SEOProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  canonicalUrl?: string;
-  type?: "website" | "article";
-  locale?: Locale;
-}
-
-// i18n types
-export interface Translations {
-  nav: {
-    home: string;
-    about: string;
-    stack: string;
-    projects: string;
-    contact: string;
-    skipToContent: string;
-  };
-  hero: {
-    greeting: string;
-    role: string;
-    description: string;
-    viewProjects: string;
-    contact: string;
-    aiCheck: string;
-  };
-  about: {
-    title: string;
-    subtitle: string;
-    bio: string;
-    yearsExp: string;
-    companies: string;
-    technologies: string;
-  };
-  stack: {
-    title: string;
-    subtitle: string;
-  };
-  portfolio: {
-    title: string;
-    subtitle: string;
-    viewProject: string;
-    viewCode: string;
-    viewDemo: string;
-    featured: string;
-    inProgress: string;
-    noProjects: string;
-  };
-  contact: {
-    title: string;
-    subtitle: string;
-    cta: string;
-    email: string;
-    form: {
-      name: string;
-      namePlaceholder: string;
-      email: string;
-      emailPlaceholder: string;
-      message: string;
-      messagePlaceholder: string;
-      send: string;
-      sending: string;
-      success: string;
-      error: string;
-      emailSubject: string;
-      fromName: string;
-    };
-  };
-  footer: {
-    rights: string;
-    builtWith: string;
-  };
-  project: {
-    backToProjects: string;
-    techStack: string;
-    links: string;
-    viewDemo: string;
-    viewCode: string;
-    viewWeb: string;
-    tags: string;
-  };
-  common: {
-    switchLang: string;
-    openMenu: string;
-    closeMenu: string;
-    scrollToAbout: string;
-    toggleDarkMode: string;
-    opensInNewWindow: string;
-    home: string;
-    skipToContent: string;
-    required: string;
-  };
-  notFound: {
-    title: string;
-    heading: string;
-    description: string;
-    goHome: string;
-  };
-  experience: {
-    title: string;
-    subtitle: string;
-    present: string;
-    downloadCV: string;
-  };
-  skillCategories: {
-    frontend: string;
-    backend: string;
-    database: string;
-    devops: string;
-    ai: string;
-    tools: string;
-  };
+export interface PublicConfig extends SiteConfig {
+  whatsappUrl: string | null;
 }

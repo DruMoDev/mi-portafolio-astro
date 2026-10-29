@@ -3,15 +3,19 @@
   "name": "dru-portfolio",
   "main": "dist/_worker.js/index.js",
   "compatibility_date": "2026-01-19",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist"
+    "directory": "./dist",
+  },
+  // Envío del formulario de contacto con Cloudflare Email Routing.
+  // CONTACT_TO (el Gmail verificado como destino) se añade como secreto:
+  //   npx wrangler secret put CONTACT_TO
+  "send_email": [{ "name": "SEND_EMAIL" }],
+  "vars": {
+    "CONTACT_FROM": "web@drumorera.com",
   },
   "observability": {
-    "enabled": true
-  }
+    "enabled": true,
+  },
 }

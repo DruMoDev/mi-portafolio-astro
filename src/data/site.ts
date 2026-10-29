@@ -1,31 +1,22 @@
 import type { SiteConfig } from "../types";
 
+// Lo que está vacío no se muestra en producción. Lo rellena Dru.
 export const siteConfig: SiteConfig = {
-  name: "Dru Portfolio",
+  name: "Dru Morera",
   url: "https://drumorera.com",
-  author: {
-    realName: "Roger Morera",
-    displayName: "Dru",
-    email: "contacto@drumorera.com",
-    avatar: "/images/yo.jpg",
+  realName: "Roger Morera",
+  handle: "@soydruia",
+  email: "hola@drumorera.com",
+  whatsapp: "",
+  whatsappText: "Hola Dru, vengo de tu web…",
+  networks: {
+    tiktok: "",
+    instagram: "",
+    facebook: "",
+    youtube: "",
   },
-  social: [
-    {
-      platform: "github",
-      url: "https://github.com/DruMoDev",
-      label: "GitHub",
-    },
-    {
-      platform: "linkedin",
-      url: "https://www.linkedin.com/in/roger-morera/",
-      label: "LinkedIn",
-    },
-    {
-      platform: "email",
-      url: "mailto:contacto@drumorera.com",
-      label: "Email",
-    },
-  ],
-  defaultLocale: "es",
-  locales: ["es", "en"],
+  extraLinks: {
+    github: "https://github.com/DruMoDev",
+    linkedin: "https://www.linkedin.com/in/roger-morera/",
+  },
 };

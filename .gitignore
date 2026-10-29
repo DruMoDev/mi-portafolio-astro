@@ -26,3 +26,10 @@ pnpm-debug.log*
 # local environment overrides
 .env.local
 .env.*.local
+
+# cloudflare
+.wrangler/
+.dev.vars
+
+# superpowers
+.superpowers/

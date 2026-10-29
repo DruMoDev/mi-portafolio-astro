@@ -1,68 +1,22 @@
 ---
-import { ViewTransitions } from "astro:transitions";
 import Head from "../components/Head.astro";
-import Navigation from "../components/Navigation.astro";
-import Footer from "../components/sections/Footer.astro";
 import "../styles/global.css";
-import type { SEOProps, Locale } from "../types";
 
 interface Props {
-  seo?: SEOProps;
-  locale: Locale;
+  title?: string;
+  description?: string;
+  noindex?: boolean;
 }
 
-const { seo = {}, locale } = Astro.props;
+const { title, description, noindex } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={locale} class="scroll-smooth">
+<html lang="es">
   <head>
-    <Head {...seo} locale={locale} />
-    <ViewTransitions />
+    <Head title={title} description={description} noindex={noindex} />
   </head>
-  <body
-    class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300"
-  >
-    <Navigation locale={locale} />
-    <main id="main">
-      <slot />
-    </main>
-    <Footer locale={locale} />
-
-    <script is:inline>
-      // Dark mode initialization (runs before render to prevent flash)
-      (function () {
-        try {
-          const theme = localStorage.getItem("theme");
-          if (
-            theme === "dark" ||
-            (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
-          ) {
-            document.documentElement.classList.add("dark");
-          } else {
-            document.documentElement.classList.remove("dark");
-          }
-        } catch (e) {}
-      })();
-    </script>
-    <script is:inline>
-      function loadChatbot() {
-        if (document.querySelector("iframe[src*='university-chatbot']")) return;
-        var old = document.querySelector("script[src*='widget-loader']");
-        if (old) old.remove();
-        var s = document.createElement("script");
-        s.src = "https://university-chatbot.pages.dev/widget-loader.js";
-        s.dataset.key = "pk_live_z8Tg93yd2P1Ztf3psYfy2k2uqobTfRDX";
-        document.body.appendChild(s);
-      }
-      document.addEventListener("astro:page-load", function () {
-        // Defer chatbot until browser is idle to avoid blocking main thread
-        if ("requestIdleCallback" in window) {
-          requestIdleCallback(loadChatbot, { timeout: 4000 });
-        } else {
-          setTimeout(loadChatbot, 3000);
-        }
-      });
-    </script>
+  <body>
+    <slot />
   </body>
 </html>

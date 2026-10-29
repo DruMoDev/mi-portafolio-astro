@@ -1,29 +1,42 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Button from "../components/ui/Button.astro";
-import { getTranslations, defaultLocale } from "../i18n";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import type { Locale } from "../types";
-
-const locale = (Astro.currentLocale ?? defaultLocale) as Locale;
-const t = getTranslations(locale);
 ---
 
-<BaseLayout locale={locale} seo={{ title: t.notFound.title, description: t.notFound.description }}>
-  <section class="min-h-[70vh] flex items-center justify-center px-4">
-    <div class="text-center max-w-lg">
-      <h1 class="text-8xl font-bold text-blue-600 dark:text-blue-400 mb-4">404</h1>
-      <h2 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
-        {t.notFound.heading}
-      </h2>
-      <p class="text-zinc-600 dark:text-zinc-400 mb-8">
-        {t.notFound.description}
-      </p>
-      <div class="flex gap-4 justify-center">
-        <Button href={getRelativeLocaleUrl(locale)}>
-          {t.notFound.goHome}
-        </Button>
-      </div>
-    </div>
-  </section>
+<BaseLayout title="Página no encontrada · Dru Morera" noindex>
+  <main class="wrap nf">
+    <p class="code">404</p>
+    <h1 class="sec">Esta página no existe.</h1>
+    <p class="sub">
+      Puede que el enlace sea antiguo. Lo que buscas seguramente está en la portada.
+    </p>
+    <a class="cta" href="/">Ir a la portada</a>
+  </main>
 </BaseLayout>
+
+<style>
+  .nf {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .code {
+    font-size: 15px;
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+  }
+  h1 {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+  .sub {
+    font-size: 18px;
+    color: var(--soft);
+    max-width: 44ch;
+    line-height: 1.5;
+  }
+</style>

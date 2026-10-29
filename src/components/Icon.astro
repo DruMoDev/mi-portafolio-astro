@@ -1,0 +1,53 @@
+---
+import {
+  AppWindow,
+  ChevronLeft,
+  ChevronRight,
+  Clapperboard,
+  Compass,
+  Eye,
+  GraduationCap,
+  Megaphone,
+  MessageCircle,
+  Send,
+  ShoppingBag,
+  ShoppingCart,
+  Store,
+  Users,
+  X,
+  Zap,
+} from "@lucide/astro";
+
+// Iconos de trazo a 1,7 px, como en el diseño.
+const icons = {
+  zap: Zap,
+  window: AppWindow,
+  bag: ShoppingBag,
+  compass: Compass,
+  users: Users,
+  clapper: Clapperboard,
+  store: Store,
+  cart: ShoppingCart,
+  cap: GraduationCap,
+  megaphone: Megaphone,
+  left: ChevronLeft,
+  right: ChevronRight,
+  eye: Eye,
+  x: X,
+  send: Send,
+  whatsapp: MessageCircle,
+};
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className = "ic" } = Astro.props;
+const Component = icons[name];
+---
+
+<Component size={size} stroke-width={1.7} class={className} aria-hidden="true" />
