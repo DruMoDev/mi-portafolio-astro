@@ -12,8 +12,8 @@ import { whoOptions } from "../data/services";
   </div>
   <div class="tiles" role="group" aria-labelledby="who-t">
     {
-      whoOptions.map((o) => (
-        <button type="button" class="tile" aria-pressed="false" data-who={o.id}>
+      whoOptions.map((o, i) => (
+        <button type="button" class="tile" aria-pressed="false" data-who={o.id} style={`--i:${i}`}>
           <span class="check" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M5 12.5l4.5 4.5L19 7.5" />
@@ -42,6 +42,20 @@ import { whoOptions } from "../data/services";
 
 <script>
   import { matchingServices, summaryText } from "../lib/services";
+
+  // La entrada espera a que la sección se vea (en el móvil puede quedar bajo el pliegue).
+  const who = document.querySelector<HTMLElement>(".who")!;
+  if (who.getBoundingClientRect().top > innerHeight) {
+    who.classList.add("paused");
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      // Ya llega tarde a la coreografía del hero: entra sin esperar.
+      who.classList.add("late");
+      who.classList.remove("paused");
+      io.disconnect();
+    });
+    io.observe(who);
+  }
   import type { WhoId } from "../data/services";
 
   const KEY = "dru:who";
@@ -255,6 +269,50 @@ import { whoOptions } from "../data/services";
   }
   .go-btn:hover {
     transform: translateY(-2px);
+  }
+  /* Entrada después del hero: la pregunta, las tarjetas una a una y la pista de abajo. */
+  .who-head,
+  .tile,
+  .more {
+    animation: rise 0.8s var(--ease) backwards;
+  }
+  .who-head {
+    animation-delay: 2.15s;
+  }
+  .tile {
+    animation-name: tile-in;
+    animation-duration: 0.75s;
+    animation-timing-function: var(--spring);
+    animation-delay: calc(2.35s + var(--i) * 0.09s);
+  }
+  .more {
+    animation-delay: 2.9s;
+  }
+  .late .who-head {
+    animation-delay: 0s;
+  }
+  .late .tile {
+    animation-delay: calc(0.15s + var(--i) * 0.09s);
+  }
+  .late .more {
+    animation-delay: 0.6s;
+  }
+  .paused .who-head,
+  .paused .tile,
+  .paused .more {
+    animation-play-state: paused;
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+  @keyframes tile-in {
+    from {
+      opacity: 0;
+      transform: translateY(26px) scale(0.94);
+    }
   }
   /* Pista de que hay más debajo. */
   .more {

@@ -326,7 +326,6 @@ const shapeVars = (s: (typeof services)[number]) =>
 <style>
   .services {
     padding: 4vh 0 10vh;
-    scroll-margin-top: 20px;
   }
   .services-head {
     display: flex;
@@ -346,7 +345,7 @@ const shapeVars = (s: (typeof services)[number]) =>
   /* Barra de navegación: pestañas y flechas juntas, pegada arriba mientras se lee el servicio. */
   .nav {
     position: sticky;
-    top: 10px;
+    top: calc(var(--header-h) + 8px);
     z-index: 20;
     display: flex;
     align-items: center;
@@ -422,10 +421,8 @@ const shapeVars = (s: (typeof services)[number]) =>
     bottom: 0;
     left: 0;
     border-radius: 16px;
-    background: #fff;
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.08),
-      0 6px 16px -8px rgba(0, 0, 0, 0.18);
+    background: var(--ink);
+    box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.5);
     transition:
       left 0.55s var(--ease),
       width 0.55s var(--ease);
@@ -450,7 +447,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     color: var(--ink);
   }
   .tab.on {
-    color: var(--ink);
+    color: #fff;
     font-weight: 600;
   }
   .tab .short {

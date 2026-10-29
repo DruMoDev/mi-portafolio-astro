@@ -10,43 +10,71 @@ const { showVideos } = Astro.props;
 const cfg = getPublicConfig();
 ---
 
-<header class="wrap">
-  <a class="brand" href="/" aria-label="Dru Morera, inicio">
-    <span class="mark" aria-hidden="true">D</span>
-    <span>Dru Morera</span>
-  </a>
-  <nav aria-label="Principal">
-    <div class="links">
-      <a href="#servicios">Servicios</a>
-      {showVideos && <a href="#videos">Vídeos</a>}
-      <a href="#contacto">Contacto</a>
-    </div>
-    {
-      cfg.whatsappUrl && (
-        <a
-          class="icon-btn"
-          href={cfg.whatsappUrl}
-          target="_blank"
-          rel="noopener"
-          aria-label="Escríbeme por WhatsApp (se abre en otra pestaña)"
-        >
-          <Icon name="whatsapp" size={18} />
-        </a>
-      )
-    }
-    <a href="#contacto" class="btn-sm" data-open>
-      Contactar
-      <Icon name="right" size={16} />
+<div class="topbar" data-topbar>
+  <header class="wrap">
+    <a class="brand" href="/" aria-label="Dru Morera, inicio">
+      <span class="mark" aria-hidden="true">D</span>
+      <span>Dru Morera</span>
     </a>
-  </nav>
-</header>
+    <nav aria-label="Principal">
+      <div class="links">
+        <a href="#servicios">Servicios</a>
+        {showVideos && <a href="#videos">Vídeos</a>}
+        <a href="#contacto">Contacto</a>
+      </div>
+      {
+        cfg.whatsappUrl && (
+          <a
+            class="icon-btn"
+            href={cfg.whatsappUrl}
+            target="_blank"
+            rel="noopener"
+            aria-label="Escríbeme por WhatsApp (se abre en otra pestaña)"
+          >
+            <Icon name="whatsapp" size={18} />
+          </a>
+        )
+      }
+      <a href="#contacto" class="btn-sm" data-open>
+        Contactar
+        <Icon name="right" size={16} />
+      </a>
+    </nav>
+  </header>
+</div>
+
+<script>
+  // Al bajar, la cabecera gana fondo y una línea para separarse del contenido.
+  const bar = document.querySelector<HTMLElement>("[data-topbar]");
+  const onScroll = () => bar?.classList.toggle("scrolled", scrollY > 8);
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+</script>
 
 <style>
+  /* Siempre visible: fija arriba, translúcida. */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(1.6) blur(16px);
+    -webkit-backdrop-filter: saturate(1.6) blur(16px);
+    transition:
+      background 0.3s,
+      box-shadow 0.3s;
+  }
+  .topbar.scrolled {
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow:
+      0 1px 0 var(--line),
+      0 10px 30px -24px rgba(0, 0, 0, 0.35);
+  }
   header {
+    height: var(--header-h);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
     font-size: 15px;
   }
   .brand {

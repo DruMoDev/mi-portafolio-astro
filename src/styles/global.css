@@ -18,7 +18,10 @@
 
 @layer base {
   html {
+    --header-h: 72px;
     scroll-behavior: smooth;
+    /* Las anclas no quedan debajo de la cabecera fija. */
+    scroll-padding-top: calc(var(--header-h) + 12px);
   }
   body {
     background: #fff;
