@@ -19,6 +19,11 @@
   "vars": {
     "CONTACT_FROM": "web@drumorera.com",
   },
+  // drumorera.com y www apuntan a este Worker (antes, al proyecto Pages mi-portafolio-astro).
+  "routes": [
+    { "pattern": "drumorera.com", "custom_domain": true },
+    { "pattern": "www.drumorera.com", "custom_domain": true },
+  ],
   "observability": {
     "enabled": true,
   },
