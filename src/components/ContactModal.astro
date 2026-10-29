@@ -14,7 +14,7 @@ const chips = [
 
 <div class="modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="mt" hidden>
   <div class="scrim" data-close></div>
-  <form class="sheet" novalidate>
+  <form class="sheet" novalidate tabindex="-1">
     <div class="sheet-head">
       <h2 id="mt">Escríbeme</h2>
       <button type="button" class="x" data-close aria-label="Cerrar"><Icon name="x" /></button>
@@ -75,7 +75,7 @@ const chips = [
     </div>
     <div class="trap" aria-hidden="true">
       <label for="f-web">Web</label>
-      <input id="f-web" name="website" tabindex="-1" autocomplete="off" />
+      <input id="f-web" name="website" tabindex="-1" autocomplete="new-password" />
     </div>
     <div class="sheet-foot">
       <button type="button" class="back" data-back hidden>Atrás</button>
@@ -140,6 +140,11 @@ const chips = [
   const fail = modal.querySelector<HTMLElement>("[data-fail]")!;
   const doneText = modal.querySelector<HTMLElement>("[data-done-text]")!;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const formParts = [
+    ...modal.querySelectorAll<HTMLElement>(".sheet-head, .steps, .panes-clip, .sheet-foot"),
+  ];
+  const failText = fail.querySelector<HTMLElement>("p")!;
+  const failDefault = failText.textContent;
 
   let step = 0;
   let sending = false;
@@ -172,6 +177,8 @@ const chips = [
       v.classList.toggle("show", v === view);
       v.inert = v !== view;
     });
+    // Con un resultado a la vista, el formulario de debajo no se puede tocar.
+    formParts.forEach((el) => (el.inert = !!view));
     if (view) setTimeout(() => view.querySelector<HTMLElement>("h3")?.focus(), 50);
   }
 
@@ -179,10 +186,13 @@ const chips = [
     clearTimeout(hideTimer);
     const selected = new Set(svc ? [svc] : mine);
     chips.forEach((c) => c.setAttribute("aria-pressed", String(selected.has(c.dataset.id!))));
+    paneEls.forEach((p) => (p.querySelector<HTMLElement>(".err")!.textContent = ""));
+    inputs.forEach((i) => i.removeAttribute("aria-invalid"));
     showResult(null);
     modal.hidden = false;
     document.body.classList.add("lock");
     requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add("open")));
+    form.focus({ preventScroll: true });
     setStep(0);
   }
 
@@ -210,7 +220,9 @@ const chips = [
     )
   );
 
-  modal.addEventListener("keydown", (e) => {
+  // En document: Esc y Tab funcionan aunque el foco haya caído fuera de un control.
+  document.addEventListener("keydown", (e) => {
+    if (modal.hidden || !modal.classList.contains("open")) return;
     if (e.key === "Escape") return close();
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
@@ -223,7 +235,10 @@ const chips = [
     ].filter((el) => !el.closest("[inert], [hidden], .trap") && el.offsetParent !== null);
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
+    if (!modal.contains(document.activeElement) || document.activeElement === form) {
+      e.preventDefault();
+      (e.shiftKey ? last : first).focus();
+    } else if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
       last.focus();
     } else if (!e.shiftKey && document.activeElement === last) {
@@ -290,9 +305,14 @@ const chips = [
         err.textContent = data.error;
         shake(input);
       } else {
+        failText.textContent =
+          res.status === 429
+            ? "Has enviado varios mensajes seguidos. Espera unos minutos o escríbeme directamente:"
+            : failDefault;
         showResult(fail);
       }
     } catch {
+      failText.textContent = failDefault;
       showResult(fail);
     } finally {
       sending = false;
@@ -326,6 +346,7 @@ const chips = [
     opacity: 1;
   }
   .sheet {
+    outline: none;
     position: relative;
     width: min(520px, 100%);
     background: #fff;

@@ -197,8 +197,10 @@ const ringSets = [
     });
     addEventListener("pointerup", () => (dragging = false));
     // Un arrastre no debe abrir el vídeo.
+    // (detail 0 = Enter desde el teclado, que siempre abre).
     wrap.addEventListener("click", (e) => {
-      if (moved > 6) e.preventDefault();
+      if (e.detail !== 0 && moved > 6) e.preventDefault();
+      moved = 0;
     });
     // Al tabular, gira hasta la tarjeta con el foco.
     wrap.addEventListener("focusin", (e) => {

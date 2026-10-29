@@ -80,7 +80,10 @@ import { whoOptions } from "../data/services";
   seeMine.addEventListener("click", () => {
     const first = matchingServices(picked)[0];
     if (!first) return;
-    document.getElementById("servicios")?.scrollIntoView({ behavior: "smooth" });
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document
+      .getElementById("servicios")
+      ?.scrollIntoView({ behavior: reduce ? "instant" : "smooth" });
     setTimeout(
       () => window.dispatchEvent(new CustomEvent("services:open", { detail: { id: first.id } })),
       450
@@ -94,8 +97,12 @@ import { whoOptions } from "../data/services";
       saved.filter((id) => valid.has(id)).forEach((id) => picked.add(id));
     }
   } catch {}
-  // Espera a que el escenario y el modal estén escuchando.
-  if (picked.size) requestAnimationFrame(() => update(false));
+  // Los scripts son módulos diferidos: DOMContentLoaded llega cuando todos (escenario y modal) escuchan.
+  if (picked.size) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => update(false), { once: true });
+    } else setTimeout(() => update(false));
+  }
 </script>
 
 <style>

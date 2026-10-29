@@ -23,6 +23,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     </div>
     <span class="count" data-count>1 de {services.length}</span>
   </div>
+  <span class="visually-hidden" aria-live="polite" data-live></span>
 
   <div class="tabs" role="tablist" aria-label="Servicios">
     <span class="pill" aria-hidden="true"></span>
@@ -59,6 +60,7 @@ const shapeVars = (s: (typeof services)[number]) =>
             id={`panel-${s.id}`}
             aria-labelledby={`tab-${s.id}`}
             hidden={i !== 0}
+            tabindex="-1"
           >
             <span class="foryou slot">Encaja con lo que buscas</span>
             <h3 class="slot">{s.title}</h3>
@@ -127,12 +129,14 @@ const shapeVars = (s: (typeof services)[number]) =>
   const count = section.querySelector<HTMLElement>("[data-count]")!;
   const prevName = section.querySelector<HTMLElement>("[data-prev-name]")!;
   const nextName = section.querySelector<HTMLElement>("[data-next-name]")!;
+  const live = section.querySelector<HTMLElement>("[data-live]")!;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const N = services.length;
 
   let cur = 0;
   let busy = false;
   let swapTimer = 0;
+  let busyTimer = 0;
 
   function placePill() {
     const t = tabs[cur];
@@ -145,8 +149,10 @@ const shapeVars = (s: (typeof services)[number]) =>
     if (i === cur || busy) return;
     instant ||= reduce.matches;
     const s = services[i];
-    const old = panels[cur];
+    // El panel visible ahora (puede no ser el de `cur` si se interrumpe una transición).
+    const old = panels.find((p) => !p.hidden) ?? panels[cur];
     const next = panels[i];
+    const hadFocus = old.contains(document.activeElement);
     busy = !instant;
     cur = i;
     // Sin animación (ancla al cargar o movimiento reducido): ni el objeto ni la píldora transicionan.
@@ -187,9 +193,15 @@ const shapeVars = (s: (typeof services)[number]) =>
 
     // El texto: sale hacia arriba y entra el nuevo desde abajo, por bloques.
     clearTimeout(swapTimer);
-    panels.forEach((p) => p.classList.remove("out", "in"));
+    clearTimeout(busyTimer);
+    panels.forEach((p) => {
+      p.classList.remove("out", "in");
+      if (p !== old) p.hidden = true;
+    });
+    live.textContent = `${s.name}, ${i + 1} de ${N}`;
     if (instant) {
       panels.forEach((p) => (p.hidden = p !== next));
+      if (hadFocus) next.focus({ preventScroll: true });
     } else {
       old.classList.add("out");
       swapTimer = window.setTimeout(() => {
@@ -197,10 +209,11 @@ const shapeVars = (s: (typeof services)[number]) =>
         old.classList.remove("out");
         next.classList.add("in");
         next.hidden = false;
+        if (hadFocus) next.focus({ preventScroll: true });
         requestAnimationFrame(() => requestAnimationFrame(() => next.classList.remove("in")));
       }, 330);
     }
-    setTimeout(() => (busy = false), instant ? 0 : 700);
+    busyTimer = window.setTimeout(() => (busy = false), instant ? 0 : 700);
   }
 
   tabs.forEach((t, k) => t.addEventListener("click", () => go(k)));
@@ -417,6 +430,17 @@ const shapeVars = (s: (typeof services)[number]) =>
   }
   .copy {
     align-self: center;
+  }
+  .panel:focus {
+    outline: none;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .slot {
     transition:

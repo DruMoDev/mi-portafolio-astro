@@ -9,7 +9,9 @@ export interface ContactInput {
   website: string;
 }
 
-export const EMAIL_RE = /^\S+@\S+\.\S+$/;
+// Una sola dirección ASCII: sin comas, punto y coma, <>, comillas ni espacios (va en Reply-To).
+export const EMAIL_RE = /^[^\s@,;<>()"\\]+@[^\s@,;<>()"\\]+\.[^\s@,;<>()"\\]+$/;
+const NON_ASCII = /[^\x20-\x7e]/;
 const LIMITS = { name: 100, email: 200, message: 5000 };
 const SERVICE_IDS = new Set<string>([...services.map((s) => s.id), "otro"]);
 
@@ -22,6 +24,7 @@ const STEP_ERRORS = [
 /** Mensaje amable si el valor del paso no vale, o "" si está bien. */
 export function validateField(step: 0 | 1 | 2, value: string): string {
   const v = value.trim();
+  if (step === 1 && NON_ASCII.test(v)) return "Escribe el email sin acentos ni eñes, por favor.";
   const valid = step === 1 ? EMAIL_RE.test(v) : v !== "";
   return valid ? "" : STEP_ERRORS[step];
 }

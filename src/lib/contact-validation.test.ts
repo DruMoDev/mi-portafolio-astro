@@ -8,6 +8,15 @@ describe("validateField", () => {
     expect(validateField(2, "")).toBe("Cuéntame en una frase qué necesitas.");
   });
 
+  it("rechaza emails que no son una sola dirección ASCII", () => {
+    expect(validateField(1, "a@b.co,otra@x.yz")).not.toBe("");
+    expect(validateField(1, "a@b.c<otra@x.y>")).not.toBe("");
+    expect(validateField(1, "a@b.co;c@d.ef")).not.toBe("");
+    expect(validateField(1, "josé@ejemplo.es")).toBe(
+      "Escribe el email sin acentos ni eñes, por favor."
+    );
+  });
+
   it("acepta valores correctos", () => {
     expect(validateField(0, "Ana")).toBe("");
     expect(validateField(1, " ana@gmail.com ")).toBe("");
