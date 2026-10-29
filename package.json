@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
+    "@astrojs/cloudflare": "^12.6.13",
     "@astrojs/sitemap": "^3.7.0",
+    "@fontsource-variable/geist": "^5.3.0",
     "@iconify-json/devicon": "^1.2.58",
     "@iconify-json/logos": "^1.2.10",
     "@lucide/astro": "^0.562.0",
@@ -27,11 +29,13 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261029.1",
     "@tailwindcss/typography": "^0.5.19",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "wrangler": "^4.155.0"
   }
 }
