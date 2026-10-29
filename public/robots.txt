@@ -1,5 +1,5 @@
 # Robots.txt for drumorera.com
-# Full Stack Developer Barcelona - Webs, Apps, SaaS
+# Dru Morera · servicios de IA, webs y automatizaciones
 
 User-agent: *
 Allow: /

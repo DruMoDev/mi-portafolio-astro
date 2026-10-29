@@ -1,0 +1,249 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactModal from "../components/ContactModal.astro";
+import Icon from "../components/Icon.astro";
+import avatar from "../assets/images/avatar.jpg";
+import { services } from "../data/services";
+import { getPublicConfig } from "../lib/config";
+import { getSocial, networkNames, selectVideoSets } from "../lib/social";
+import type { Network } from "../types";
+
+const cfg = getPublicConfig();
+const sets = selectVideoSets(getSocial().videos);
+const lastVideo = sets?.latest[0] ?? null;
+const networks = (Object.keys(cfg.networks) as Network[]).filter((n) => cfg.networks[n]);
+---
+
+<BaseLayout
+  title="Dru Morera · @soydruia"
+  description="Automatizaciones, webs, tiendas Shopify, consultoría y mentoría de IA. Escríbeme o mira mis vídeos."
+  noindex
+>
+  <main class="links">
+    <header>
+      <Image
+        src={avatar}
+        alt="Dru Morera"
+        width={176}
+        height={176}
+        class="avatar"
+        loading="eager"
+      />
+      <h1>{cfg.handle}</h1>
+      <p>Programo con IA. Construyo para negocios, enseño a usarla y lo cuento en vídeo.</p>
+    </header>
+
+    <div class="main-actions">
+      {
+        cfg.whatsappUrl && (
+          <a class="big wa" href={cfg.whatsappUrl} target="_blank" rel="noopener">
+            <Icon name="whatsapp" />
+            Háblame por WhatsApp
+          </a>
+        )
+      }
+      <button type="button" class:list={["big", cfg.whatsappUrl ? "ghost-big" : "p"]} data-open>
+        <Icon name="send" />Escríbeme
+      </button>
+    </div>
+
+    <section aria-labelledby="l-services">
+      <h2 id="l-services">Servicios</h2>
+      <ul class="list">
+        {
+          services.map((s) => (
+            <li>
+              <a href={`/#${s.id}`}>
+                <span class="ico">
+                  <Icon name={s.icon} />
+                </span>
+                <span>
+                  <b>{s.name}</b>
+                  <small>{s.waitlist ? "Lista de espera abierta" : s.title}</small>
+                </span>
+                <Icon name="right" class="ic chev" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      lastVideo && (
+        <section aria-labelledby="l-video">
+          <h2 id="l-video">Mi último vídeo</h2>
+          <ul class="list">
+            <li>
+              <a href={lastVideo.url} target="_blank" rel="noopener">
+                <span class="ico">
+                  <Icon name="clapper" />
+                </span>
+                <span>
+                  <b>{lastVideo.title}</b>
+                  <small>{networkNames[lastVideo.network]}</small>
+                </span>
+                <Icon name="right" class="ic chev" />
+              </a>
+            </li>
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      networks.length > 0 && (
+        <section aria-labelledby="l-nets">
+          <h2 id="l-nets">Redes</h2>
+          <div class="nets">
+            {networks.map((n) => (
+              <a href={cfg.networks[n]} target="_blank" rel="noopener me">
+                {networkNames[n]}
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <footer><a href="/">drumorera.com</a></footer>
+  </main>
+  <ContactModal />
+</BaseLayout>
+
+<style>
+  .links {
+    width: min(480px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 48px 0 40px;
+  }
+  header {
+    text-align: center;
+  }
+  header :global(.avatar) {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    margin: 0 auto;
+    object-fit: cover;
+    animation: pop 0.6s var(--spring) both;
+  }
+  @keyframes pop {
+    from {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+  }
+  h1 {
+    margin-top: 16px;
+    font-size: 28px;
+    font-weight: 550;
+    letter-spacing: -0.035em;
+  }
+  header p {
+    margin: 8px auto 0;
+    color: var(--soft);
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 32ch;
+  }
+  .main-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .main-actions .big {
+    justify-content: center;
+  }
+  .ghost-big {
+    background: var(--tint);
+    color: var(--ink);
+  }
+  section {
+    margin-top: 32px;
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+  .list li {
+    min-width: 0;
+  }
+  .list a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 20px;
+    background: var(--tint);
+    text-decoration: none;
+    transition:
+      transform 0.35s var(--spring),
+      background 0.2s;
+  }
+  .list a:hover {
+    transform: translateY(-2px);
+  }
+  .list a:active {
+    transform: scale(0.98);
+  }
+  .list a > span:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+  }
+  .ico {
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+  }
+  .list b {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .list small {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .list :global(.chev) {
+    color: var(--soft);
+  }
+  .nets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nets a {
+    padding: 10px 16px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line);
+    text-decoration: none;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+  .nets a:hover {
+    background: var(--tint);
+  }
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--soft);
+  }
+</style>
