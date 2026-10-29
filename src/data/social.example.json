@@ -1,0 +1,139 @@
+{
+  "updatedAt": "2026-10-28",
+  "followers": {
+    "facebook": 2400,
+    "instagram": 2300,
+    "tiktok": 300,
+    "youtube": 300
+  },
+  "videos": [
+    {
+      "id": "ejemplo-1",
+      "network": "instagram",
+      "title": "Las 5 herramientas de IA que uso cada día",
+      "url": "https://www.instagram.com/soydruia",
+      "views": 210000,
+      "publishedAt": "2026-06-02"
+    },
+    {
+      "id": "ejemplo-2",
+      "network": "tiktok",
+      "title": "Una web en un día con IA",
+      "url": "https://www.tiktok.com/@soydruia",
+      "views": 48000,
+      "publishedAt": "2026-05-14"
+    },
+    {
+      "id": "ejemplo-3",
+      "network": "youtube",
+      "title": "Cómo edito mis vídeos con un agente",
+      "url": "https://www.youtube.com/@soydruia",
+      "views": 31000,
+      "publishedAt": "2026-07-20"
+    },
+    {
+      "id": "ejemplo-4",
+      "network": "instagram",
+      "title": "Prompts que sí funcionan",
+      "url": "https://www.instagram.com/soydruia",
+      "views": 22000,
+      "publishedAt": "2026-04-03"
+    },
+    {
+      "id": "ejemplo-5",
+      "network": "youtube",
+      "title": "Automatiza tu email en 10 minutos",
+      "url": "https://www.youtube.com/@soydruia",
+      "views": 15000,
+      "publishedAt": "2026-08-11"
+    },
+    {
+      "id": "ejemplo-6",
+      "network": "tiktok",
+      "title": "IA para tu negocio, sin humo",
+      "url": "https://www.tiktok.com/@soydruia",
+      "views": 12000,
+      "publishedAt": "2026-03-22"
+    },
+    {
+      "id": "ejemplo-7",
+      "network": "tiktok",
+      "title": "Claude Code en 60 segundos",
+      "url": "https://www.tiktok.com/@soydruia",
+      "views": 9000,
+      "publishedAt": "2026-09-01"
+    },
+    {
+      "id": "ejemplo-8",
+      "network": "youtube",
+      "title": "Mi setup para programar con IA",
+      "url": "https://www.youtube.com/@soydruia",
+      "views": 7000,
+      "publishedAt": "2026-02-17"
+    },
+    {
+      "id": "ejemplo-9",
+      "network": "tiktok",
+      "title": "Lo que nadie te cuenta de los agentes",
+      "url": "https://www.tiktok.com/@soydruia",
+      "views": 3000,
+      "publishedAt": "2026-10-27"
+    },
+    {
+      "id": "ejemplo-10",
+      "network": "instagram",
+      "title": "Mi rutina con IA en 2026",
+      "url": "https://www.instagram.com/soydruia",
+      "views": 5000,
+      "publishedAt": "2026-10-24"
+    },
+    {
+      "id": "ejemplo-11",
+      "network": "youtube",
+      "title": "Shopify + IA: tienda en una tarde",
+      "url": "https://www.youtube.com/@soydruia",
+      "views": 2000,
+      "publishedAt": "2026-10-21"
+    },
+    {
+      "id": "ejemplo-12",
+      "network": "tiktok",
+      "title": "3 errores al usar ChatGPT",
+      "url": "https://www.tiktok.com/@soydruia",
+      "views": 6000,
+      "publishedAt": "2026-10-18"
+    },
+    {
+      "id": "ejemplo-13",
+      "network": "instagram",
+      "title": "Así gestiono mis redes con IA",
+      "url": "https://www.instagram.com/soydruia",
+      "views": 4000,
+      "publishedAt": "2026-10-15"
+    },
+    {
+      "id": "ejemplo-14",
+      "network": "youtube",
+      "title": "Una app en un fin de semana",
+      "url": "https://www.youtube.com/@soydruia",
+      "views": 1000,
+      "publishedAt": "2026-10-12"
+    },
+    {
+      "id": "ejemplo-15",
+      "network": "tiktok",
+      "title": "Lo que aprendí en mi primer mes",
+      "url": "https://www.tiktok.com/@soydruia",
+      "views": 8000,
+      "publishedAt": "2026-10-09"
+    },
+    {
+      "id": "ejemplo-16",
+      "network": "instagram",
+      "title": "Preguntas de la comunidad",
+      "url": "https://www.instagram.com/soydruia",
+      "views": 2000,
+      "publishedAt": "2026-10-06"
+    }
+  ]
+}
