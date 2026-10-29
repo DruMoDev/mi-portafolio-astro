@@ -1,0 +1,57 @@
+---
+import { getPublicConfig } from "../lib/config";
+import { networkNames } from "../lib/social";
+import type { Network } from "../types";
+
+const cfg = getPublicConfig();
+const links = [
+  ...(Object.keys(cfg.networks) as Network[])
+    .filter((n) => cfg.networks[n])
+    .map((n) => ({ label: networkNames[n], href: cfg.networks[n] })),
+  { label: "GitHub", href: cfg.extraLinks.github },
+  { label: "LinkedIn", href: cfg.extraLinks.linkedin },
+];
+---
+
+<footer class="wrap">
+  <span>Dru Morera</span>
+  <nav aria-label="Redes">
+    <span>{cfg.handle}</span>
+    {
+      links.map((l) => (
+        <a href={l.href} target="_blank" rel="noopener me">
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
+</footer>
+
+<style>
+  footer {
+    padding: 30px 0 40px;
+    font-size: 14px;
+    color: var(--soft);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+  }
+  nav {
+    display: flex;
+    gap: 8px 18px;
+    flex-wrap: wrap;
+  }
+  nav span {
+    color: var(--ink);
+  }
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

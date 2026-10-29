@@ -1,7 +1,48 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import WhoTiles from "../components/WhoTiles.astro";
+import ServicesStage from "../components/ServicesStage.astro";
+import VideoRing from "../components/VideoRing.astro";
+import ContactSection from "../components/ContactSection.astro";
+import Footer from "../components/Footer.astro";
+import ContactModal from "../components/ContactModal.astro";
+import { hasVideoSection } from "../lib/social";
+
+const showVideos = hasVideoSection();
 ---
 
 <BaseLayout>
-  <main class="wrap"></main>
+  <Header showVideos={showVideos} />
+  <main class="wrap">
+    <section class="intro">
+      <h1>
+        Programo con IA desde hace cuatro años. <span
+          >Construyo para negocios, enseño a usarla y lo cuento en vídeo.</span
+        >
+      </h1>
+    </section>
+    <WhoTiles />
+    <ServicesStage showVideos={showVideos} />
+    {showVideos && <VideoRing />}
+    <ContactSection />
+  </main>
+  <Footer />
+  <ContactModal />
 </BaseLayout>
+
+<style>
+  .intro {
+    padding: 9vh 0 6vh;
+  }
+  h1 {
+    font-size: clamp(30px, 4.4vw, 56px);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+    max-width: 21ch;
+  }
+  h1 span {
+    color: var(--soft);
+  }
+</style>

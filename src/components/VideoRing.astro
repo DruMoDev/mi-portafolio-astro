@@ -1,0 +1,426 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import Icon from "./Icon.astro";
+import {
+  formatCount,
+  formatViews,
+  getSocial,
+  networkNames,
+  selectVideoSets,
+  totalFollowers,
+  type Video,
+} from "../lib/social";
+import type { Network } from "../types";
+
+const social = getSocial();
+const sets = selectVideoSets(social.videos)!;
+const thumbs = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/videos/*.{jpg,jpeg,png,webp}",
+  { eager: true }
+);
+const thumbFor = (v: Video) => {
+  const path = v.thumbnail
+    ? `/${v.thumbnail.replace(/^\.?\//, "")}`
+    : Object.keys(thumbs).find(
+        (p) =>
+          p
+            .split("/")
+            .pop()
+            ?.replace(/\.\w+$/, "") === v.id
+      );
+  return path ? thumbs[path]?.default : undefined;
+};
+
+// Degradados de reserva para vídeos sin miniatura.
+const G = [
+  "linear-gradient(165deg,#2440FF,#0B1240)",
+  "linear-gradient(165deg,#1E1E24,#4A4A55)",
+  "linear-gradient(165deg,#0E7A57,#0B2A22)",
+  "linear-gradient(165deg,#8A5CF6,#2A1660)",
+  "linear-gradient(165deg,#E0562E,#4A1A0B)",
+  "linear-gradient(165deg,#3A8DDE,#0D2742)",
+  "linear-gradient(165deg,#C2A27A,#4A3622)",
+  "linear-gradient(165deg,#D23C77,#3D0B22)",
+];
+
+const order: Network[] = ["facebook", "instagram", "tiktok", "youtube"];
+const ringSets = [
+  { key: "top", label: "Más vistos", videos: sets.top },
+  { key: "latest", label: "Últimos", videos: sets.latest },
+].filter((s) => s.videos.length);
+---
+
+<section class="videos" id="videos" aria-labelledby="videos-t">
+  <div class="videos-head">
+    <div>
+      <h2 class="sec" id="videos-t">Lo cuento en vídeo</h2>
+      <div class="nets">
+        <span><b>+{formatCount(totalFollowers(social.followers))}</b> personas me siguen</span>
+        {
+          order.map((n) => (
+            <span>
+              <b>{formatCount(social.followers[n])}</b> {networkNames[n]}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+    {
+      ringSets.length > 1 && (
+        <div class="seg" role="group" aria-label="Qué vídeos ver">
+          {ringSets.map((s, i) => (
+            <button type="button" aria-pressed={i === 0 ? "true" : "false"} data-set={s.key}>
+              {s.label}
+            </button>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="ring-wrap" role="region" aria-label="Vídeos destacados. Arrastra para girar.">
+    {
+      ringSets.map((set, si) => (
+        <div class="ring" data-ring={set.key} hidden={si !== 0}>
+          {set.videos.map((v, k) => {
+            const img = thumbFor(v);
+            return (
+              <a
+                class="card"
+                href={v.url}
+                target="_blank"
+                rel="noopener"
+                draggable="false"
+                style={`--a:${(k * 360) / set.videos.length}deg;--g:${G[k % G.length]};animation-delay:${k * 40}ms`}
+                aria-label={`${v.title}, en ${networkNames[v.network]}, ${formatViews(v.views)} visualizaciones (se abre en otra pestaña)`}
+              >
+                {img && (
+                  <Image
+                    src={img}
+                    alt=""
+                    width={420}
+                    class="thumb"
+                    loading="lazy"
+                    draggable="false"
+                  />
+                )}
+                <span class="net">{networkNames[v.network]}</span>
+                <span>
+                  <span class="ttl">{v.title}</span>
+                  <span class="views">
+                    <Icon name="eye" size={16} />
+                    {formatViews(v.views)}
+                  </span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      ))
+    }
+  </div>
+  <div class="ring-ctrl">
+    <button type="button" class="round" data-spin="1" aria-label="Girar a la izquierda">
+      <Icon name="left" />
+    </button>
+    <button type="button" class="round" data-spin="-1" aria-label="Girar a la derecha">
+      <Icon name="right" />
+    </button>
+  </div>
+</section>
+
+<script>
+  const wrap = document.querySelector<HTMLElement>(".ring-wrap");
+  if (wrap) {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+    const rings = [...wrap.querySelectorAll<HTMLElement>(".ring")];
+    let ring = rings[0];
+    let ry = 0;
+    let vel = 0;
+    let dragging = false;
+    let moved = 0;
+    let lastX = 0;
+    let hover = false;
+    let visible = true;
+    let frame = 0;
+
+    const cards = () => [...ring.querySelectorAll<HTMLElement>(".card")];
+
+    // Radio del anillo según el número de tarjetas, para que no se solapen.
+    function layout() {
+      const n = cards().length;
+      const w = ring.offsetWidth || 210;
+      const base = innerWidth < 700 ? 270 : 380;
+      const min = w / 2 / Math.tan(Math.PI / n) + 24;
+      rings.forEach((r) => r.style.setProperty("--z", `${Math.round(Math.max(base, min))}px`));
+    }
+
+    function tick() {
+      if (!dragging) {
+        ry += vel;
+        vel *= 0.94;
+        if (!hover && !reduce.matches && Math.abs(vel) < 0.02) ry -= 0.08;
+      }
+      ring.style.setProperty("--ry", `${ry}deg`);
+      const list = cards();
+      const step = 360 / list.length;
+      const front = Math.round((((-ry % 360) + 360) % 360) / step) % list.length;
+      list.forEach((c, k) => c.classList.toggle("front", k === front));
+      frame = visible ? requestAnimationFrame(tick) : 0;
+    }
+
+    // Solo anima mientras se ve: ahorra batería, no ata nada al scroll.
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !frame) frame = requestAnimationFrame(tick);
+    }).observe(wrap);
+
+    wrap.addEventListener("pointerenter", () => (hover = true));
+    wrap.addEventListener("pointerleave", () => {
+      hover = false;
+      dragging = false;
+    });
+    wrap.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      moved = 0;
+      lastX = e.clientX;
+      vel = 0;
+    });
+    addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX;
+      moved += Math.abs(dx);
+      ry += dx * 0.3;
+      vel = dx * 0.3;
+      lastX = e.clientX;
+    });
+    addEventListener("pointerup", () => (dragging = false));
+    // Un arrastre no debe abrir el vídeo.
+    wrap.addEventListener("click", (e) => {
+      if (moved > 6) e.preventDefault();
+    });
+    // Al tabular, gira hasta la tarjeta con el foco.
+    wrap.addEventListener("focusin", (e) => {
+      const k = cards().indexOf((e.target as HTMLElement).closest(".card")!);
+      if (k >= 0) {
+        vel = 0;
+        ry = (-k * 360) / cards().length;
+      }
+    });
+
+    document.querySelectorAll<HTMLButtonElement>("[data-spin]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const dir = Number(b.dataset.spin);
+        if (reduce.matches) ry += (dir * 360) / cards().length;
+        else vel = dir * 3.2;
+      })
+    );
+
+    const segButtons = [...document.querySelectorAll<HTMLButtonElement>(".seg button")];
+    segButtons.forEach((b) =>
+      b.addEventListener("click", () => {
+        const next = rings.find((r) => r.dataset.ring === b.dataset.set);
+        if (!next || next === ring) return;
+        segButtons.forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+        ring.hidden = true;
+        next.hidden = false;
+        ring = next;
+        layout();
+        cards().forEach((c) => {
+          c.classList.remove("swap");
+          void c.offsetWidth;
+          c.classList.add("swap");
+        });
+      })
+    );
+
+    layout();
+    addEventListener("resize", layout);
+  }
+</script>
+
+<style>
+  .videos {
+    padding: 12vh 0;
+    overflow: hidden;
+  }
+  .videos-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .seg {
+    display: flex;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--tint);
+  }
+  .seg button {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--soft);
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+  .seg button[aria-pressed="true"] {
+    background: #fff;
+    color: var(--ink);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+  .nets {
+    display: flex;
+    gap: 8px 26px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    font-size: 15px;
+    color: var(--soft);
+  }
+  .nets b {
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .ring-wrap {
+    position: relative;
+    height: 520px;
+    margin-top: 30px;
+    perspective: 1400px;
+    display: grid;
+    place-items: center;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+  }
+  .ring-wrap:active {
+    cursor: grabbing;
+  }
+  .ring {
+    position: relative;
+    width: 210px;
+    height: 373px;
+    transform-style: preserve-3d;
+    transform: rotateX(-4deg) rotateY(var(--ry, 0deg));
+  }
+  .ring[hidden] {
+    display: none;
+  }
+  .card {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    transform: rotateY(var(--a)) translateZ(var(--z, 360px));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px;
+    color: #fff;
+    background: var(--g);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.5);
+    transition:
+      opacity 0.4s,
+      filter 0.4s,
+      box-shadow 0.4s;
+    backface-visibility: hidden;
+    text-decoration: none;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0) 30%,
+      rgba(0, 0, 0, 0) 45%,
+      rgba(0, 0, 0, 0.75) 100%
+    );
+    z-index: 1;
+  }
+  .card > span {
+    position: relative;
+    z-index: 2;
+  }
+  .card :global(.thumb) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .net {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  .ttl {
+    display: block;
+    font-size: 18px;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .views {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .card.front {
+    box-shadow:
+      0 30px 60px -20px rgba(0, 0, 0, 0.55),
+      0 0 0 2px #fff;
+  }
+  .card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .card.swap {
+    animation: swap 0.6s var(--ease) backwards;
+  }
+  @keyframes swap {
+    40% {
+      opacity: 0;
+      filter: blur(6px);
+    }
+  }
+  .ring-ctrl {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .round {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 0 0 1px var(--line);
+    transition: background 0.2s;
+  }
+  .round:hover {
+    background: var(--tint);
+  }
+  @media (max-width: 980px) {
+    .videos {
+      padding: 6vh 0 8vh;
+    }
+    .ring-wrap {
+      height: 440px;
+    }
+    .ring {
+      width: 170px;
+      height: 302px;
+    }
+  }
+</style>

@@ -1,0 +1,657 @@
+---
+import Icon from "./Icon.astro";
+import ServiceFaces from "./ServiceFaces.astro";
+import { services } from "../data/services";
+
+interface Props {
+  showVideos: boolean;
+}
+
+const { showVideos } = Astro.props;
+const first = services[0];
+const shapeVars = (s: (typeof services)[number]) =>
+  `--w:${s.shape.w}px;--h:${s.shape.h}px;--r:${s.shape.r}px;--ob:${s.shape.ob};--tilt:${s.shape.tilt};--ms:${s.shape.ms}`;
+---
+
+<section class="services" id="servicios" aria-labelledby="services-t">
+  <div class="services-head">
+    <div>
+      <h2 class="sec" id="services-t">Mis servicios</h2>
+      <p class="sec-sub">
+        Toca cualquiera para verlo. También puedes ir con las flechas del teclado o deslizando.
+      </p>
+    </div>
+    <span class="count" data-count>1 de {services.length}</span>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Servicios">
+    <span class="pill" aria-hidden="true"></span>
+    {
+      services.map((s, i) => (
+        <button
+          type="button"
+          role="tab"
+          class:list={["tab", { on: i === 0 }]}
+          id={`tab-${s.id}`}
+          aria-controls={`panel-${s.id}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? 0 : -1}
+          data-i={i}
+        >
+          <Icon name={s.icon} />
+          {s.name}
+          <span class="fit">Para ti</span>
+        </button>
+      ))
+    }
+  </div>
+  <div class="bar" aria-hidden="true">
+    <i style={`width:${100 / services.length}%`}></i>
+  </div>
+
+  <div class="stage" style={`--bg:${first.shape.bg}`}>
+    <div class="copy">
+      {
+        services.map((s, i) => (
+          <div
+            class="panel"
+            role="tabpanel"
+            id={`panel-${s.id}`}
+            aria-labelledby={`tab-${s.id}`}
+            hidden={i !== 0}
+          >
+            <span class="foryou slot">Encaja con lo que buscas</span>
+            <h3 class="slot">{s.title}</h3>
+            <p class="one slot">{s.one}</p>
+            <div class="slot">
+              <h4>Es para ti si…</h4>
+              <ul>
+                {s.fit.map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="actions slot">
+              <button
+                type="button"
+                class:list={["cta", { ghost: s.waitlist }]}
+                data-open
+                data-svc={s.id}
+              >
+                {s.cta}
+              </button>
+              {s.waitlist && <span class="tag">Sin plazas ahora mismo</span>}
+              {s.moreVideos && showVideos && (
+                <a class="linkish" href="#videos">
+                  Ver mis vídeos
+                </a>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="view" aria-hidden="true">
+      <div class="obj" style={shapeVars(first)}>
+        <ServiceFaces />
+      </div>
+    </div>
+
+    <div class="stepper">
+      <button type="button" class="step-btn" data-prev>
+        <Icon name="left" />
+        <span><small>Anterior</small><b data-prev-name>{services.at(-1)!.name}</b></span>
+      </button>
+      <button type="button" class="step-btn next" data-next>
+        <span><small>Siguiente</small><b data-next-name>{services[1].name}</b></span>
+        <Icon name="right" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { services, type WhoId } from "../data/services";
+  import { matchingServices, serviceIndexFromHash } from "../lib/services";
+
+  const section = document.getElementById("servicios")!;
+  const tabsEl = section.querySelector<HTMLElement>(".tabs")!;
+  const pill = section.querySelector<HTMLElement>(".pill")!;
+  const tabs = [...section.querySelectorAll<HTMLButtonElement>(".tab")];
+  const panels = [...section.querySelectorAll<HTMLElement>(".panel")];
+  const stage = section.querySelector<HTMLElement>(".stage")!;
+  const obj = section.querySelector<HTMLElement>(".obj")!;
+  const faces = [...section.querySelectorAll<HTMLElement>(".face")];
+  const barFill = section.querySelector<HTMLElement>(".bar i")!;
+  const count = section.querySelector<HTMLElement>("[data-count]")!;
+  const prevName = section.querySelector<HTMLElement>("[data-prev-name]")!;
+  const nextName = section.querySelector<HTMLElement>("[data-next-name]")!;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const N = services.length;
+
+  let cur = 0;
+  let busy = false;
+  let swapTimer = 0;
+
+  function placePill() {
+    const t = tabs[cur];
+    pill.style.left = `${t.offsetLeft}px`;
+    pill.style.width = `${t.offsetWidth}px`;
+  }
+
+  function go(target: number, instant = false) {
+    const i = (target + N) % N;
+    if (i === cur || busy) return;
+    instant ||= reduce.matches;
+    const s = services[i];
+    const old = panels[cur];
+    const next = panels[i];
+    busy = !instant;
+    cur = i;
+    // Sin animación (ancla al cargar o movimiento reducido): ni el objeto ni la píldora transicionan.
+    section.classList.toggle("instant", instant);
+    if (instant)
+      requestAnimationFrame(() => requestAnimationFrame(() => section.classList.remove("instant")));
+
+    tabs.forEach((t, k) => {
+      const on = k === i;
+      t.classList.toggle("on", on);
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    placePill();
+    const t = tabs[i];
+    tabsEl.scrollTo({
+      left: t.offsetLeft - tabsEl.clientWidth / 2 + t.offsetWidth / 2,
+      behavior: instant ? "auto" : "smooth",
+    });
+    barFill.style.width = `${((i + 1) / N) * 100}%`;
+    count.textContent = `${i + 1} de ${N}`;
+    prevName.textContent = services[(i + N - 1) % N].name;
+    nextName.textContent = services[(i + 1) % N].name;
+    history.replaceState(null, "", `#${s.id}`);
+
+    // El objeto: se apaga la cara, cambia de forma inclinándose y entra la nueva.
+    faces.forEach((f) => f.classList.remove("on"));
+    obj.style.setProperty("--tilt", s.shape.tilt);
+    if (!instant) obj.classList.add("morphing");
+    obj.style.setProperty("--w", `${s.shape.w}px`);
+    obj.style.setProperty("--h", `${s.shape.h}px`);
+    obj.style.setProperty("--r", `${s.shape.r}px`);
+    obj.style.setProperty("--ob", s.shape.ob);
+    obj.style.setProperty("--ms", String(s.shape.ms));
+    stage.style.setProperty("--bg", s.shape.bg);
+    setTimeout(() => obj.classList.remove("morphing"), instant ? 0 : 420);
+    requestAnimationFrame(() => faces[i].classList.add("on"));
+
+    // El texto: sale hacia arriba y entra el nuevo desde abajo, por bloques.
+    clearTimeout(swapTimer);
+    panels.forEach((p) => p.classList.remove("out", "in"));
+    if (instant) {
+      panels.forEach((p) => (p.hidden = p !== next));
+    } else {
+      old.classList.add("out");
+      swapTimer = window.setTimeout(() => {
+        old.hidden = true;
+        old.classList.remove("out");
+        next.classList.add("in");
+        next.hidden = false;
+        requestAnimationFrame(() => requestAnimationFrame(() => next.classList.remove("in")));
+      }, 330);
+    }
+    setTimeout(() => (busy = false), instant ? 0 : 700);
+  }
+
+  tabs.forEach((t, k) => t.addEventListener("click", () => go(k)));
+  section.querySelector("[data-prev]")!.addEventListener("click", () => go(cur - 1));
+  section.querySelector("[data-next]")!.addEventListener("click", () => go(cur + 1));
+
+  // Teclado: dentro de las pestañas como un tablist; fuera, si el escenario está en pantalla.
+  tabsEl.addEventListener("keydown", (e) => {
+    const to =
+      e.key === "Home"
+        ? 0
+        : e.key === "End"
+          ? N - 1
+          : e.key === "ArrowRight"
+            ? cur + 1
+            : e.key === "ArrowLeft"
+              ? cur - 1
+              : null;
+    if (to === null) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (busy) return;
+    go(to);
+    tabs[cur].focus({ preventScroll: true });
+  });
+  addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    if (document.body.classList.contains("lock") || e.altKey || e.metaKey || e.ctrlKey) return;
+    const el = e.target as HTMLElement;
+    if (el.closest("input, textarea, select, [contenteditable], .ring-wrap")) return;
+    const r = section.getBoundingClientRect();
+    if (r.top > innerHeight * 0.6 || r.bottom < innerHeight * 0.3) return;
+    go(cur + (e.key === "ArrowRight" ? 1 : -1));
+  });
+
+  // Deslizar en táctil.
+  let x0: number | null = null;
+  let y0 = 0;
+  stage.addEventListener(
+    "touchstart",
+    (e) => {
+      x0 = e.touches[0].clientX;
+      y0 = e.touches[0].clientY;
+    },
+    { passive: true }
+  );
+  stage.addEventListener("touchend", (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    const dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  // "¿Qué te trae por aquí?": insignias "Para ti" y texto "Encaja con lo que buscas".
+  addEventListener("who:change", (e) => {
+    const picked = (e as CustomEvent<{ picked: WhoId[] }>).detail.picked;
+    const mine = new Set(matchingServices(picked).map((s) => s.id));
+    services.forEach((s, k) => {
+      tabs[k].classList.toggle("mine", mine.has(s.id));
+      panels[k].classList.toggle("mine", mine.has(s.id));
+    });
+    placePill();
+  });
+  addEventListener("services:open", (e) => {
+    const id = (e as CustomEvent<{ id: string }>).detail.id;
+    const k = services.findIndex((s) => s.id === id);
+    if (k >= 0) {
+      busy = false;
+      go(k);
+    }
+  });
+
+  // Ancla al cargar (/#webs): abre ese servicio sin animación.
+  const start = serviceIndexFromHash(location.hash);
+  if (start > 0) go(start, true);
+  if (start >= 0) section.scrollIntoView({ behavior: "instant" });
+  // Un enlace a /#mentoria desde la propia página.
+  addEventListener("hashchange", () => {
+    const k = serviceIndexFromHash(location.hash);
+    if (k < 0) return;
+    section.scrollIntoView({ behavior: reduce.matches ? "instant" : "smooth" });
+    busy = false;
+    go(k);
+  });
+  placePill();
+  addEventListener("resize", placePill);
+  document.fonts?.ready.then(placePill);
+</script>
+
+<style>
+  .services {
+    padding: 4vh 0 10vh;
+    scroll-margin-top: 20px;
+  }
+  .services-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .sec-sub {
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--soft);
+    max-width: 52ch;
+    line-height: 1.5;
+  }
+  .count {
+    font-size: 15px;
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tabs {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 18px;
+    background: var(--tint);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .pill {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 6px 16px -8px rgba(0, 0, 0, 0.18);
+    transition:
+      left 0.55s var(--ease),
+      width 0.55s var(--ease);
+  }
+  .tab {
+    position: relative;
+    z-index: 1;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 15px;
+    color: var(--soft);
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+  .tab:hover,
+  .tab.mine {
+    color: var(--ink);
+  }
+  .tab.on {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .tab:focus-visible {
+    outline-offset: -2px;
+  }
+  .fit {
+    display: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 999px;
+    padding: 2px 7px;
+  }
+  .tab.mine .fit {
+    display: inline-block;
+    animation: popin 0.5s var(--spring);
+  }
+  @keyframes popin {
+    from {
+      transform: scale(0);
+    }
+  }
+  .bar {
+    height: 2px;
+    background: var(--line);
+    margin: 14px 4px 0;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+    transition: width 0.6s var(--ease);
+  }
+
+  .stage {
+    position: relative;
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 48px;
+    min-height: 600px;
+    padding: 48px 48px 96px;
+    border-radius: 28px;
+    background: var(--bg, var(--tint));
+    transition: background 0.8s var(--ease);
+    overflow: hidden;
+  }
+  .copy {
+    align-self: center;
+  }
+  .slot {
+    transition:
+      opacity 0.35s,
+      transform 0.55s var(--ease);
+  }
+  .panel.out .slot {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  .panel.in .slot {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: none;
+  }
+  .slot:nth-child(2) {
+    transition-delay: 0.05s;
+  }
+  .slot:nth-child(3) {
+    transition-delay: 0.1s;
+  }
+  .slot:nth-child(4) {
+    transition-delay: 0.15s;
+  }
+  .slot:nth-child(5) {
+    transition-delay: 0.2s;
+  }
+  .foryou {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(36, 64, 255, 0.08);
+    padding: 5px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .panel.mine .foryou {
+    display: inline-flex;
+  }
+  h3 {
+    font-size: clamp(30px, 3.6vw, 50px);
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+  .one {
+    margin-top: 14px;
+    font-size: 19px;
+    line-height: 1.5;
+    color: #2a2a2e;
+    max-width: 38ch;
+  }
+  h4 {
+    margin-top: 24px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  ul {
+    list-style: none;
+    margin-top: 10px;
+    display: grid;
+    gap: 8px;
+  }
+  li {
+    font-size: 16px;
+    line-height: 1.45;
+    padding-left: 18px;
+    position: relative;
+    color: #2a2a2e;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .actions {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 26px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.07);
+  }
+  .linkish {
+    font-size: 15px;
+    color: var(--soft);
+    text-underline-offset: 4px;
+  }
+  .linkish:hover {
+    color: var(--ink);
+  }
+
+  .view {
+    position: relative;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+  }
+  .obj {
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    border-radius: var(--r);
+    background: var(--ob, #fff);
+    box-shadow:
+      0 40px 80px -40px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition:
+      width 0.75s var(--ease),
+      height 0.75s var(--ease),
+      border-radius 0.75s var(--ease),
+      background 0.75s var(--ease),
+      transform 0.75s var(--ease);
+  }
+  .obj.morphing {
+    transform: scale(0.94) rotate(var(--tilt, 0deg));
+  }
+  .instant .obj,
+  .instant .stage,
+  .instant .pill,
+  .instant .bar i,
+  .instant :global(.face),
+  .instant :global(.face .st) {
+    transition: none !important;
+  }
+
+  .stepper {
+    position: absolute;
+    left: 48px;
+    right: 48px;
+    bottom: 26px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 3;
+  }
+  .step-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 10px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    font-size: 14px;
+    text-align: left;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+    transition:
+      background 0.2s,
+      transform 0.25s var(--spring);
+  }
+  .step-btn.next {
+    padding: 10px 12px 10px 16px;
+  }
+  .step-btn:hover {
+    background: #fff;
+    transform: translateY(-2px);
+  }
+  .step-btn small {
+    display: block;
+    font-size: 11px;
+    color: var(--soft);
+  }
+  .step-btn b {
+    font-weight: 600;
+  }
+  .step-btn.next span {
+    text-align: right;
+  }
+
+  @media (max-width: 980px) {
+    .tab {
+      flex: 0 0 auto;
+    }
+    .stage {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 20px 20px 90px;
+      gap: 20px;
+      min-height: 0;
+      border-radius: 22px;
+    }
+    .view {
+      order: -1;
+      height: 340px;
+    }
+    .obj {
+      transform: scale(var(--ms, 0.7));
+    }
+    .obj.morphing {
+      transform: scale(calc(var(--ms, 0.7) * 0.94)) rotate(var(--tilt, 0deg));
+    }
+    .stepper {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+    }
+    .step-btn small {
+      display: none;
+    }
+    .step-btn span {
+      min-width: 0;
+    }
+    .step-btn b {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .step-btn {
+      min-width: 0;
+      gap: 6px;
+      font-size: 13px;
+    }
+    .step-btn:not(.next) {
+      flex: 0 1 auto;
+      padding-right: 14px;
+    }
+    .step-btn.next {
+      flex: 0 1 auto;
+      padding-left: 14px;
+    }
+  }
+</style>

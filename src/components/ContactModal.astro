@@ -1,0 +1,565 @@
+---
+import Icon from "./Icon.astro";
+import { services } from "../data/services";
+import { getPublicConfig } from "../lib/config";
+import { contactAlternatives } from "../lib/contact-validation";
+
+const cfg = getPublicConfig();
+const alternatives = contactAlternatives(cfg);
+const chips = [
+  ...services.map((s) => ({ id: s.id, name: s.name })),
+  { id: "otro", name: "Otra cosa" },
+];
+---
+
+<div class="modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="mt" hidden>
+  <div class="scrim" data-close></div>
+  <form class="sheet" novalidate>
+    <div class="sheet-head">
+      <h2 id="mt">Escríbeme</h2>
+      <button type="button" class="x" data-close aria-label="Cerrar"><Icon name="x" /></button>
+    </div>
+    <ol class="steps" aria-label="Pasos">
+      <li class="cur" aria-current="step"><i></i>Tu nombre</li>
+      <li><i></i>Tu email</li>
+      <li><i></i>Tu mensaje</li>
+    </ol>
+    <div class="panes-clip">
+      <div class="panes">
+        <div class="pane">
+          <label for="f-name">¿Cómo te llamas?</label>
+          <input
+            id="f-name"
+            name="name"
+            autocomplete="name"
+            placeholder="Tu nombre"
+            maxlength="100"
+            aria-describedby="e-name"
+          />
+          <span class="err" id="e-name" aria-live="polite"></span>
+        </div>
+        <div class="pane" inert>
+          <label for="f-mail">¿A qué email te respondo?</label>
+          <input
+            id="f-mail"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="tu@email.com"
+            maxlength="200"
+            aria-describedby="e-mail"
+          />
+          <span class="err" id="e-mail" aria-live="polite"></span>
+        </div>
+        <div class="pane" inert>
+          <label for="f-msg">¿Qué necesitas?</label>
+          <div class="chips" role="group" aria-label="Servicios que te interesan">
+            {
+              chips.map((c) => (
+                <button type="button" class="chip" aria-pressed="false" data-id={c.id}>
+                  {c.name}
+                </button>
+              ))
+            }
+          </div>
+          <textarea
+            id="f-msg"
+            name="message"
+            placeholder="Cuéntame tu idea en un par de frases"
+            maxlength="5000"
+            aria-describedby="e-msg"></textarea>
+          <span class="err" id="e-msg" aria-live="polite"></span>
+        </div>
+      </div>
+    </div>
+    <div class="trap" aria-hidden="true">
+      <label for="f-web">Web</label>
+      <input id="f-web" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+    <div class="sheet-foot">
+      <button type="button" class="back" data-back hidden>Atrás</button>
+      <button type="submit" class="cta" data-fwd>Siguiente</button>
+    </div>
+
+    <div class="result done-view" data-done inert>
+      <div>
+        <div class="tick">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        </div>
+        <h3 tabindex="-1">Mensaje enviado</h3>
+        <p data-done-text>Te respondo a tu email lo antes posible.</p>
+        <button type="button" class="cta ghost" data-close>Cerrar</button>
+      </div>
+    </div>
+
+    <div class="result fail-view" data-fail inert>
+      <div>
+        <h3 tabindex="-1">No he podido enviarlo</h3>
+        <p>Algo ha fallado por mi lado. Puedes escribirme directamente:</p>
+        <div class="alts">
+          {
+            alternatives.map((a) => (
+              <a
+                class="big p"
+                href={a.href}
+                target={a.href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener"
+              >
+                {a.label}
+              </a>
+            ))
+          }
+        </div>
+        <button type="button" class="back" data-retry>Volver a intentarlo</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  import { matchingServices } from "../lib/services";
+  import { validateField } from "../lib/contact-validation";
+  import type { WhoId } from "../data/services";
+
+  const modal = document.getElementById("contact-modal")!;
+  const form = modal.querySelector("form")!;
+  const panes = modal.querySelector<HTMLElement>(".panes")!;
+  const paneEls = [...modal.querySelectorAll<HTMLElement>(".pane")];
+  const stepEls = [...modal.querySelectorAll<HTMLElement>(".steps li")];
+  const inputs = [
+    modal.querySelector<HTMLInputElement>("#f-name")!,
+    modal.querySelector<HTMLInputElement>("#f-mail")!,
+    modal.querySelector<HTMLTextAreaElement>("#f-msg")!,
+  ];
+  const trap = modal.querySelector<HTMLInputElement>("#f-web")!;
+  const chips = [...modal.querySelectorAll<HTMLButtonElement>(".chip")];
+  const back = modal.querySelector<HTMLButtonElement>("[data-back]")!;
+  const fwd = modal.querySelector<HTMLButtonElement>("[data-fwd]")!;
+  const done = modal.querySelector<HTMLElement>("[data-done]")!;
+  const fail = modal.querySelector<HTMLElement>("[data-fail]")!;
+  const doneText = modal.querySelector<HTMLElement>("[data-done-text]")!;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+
+  let step = 0;
+  let sending = false;
+  let opener: HTMLElement | null = null;
+  let mine: string[] = [];
+  let hideTimer = 0;
+
+  addEventListener("who:change", (e) => {
+    const picked = (e as CustomEvent<{ picked: WhoId[] }>).detail.picked;
+    mine = matchingServices(picked).map((s) => s.id);
+  });
+
+  function setStep(n: number) {
+    step = n;
+    panes.style.transform = `translateX(${-100 * n}%)`;
+    paneEls.forEach((p, k) => (p.inert = k !== n));
+    stepEls.forEach((d, k) => {
+      d.classList.toggle("done", k < n);
+      d.classList.toggle("cur", k === n);
+      if (k === n) d.setAttribute("aria-current", "step");
+      else d.removeAttribute("aria-current");
+    });
+    back.hidden = n === 0;
+    fwd.textContent = n === 2 ? "Enviar" : "Siguiente";
+    setTimeout(() => inputs[n].focus({ preventScroll: true }), reduce.matches ? 0 : 350);
+  }
+
+  function showResult(view: HTMLElement | null) {
+    [done, fail].forEach((v) => {
+      v.classList.toggle("show", v === view);
+      v.inert = v !== view;
+    });
+    if (view) setTimeout(() => view.querySelector<HTMLElement>("h3")?.focus(), 50);
+  }
+
+  function open(svc?: string) {
+    clearTimeout(hideTimer);
+    const selected = new Set(svc ? [svc] : mine);
+    chips.forEach((c) => c.setAttribute("aria-pressed", String(selected.has(c.dataset.id!))));
+    showResult(null);
+    modal.hidden = false;
+    document.body.classList.add("lock");
+    requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add("open")));
+    setStep(0);
+  }
+
+  function close() {
+    if (modal.hidden) return;
+    modal.classList.remove("open");
+    document.body.classList.remove("lock");
+    hideTimer = window.setTimeout(() => (modal.hidden = true), reduce.matches ? 0 : 500);
+    opener?.focus({ preventScroll: true });
+  }
+
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const o = target.closest<HTMLElement>("[data-open]");
+    if (o) {
+      e.preventDefault();
+      opener = o;
+      open(o.dataset.svc);
+    } else if (target.closest("[data-close]") && modal.contains(target)) close();
+  });
+
+  chips.forEach((c) =>
+    c.addEventListener("click", () =>
+      c.setAttribute("aria-pressed", String(c.getAttribute("aria-pressed") !== "true"))
+    )
+  );
+
+  modal.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") return close();
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+    if (e.key !== "Tab") return;
+    // Trampa de foco: Tab no sale del modal.
+    const focusables = [
+      ...modal.querySelectorAll<HTMLElement>("button, input, textarea, a[href]"),
+    ].filter((el) => !el.closest("[inert], [hidden], .trap") && el.offsetParent !== null);
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  back.addEventListener("click", () => setStep(step - 1));
+  modal.querySelector("[data-retry]")!.addEventListener("click", () => {
+    showResult(null);
+    setStep(2);
+  });
+
+  function shake(el: HTMLElement) {
+    if (reduce.matches) return;
+    el.animate(
+      [
+        { transform: "translateX(0)" },
+        { transform: "translateX(-6px)" },
+        { transform: "translateX(6px)" },
+        { transform: "translateX(0)" },
+      ],
+      { duration: 260 }
+    );
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (sending) return;
+    const input = inputs[step];
+    const err = paneEls[step].querySelector<HTMLElement>(".err")!;
+    const msg = validateField(step as 0 | 1 | 2, input.value);
+    err.textContent = msg;
+    input.setAttribute("aria-invalid", String(!!msg));
+    if (msg) return shake(input);
+    if (step < 2) return setStep(step + 1);
+
+    sending = true;
+    fwd.disabled = true;
+    fwd.textContent = "Enviando…";
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          message: inputs[2].value.trim(),
+          services: chips
+            .filter((c) => c.getAttribute("aria-pressed") === "true")
+            .map((c) => c.dataset.id),
+          website: trap.value,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (res.ok && data.ok) {
+        doneText.textContent = `Gracias, ${name.split(/\s+/)[0]}. Te respondo a ${email} lo antes posible.`;
+        showResult(done);
+        form.reset();
+      } else if (res.status === 400 && data.error && data.error.includes(" ")) {
+        err.textContent = data.error;
+        shake(input);
+      } else {
+        showResult(fail);
+      }
+    } catch {
+      showResult(fail);
+    } finally {
+      sending = false;
+      fwd.disabled = false;
+      fwd.textContent = step === 2 ? "Enviar" : "Siguiente";
+    }
+  });
+</script>
+
+<style>
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+  }
+  .modal[hidden] {
+    display: none;
+  }
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 20, 0.35);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .modal.open .scrim {
+    opacity: 1;
+  }
+  .sheet {
+    position: relative;
+    width: min(520px, 100%);
+    background: #fff;
+    border-radius: 26px;
+    padding: 26px;
+    box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.45);
+    transform: translateY(30px) scale(0.96);
+    opacity: 0;
+    transition:
+      transform 0.5s var(--spring),
+      opacity 0.3s;
+    overflow: hidden;
+  }
+  .modal.open .sheet {
+    transform: none;
+    opacity: 1;
+  }
+  .sheet-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sheet-head h2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .x {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--tint);
+  }
+  .steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin: 18px 0 22px;
+  }
+  .steps li {
+    font-size: 13px;
+    color: var(--soft);
+    transition: color 0.3s;
+  }
+  .steps i {
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+    margin-bottom: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .steps i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+  }
+  .steps li.done,
+  .steps li.cur {
+    color: var(--ink);
+  }
+  .steps li.done i::after,
+  .steps li.cur i::after {
+    transform: scaleX(1);
+  }
+  .panes-clip {
+    overflow: hidden;
+  }
+  .panes {
+    display: flex;
+    transition: transform 0.55s var(--ease);
+  }
+  .pane {
+    flex: 0 0 100%;
+    padding: 2px;
+  }
+  .pane label {
+    display: block;
+    font-size: 24px;
+    font-weight: 550;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .pane input,
+  .pane textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 18px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  .pane input:focus,
+  .pane textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+  }
+  .pane [aria-invalid="true"] {
+    border-color: #b4432f;
+  }
+  .pane textarea {
+    min-height: 110px;
+    resize: vertical;
+    font-size: 16px;
+  }
+  .err {
+    display: block;
+    min-height: 20px;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #b4432f;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .chip {
+    font-size: 13px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line);
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: none;
+  }
+  .trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .sheet-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+  }
+  .back {
+    font-size: 15px;
+    color: var(--soft);
+    padding: 10px 4px;
+  }
+  .back:hover {
+    color: var(--ink);
+  }
+  .sheet-foot .back[hidden] {
+    visibility: hidden;
+    display: block;
+  }
+  .cta:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .result {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 30px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .result.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .result h3 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    outline: none;
+  }
+  .result p {
+    margin-top: 8px;
+    color: var(--soft);
+    line-height: 1.5;
+  }
+  .result .cta {
+    margin-top: 22px;
+  }
+  .tick {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--ok);
+    display: grid;
+    place-items: center;
+    transform: scale(0);
+    transition: transform 0.6s var(--spring) 0.1s;
+  }
+  .done-view.show .tick {
+    transform: scale(1);
+  }
+  .tick svg {
+    width: 32px;
+    height: 32px;
+    stroke: #fff;
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    transition: stroke-dashoffset 0.5s 0.45s;
+  }
+  .done-view.show .tick svg {
+    stroke-dashoffset: 0;
+  }
+  .alts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 8px;
+  }
+</style>

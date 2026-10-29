@@ -1,0 +1,341 @@
+---
+// Las seis caras del objeto que se transforma. El orden es el de `services`.
+---
+
+<div class="face wa on" data-face="automatizaciones">
+  <div class="top">Peluquería Nube</div>
+  <div class="body">
+    <div class="bub c st">Hola! ¿Tenéis hueco el sábado?</div>
+    <div class="bub b st">
+      ¡Hola! Sí, a las 10:30 o a las 12:00. ¿Cuál te va mejor?<small>respuesta automática</small>
+    </div>
+    <div class="bub c st">A las 12 perfecto</div>
+    <div class="bub b st">
+      Hecho, te espero el sábado a las 12:00<small>cita añadida al calendario</small>
+    </div>
+  </div>
+</div>
+
+<div class="face" data-face="webs">
+  <div class="chrome"><i></i><i></i><i></i><em>fisiocastelldefels.com</em></div>
+  <div class="site-hero st"><b>Fisioterapia<br />en Castelldefels</b><span>Pedir cita</span></div>
+  <div class="site-row st"><i></i><i></i><i></i></div>
+</div>
+
+<div class="face" data-face="shopify">
+  <div class="chrome"><i></i><i></i><i></i><em>bolsosmar.com</em></div>
+  <div class="shop">
+    <div class="shop-head st"><span>Bolsos Mar</span><span>Carrito (1)</span></div>
+    <div class="prods st">
+      <div class="prod"><i></i><b>Mar</b>39 €</div>
+      <div class="prod"><i></i><b>Cielo</b>29 €</div>
+      <div class="prod"><i></i><b>Oliva</b>24 €</div>
+    </div>
+    <div class="paid st"><span>Pedido #1043 pagado</span><span>Envío a Valencia</span></div>
+  </div>
+</div>
+
+<div class="face doc" data-face="consultoria">
+  <h5 class="st">Plan de IA para tu negocio</h5>
+  <p class="st">Resultado de la consultoría</p>
+  <div class="ln st"><b>1</b>Responder consultas repetidas con un asistente</div>
+  <div class="ln st"><b>2</b>Generar presupuestos a partir de una plantilla</div>
+  <div class="ln st"><b>3</b>Resumen semanal de ventas, automático</div>
+</div>
+
+<div class="face" data-face="mentoria">
+  <div class="call">
+    <div class="tile2 st"><span class="av"></span><span>Dru</span></div>
+    <div class="tile2 you st"><span class="av"></span><span>Tú</span></div>
+  </div>
+  <span class="wait">Lista de espera abierta</span>
+</div>
+
+<div class="face" data-face="colaboraciones">
+  <div class="reelf">
+    <span class="t st">Las 5 herramientas de IA que uso cada día</span>
+    <span class="k st"><span>@soydruia</span><span>Tu marca aquí</span></span>
+  </div>
+</div>
+
+<style>
+  .face {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .face.on {
+    opacity: 1;
+    transition: opacity 0.45s 0.55s;
+  }
+  .st {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.35s,
+      transform 0.45s;
+  }
+  .face.on .st {
+    opacity: 1;
+    transform: none;
+  }
+  .face.on .st:nth-of-type(1) {
+    transition-delay: 0.7s;
+  }
+  .face.on .st:nth-of-type(2) {
+    transition-delay: 0.95s;
+  }
+  .face.on .st:nth-of-type(3) {
+    transition-delay: 1.2s;
+  }
+  .face.on .st:nth-of-type(4) {
+    transition-delay: 1.45s;
+  }
+
+  .wa .top {
+    background: #075e54;
+    color: #fff;
+    padding: 40px 14px 12px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .wa .body {
+    position: absolute;
+    top: 76px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ece5dd;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .bub {
+    max-width: 82%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .bub.c {
+    align-self: flex-end;
+    background: #dcf8c6;
+  }
+  .bub.b {
+    align-self: flex-start;
+    background: #fff;
+  }
+  .bub small {
+    display: block;
+    font-size: 10px;
+    color: #667781;
+    margin-top: 2px;
+  }
+  .chrome {
+    height: 32px;
+    background: #f0f1f4;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    font-size: 12px;
+    color: var(--soft);
+  }
+  .chrome i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #d5d8df;
+  }
+  .chrome em {
+    font-style: normal;
+    margin-left: 8px;
+  }
+  .site-hero {
+    margin: 12px;
+    height: 180px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #24342c, #5e7a68);
+    color: #fff;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .site-hero b {
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .site-hero span {
+    margin-top: 10px;
+    align-self: flex-start;
+    background: #fff;
+    color: #24342c;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .site-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 0 12px;
+  }
+  .site-row i {
+    height: 70px;
+    border-radius: 8px;
+    background: #eef2ef;
+  }
+  .shop {
+    padding: 16px;
+  }
+  .shop-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .prods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .prod {
+    font-size: 12px;
+  }
+  .prod i {
+    display: block;
+    aspect-ratio: 3/4;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    background: linear-gradient(160deg, #e9ddd0, #cdb8a2);
+  }
+  .prod:nth-child(2) i {
+    background: linear-gradient(160deg, #d6e2ea, #a9bfcf);
+  }
+  .prod:nth-child(3) i {
+    background: linear-gradient(160deg, #e2e6d3, #b9c3a0);
+  }
+  .prod b {
+    display: block;
+  }
+  .paid {
+    margin-top: 14px;
+    border-radius: 10px;
+    background: #e5f3ec;
+    color: var(--ok);
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+  }
+  .doc {
+    padding: 34px 30px;
+  }
+  .doc h5 {
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .doc p {
+    font-size: 12px;
+    color: var(--soft);
+    margin-top: 4px;
+  }
+  .doc .ln {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .doc .ln:first-of-type {
+    margin-top: 18px;
+  }
+  .doc .ln b {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 11px;
+    display: grid;
+    place-items: center;
+  }
+  .call {
+    background: #1c1d22;
+    color: #fff;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 10px;
+    height: 100%;
+  }
+  .tile2 {
+    border-radius: 12px;
+    background: #2c2e35;
+    position: relative;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+  }
+  .tile2 .av {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, #8ea4bc, #536b85);
+  }
+  .tile2.you .av {
+    background: linear-gradient(140deg, #c6b39f, #8d735c);
+  }
+  .tile2 span:last-child {
+    position: absolute;
+    left: 10px;
+    bottom: 8px;
+  }
+  .wait {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    background: #fff;
+    color: #000;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .reelf {
+    background: linear-gradient(170deg, #2440ff, #0b1240 75%);
+    color: #fff;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  .reelf .t {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .reelf .k {
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    font-size: 12px;
+    opacity: 0.85;
+  }
+</style>

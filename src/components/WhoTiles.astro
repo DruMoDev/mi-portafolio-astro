@@ -1,0 +1,273 @@
+---
+import Icon from "./Icon.astro";
+import { whoOptions } from "../data/services";
+---
+
+<section class="who" aria-labelledby="who-t">
+  <div class="who-head">
+    <div>
+      <h2 id="who-t">¿Qué te trae por aquí?</h2>
+      <p>Elige una o varias y te marco los servicios que son para ti.</p>
+    </div>
+    <a class="skip" href="#servicios">Ver todos los servicios</a>
+  </div>
+  <div class="tiles" role="group" aria-labelledby="who-t">
+    {
+      whoOptions.map((o) => (
+        <button type="button" class="tile" aria-pressed="false" data-who={o.id}>
+          <span class="check" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12.5l4.5 4.5L19 7.5" />
+            </svg>
+          </span>
+          <span class="art">
+            <Icon name={o.icon} size={24} />
+          </span>
+          <span>
+            <b>{o.title}</b>
+            <small>{o.sub}</small>
+          </span>
+        </button>
+      ))
+    }
+  </div>
+  <div class="who-result" aria-live="polite">
+    <span data-summary></span>
+    <button type="button" class="go-btn" data-see-mine tabindex="-1">Verlos</button>
+  </div>
+</section>
+
+<script>
+  import { matchingServices, summaryText } from "../lib/services";
+  import type { WhoId } from "../data/services";
+
+  const KEY = "dru:who";
+  const tiles = [...document.querySelectorAll<HTMLButtonElement>(".tile[data-who]")];
+  const result = document.querySelector<HTMLElement>(".who-result")!;
+  const summary = result.querySelector<HTMLElement>("[data-summary]")!;
+  const seeMine = result.querySelector<HTMLButtonElement>("[data-see-mine]")!;
+  const picked = new Set<WhoId>();
+
+  function update(save: boolean) {
+    tiles.forEach((t) =>
+      t.setAttribute("aria-pressed", String(picked.has(t.dataset.who as WhoId)))
+    );
+    const mine = matchingServices(picked);
+    if (mine.length) {
+      summary.textContent = summaryText(mine);
+      result.classList.add("show");
+      seeMine.tabIndex = 0;
+    } else {
+      result.classList.remove("show");
+      seeMine.tabIndex = -1;
+    }
+    window.dispatchEvent(new CustomEvent("who:change", { detail: { picked: [...picked] } }));
+    if (save) {
+      try {
+        localStorage.setItem(KEY, JSON.stringify([...picked]));
+      } catch {}
+    }
+  }
+
+  tiles.forEach((t) =>
+    t.addEventListener("click", () => {
+      const id = t.dataset.who as WhoId;
+      picked.has(id) ? picked.delete(id) : picked.add(id);
+      update(true);
+    })
+  );
+
+  seeMine.addEventListener("click", () => {
+    const first = matchingServices(picked)[0];
+    if (!first) return;
+    document.getElementById("servicios")?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(
+      () => window.dispatchEvent(new CustomEvent("services:open", { detail: { id: first.id } })),
+      450
+    );
+  });
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) ?? "[]");
+    if (Array.isArray(saved)) {
+      const valid = new Set(tiles.map((t) => t.dataset.who));
+      saved.filter((id) => valid.has(id)).forEach((id) => picked.add(id));
+    }
+  } catch {}
+  // Espera a que el escenario y el modal estén escuchando.
+  if (picked.size) requestAnimationFrame(() => update(false));
+</script>
+
+<style>
+  .who {
+    padding: 2vh 0 8vh;
+  }
+  .who-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .who-head h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .who-head p {
+    color: var(--soft);
+    font-size: 15px;
+    margin-top: 4px;
+  }
+  .skip {
+    font-size: 15px;
+    color: var(--soft);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .skip:hover {
+    color: var(--ink);
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .tile {
+    position: relative;
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 168px;
+    background: var(--tint);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    transition:
+      background 0.35s,
+      color 0.35s,
+      transform 0.35s var(--spring);
+  }
+  .tile:hover {
+    transform: translateY(-3px);
+  }
+  .tile:active {
+    transform: scale(0.98);
+  }
+  .art {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    transition:
+      background 0.35s,
+      transform 0.5s var(--spring);
+  }
+  .tile b {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: block;
+  }
+  .tile small {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--soft);
+    transition: color 0.35s;
+  }
+  .check {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px #c9cbd3;
+    display: grid;
+    place-items: center;
+    transition:
+      background 0.3s,
+      box-shadow 0.3s;
+  }
+  .check svg {
+    width: 14px;
+    height: 14px;
+    stroke: #fff;
+    stroke-width: 2.5;
+    fill: none;
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    transition: stroke-dashoffset 0.35s 0.1s;
+  }
+  .tile[aria-pressed="true"] {
+    background: var(--ink);
+    color: #fff;
+  }
+  .tile[aria-pressed="true"] small {
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .tile[aria-pressed="true"] .art {
+    background: rgba(255, 255, 255, 0.12);
+    transform: rotate(-8deg) scale(1.06);
+  }
+  .tile[aria-pressed="true"] .check {
+    background: var(--accent);
+    box-shadow: none;
+  }
+  .tile[aria-pressed="true"] .check svg {
+    stroke-dashoffset: 0;
+  }
+  .who-result {
+    margin-top: 16px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+      opacity 0.35s,
+      transform 0.45s var(--ease),
+      visibility 0.35s;
+  }
+  .who-result.show {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .go-btn {
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform 0.25s var(--spring);
+  }
+  .go-btn:hover {
+    transform: translateY(-2px);
+  }
+  @media (max-width: 980px) {
+    .tiles {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .tile {
+      min-height: 140px;
+      padding: 16px;
+    }
+    .tile b {
+      font-size: 16px;
+    }
+    .tile small {
+      font-size: 13px;
+    }
+  }
+</style>

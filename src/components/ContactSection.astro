@@ -1,0 +1,86 @@
+---
+import Icon from "./Icon.astro";
+import { getPublicConfig } from "../lib/config";
+
+const cfg = getPublicConfig();
+---
+
+<section class="contact" id="contacto" aria-labelledby="contact-t">
+  <h2 class="sec" id="contact-t">¿Tienes algo en mente?</h2>
+  <button type="button" class="mail" data-copy={cfg.email} aria-describedby="copied">
+    {cfg.email}
+  </button>
+  <span class="copied" id="copied" aria-live="polite"></span>
+  <div class="contact-actions">
+    <button type="button" class="big p" data-open><Icon name="send" />Escríbeme aquí</button>
+    {
+      cfg.whatsappUrl && (
+        <a class="big wa" href={cfg.whatsappUrl} target="_blank" rel="noopener">
+          <Icon name="whatsapp" />
+          WhatsApp
+        </a>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  const mail = document.querySelector<HTMLButtonElement>("[data-copy]");
+  const copied = document.getElementById("copied");
+  let timer = 0;
+  mail?.addEventListener("click", async () => {
+    const email = mail.dataset.copy!;
+    try {
+      await navigator.clipboard.writeText(email);
+      copied!.textContent = "Email copiado";
+    } catch {
+      // Sin portapapeles (http, permisos): abre el cliente de correo.
+      location.href = `mailto:${email}`;
+      return;
+    }
+    copied!.classList.add("show");
+    clearTimeout(timer);
+    timer = window.setTimeout(() => copied!.classList.remove("show"), 1800);
+  });
+</script>
+
+<style>
+  .contact {
+    padding: 12vh 0 10vh;
+    border-top: 1px solid var(--line);
+  }
+  .mail {
+    display: inline-block;
+    margin-top: 24px;
+    font-size: clamp(34px, 7vw, 96px);
+    font-weight: 550;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    text-align: left;
+    overflow-wrap: anywhere;
+    transition: color 0.2s;
+  }
+  .mail:hover {
+    color: var(--accent);
+  }
+  .copied {
+    display: block;
+    height: 22px;
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: 0.3s;
+  }
+  .copied.show {
+    opacity: 1;
+    transform: none;
+  }
+  .contact-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+</style>
