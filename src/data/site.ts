@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
   url: "https://drumorera.com",
   realName: "Roger Morera",
   handle: "@soydruia",
-  email: "hola@drumorera.com",
+  email: "contacto@drumorera.com",
   whatsapp: "34617587034",
   whatsappText: "Hola Dru, vengo de tu web…",
   networks: {
