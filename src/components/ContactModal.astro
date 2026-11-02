@@ -120,6 +120,7 @@ const chips = [
 <script>
   import { matchingServices } from "../lib/services";
   import { validateField } from "../lib/contact-validation";
+  import { sectionOf, track } from "../lib/analytics";
   import type { WhoId } from "../data/services";
 
   const modal = document.getElementById("contact-modal")!;
@@ -157,8 +158,16 @@ const chips = [
     mine = matchingServices(picked).map((s) => s.id);
   });
 
+  // Hasta qué paso llega cada visita y si termina enviando.
+  let reached = 0;
+  let sent = false;
+
   function setStep(n: number) {
     step = n;
+    if (n > reached) {
+      reached = n;
+      track("contact_step", { step: n + 1, name: ["nombre", "email", "mensaje"][n] });
+    }
     panes.style.transform = `translateX(${-100 * n}%)`;
     paneEls.forEach((p, k) => (p.inert = k !== n));
     stepEls.forEach((d, k) => {
@@ -193,11 +202,15 @@ const chips = [
     document.body.classList.add("lock");
     requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add("open")));
     form.focus({ preventScroll: true });
+    reached = 0;
+    sent = false;
+    track("contact_opened", { from: sectionOf(opener ?? null), service: svc });
     setStep(0);
   }
 
   function close() {
     if (modal.hidden) return;
+    track("contact_closed", { step: reached + 1, sent });
     modal.classList.remove("open");
     document.body.classList.remove("lock");
     hideTimer = window.setTimeout(() => (modal.hidden = true), reduce.matches ? 0 : 500);
@@ -274,7 +287,10 @@ const chips = [
     const msg = validateField(step as 0 | 1 | 2, input.value);
     err.textContent = msg;
     input.setAttribute("aria-invalid", String(!!msg));
-    if (msg) return shake(input);
+    if (msg) {
+      track("contact_invalid", { step: step + 1 });
+      return shake(input);
+    }
     if (step < 2) return setStep(step + 1);
 
     sending = true;
@@ -297,14 +313,21 @@ const chips = [
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const picked = chips
+        .filter((c) => c.getAttribute("aria-pressed") === "true")
+        .map((c) => c.dataset.id!);
       if (res.ok && data.ok) {
+        sent = true;
+        track("contact_sent", { services: picked });
         doneText.textContent = `Gracias, ${name.split(/\s+/)[0]}. Te respondo a ${email} lo antes posible.`;
         showResult(done);
         form.reset();
       } else if (res.status === 400 && data.error && data.error.includes(" ")) {
         err.textContent = data.error;
+        track("contact_invalid", { step: 3, server: true });
         shake(input);
       } else {
+        track("contact_failed", { status: res.status });
         failText.textContent =
           res.status === 429
             ? "Has enviado varios mensajes seguidos. Espera unos minutos o escríbeme directamente:"
@@ -312,6 +335,7 @@ const chips = [
         showResult(fail);
       }
     } catch {
+      track("contact_failed", { status: 0 });
       failText.textContent = failDefault;
       showResult(fail);
     } finally {

@@ -23,6 +23,7 @@
     "@lucide/astro": "^0.562.0",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.2",
+    "posthog-js": "1.438.10",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   },

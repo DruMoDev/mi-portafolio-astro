@@ -1,0 +1,215 @@
+---
+// Analítica con PostHog (UE) y aviso de cookies.
+// Sin aceptar: estadísticas anónimas sin cookies. Al aceptar: cookies y grabación de la sesión.
+---
+
+<div class="consent" data-consent hidden role="region" aria-label="Cookies">
+  <p>
+    Uso cookies de analítica para ver qué partes de la web sirven y cuáles no. Nada de publicidad.
+    <a href="/privacidad">Más info</a>
+  </p>
+  <div class="btns">
+    <button type="button" data-choice="no">Rechazar</button>
+    <button type="button" data-choice="si">Aceptar</button>
+  </div>
+</div>
+
+<script>
+  import type { PostHogInterface } from "posthog-js";
+  import { TRACK_EVENT, linkKind, networkOf, sectionOf, type TrackProps } from "../lib/analytics";
+
+  // Clave pública del proyecto: está pensada para ir en el navegador.
+  const KEY = "phc_rnhUdM9umN22Vk7FPNce9Z8bBqVHU7Grg7i8KyJyzzrN";
+  const HOSTS = ["drumorera.com", "www.drumorera.com"];
+  const CHOICE = "cookies";
+  const OFF = "sin-analitica";
+
+  const storage = {
+    get: (k: string) => {
+      try {
+        return localStorage.getItem(k);
+      } catch {
+        return null;
+      }
+    },
+    set: (k: string, v: string | null) => {
+      try {
+        if (v === null) localStorage.removeItem(k);
+        else localStorage.setItem(k, v);
+      } catch {
+        /* sin almacenamiento: no pasa nada */
+      }
+    },
+  };
+
+  // Para no contarte a ti: abre una vez drumorera.com/?sin-analitica (y ?con-analitica para deshacerlo).
+  const params = new URLSearchParams(location.search);
+  if (params.has(OFF)) storage.set(OFF, "1");
+  if (params.has("con-analitica")) storage.set(OFF, null);
+  const enabled =
+    (HOSTS.includes(location.hostname) && !storage.get(OFF)) || params.has("analitica-prueba");
+
+  if (enabled) {
+    const banner = document.querySelector<HTMLElement>("[data-consent]")!;
+    let ph: PostHogInterface | null = null;
+    const queue: [string, TrackProps][] = [];
+    const send = (event: string, props: TrackProps) =>
+      ph ? ph.capture(event, props) : queue.length < 100 && queue.push([event, props]);
+
+    function applyChoice(choice: string | null) {
+      if (!ph) return;
+      if (choice === "si") ph.opt_in_capturing();
+      else if (choice === "no") ph.opt_out_capturing();
+    }
+
+    function showBanner(show: boolean) {
+      banner.hidden = !show;
+      requestAnimationFrame(() => banner.classList.toggle("show", show));
+    }
+
+    banner.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>("[data-choice]");
+      if (!btn) return;
+      const choice = btn.dataset.choice!;
+      storage.set(CHOICE, choice);
+      applyChoice(choice);
+      send("cookies_choice", { choice });
+      showBanner(false);
+    });
+    document.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("[data-cookies]")) showBanner(true);
+    });
+    if (!storage.get(CHOICE)) showBanner(true);
+
+    // Eventos propios de los componentes (track()).
+    addEventListener(TRACK_EVENT, (e) => {
+      const { event, props } = (e as CustomEvent<{ event: string; props: TrackProps }>).detail;
+      send(event, props);
+    });
+
+    // Salidas: WhatsApp, email, redes… y desde qué parte de la página.
+    document.addEventListener(
+      "click",
+      (e) => {
+        const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+        if (!a) return;
+        const kind = linkKind(a.getAttribute("href")!, location.origin);
+        if (!kind) return;
+        send("outbound_click", {
+          kind,
+          network: kind === "social" ? networkOf(a.href) : undefined,
+          section: sectionOf(a),
+          label: (a.textContent ?? "").trim().replace(/\s+/g, " ").slice(0, 60) || undefined,
+        });
+      },
+      { capture: true }
+    );
+
+    // "¿Qué te trae por aquí?"
+    addEventListener("who:change", (e) => {
+      const picked = (e as CustomEvent<{ picked: string[] }>).detail.picked;
+      send("who_picked", { picked, count: picked.length });
+    });
+
+    // Hasta dónde llega cada visita: una vez por sección.
+    const seen = new Set<string>();
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const name = sectionOf(en.target);
+          io.unobserve(en.target);
+          if (seen.has(name)) return;
+          seen.add(name);
+          send("section_viewed", { section: name });
+        }),
+      { threshold: 0.35 }
+    );
+    document.querySelectorAll("main section").forEach((s) => io.observe(s));
+
+    // PostHog se carga cuando la página ya está lista, para no frenarla.
+    const load = () =>
+      import("posthog-js").then(({ default: posthog }) => {
+        posthog.init(KEY, {
+          api_host: "/relay",
+          ui_host: "https://eu.posthog.com",
+          defaults: "2026-08-30",
+          // Hasta que acepte, sin cookies (PostHog calcula la visita en su servidor).
+          cookieless_mode: "on_reject",
+          opt_out_capturing_by_default: true,
+          person_profiles: "identified_only",
+          disable_surveys: true,
+          session_recording: { maskAllInputs: true },
+          loaded: (p) => {
+            ph = p;
+            applyChoice(storage.get(CHOICE));
+            queue.splice(0).forEach(([event, props]) => p.capture(event, props));
+          },
+        });
+      });
+    const idle = (fn: () => void) =>
+      "requestIdleCallback" in window
+        ? requestIdleCallback(fn, { timeout: 3000 })
+        : setTimeout(fn, 1500);
+    if (document.readyState === "complete") idle(load);
+    else addEventListener("load", () => idle(load), { once: true });
+  }
+</script>
+
+<style>
+  .consent {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 60;
+    width: min(420px, calc(100% - 32px));
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow:
+      0 0 0 1px var(--line),
+      0 18px 40px -18px rgba(0, 0, 0, 0.35);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--soft);
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.3s,
+      transform 0.45s var(--spring);
+  }
+  .consent.show {
+    opacity: 1;
+    transform: none;
+  }
+  .consent a {
+    color: var(--ink);
+    text-underline-offset: 3px;
+  }
+  .btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .btns button {
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1.5px var(--ink);
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .btns button:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .consent {
+      transition: none;
+    }
+  }
+</style>

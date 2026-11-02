@@ -14,7 +14,11 @@ const links = [
 ---
 
 <footer class="wrap">
-  <span>Dru Morera</span>
+  <span class="me">
+    Dru Morera
+    <a href="/privacidad">Privacidad</a>
+    <button type="button" data-cookies>Cookies</button>
+  </span>
   <nav aria-label="Redes">
     <span>{cfg.handle}</span>
     {
@@ -42,6 +46,19 @@ const links = [
     display: flex;
     gap: 8px 18px;
     flex-wrap: wrap;
+  }
+  .me {
+    display: flex;
+    gap: 8px 18px;
+    flex-wrap: wrap;
+  }
+  .me button {
+    color: inherit;
+  }
+  .me button:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   nav span {
     color: var(--ink);

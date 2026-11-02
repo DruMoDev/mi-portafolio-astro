@@ -122,6 +122,7 @@ const shapeVars = (s: (typeof services)[number]) =>
 <script>
   import { services, type WhoId } from "../data/services";
   import { matchingServices, serviceIndexFromHash } from "../lib/services";
+  import { track } from "../lib/analytics";
 
   const section = document.getElementById("servicios")!;
   const tabsEl = section.querySelector<HTMLElement>(".tabs")!;
@@ -149,7 +150,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     pill.style.width = `${t.offsetWidth}px`;
   }
 
-  function go(target: number, instant = false) {
+  function go(target: number, instant = false, via?: string) {
     const i = (target + N) % N;
     if (i === cur || busy) return;
     instant ||= reduce.matches;
@@ -217,11 +218,12 @@ const shapeVars = (s: (typeof services)[number]) =>
       }, 330);
     }
     busyTimer = window.setTimeout(() => (busy = false), instant ? 0 : 700);
+    if (via) track("service_viewed", { service: s.id, via });
   }
 
-  tabs.forEach((t, k) => t.addEventListener("click", () => go(k)));
-  prevBtn.addEventListener("click", () => go(cur - 1));
-  nextBtn.addEventListener("click", () => go(cur + 1));
+  tabs.forEach((t, k) => t.addEventListener("click", () => go(k, false, "tab")));
+  prevBtn.addEventListener("click", () => go(cur - 1, false, "arrow"));
+  nextBtn.addEventListener("click", () => go(cur + 1, false, "arrow"));
 
   // Teclado: dentro de las pestañas como un tablist; fuera, si el escenario está en pantalla.
   tabsEl.addEventListener("keydown", (e) => {
@@ -239,7 +241,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     e.preventDefault();
     e.stopPropagation();
     if (busy) return;
-    go(to);
+    go(to, false, "keyboard");
     tabs[cur].focus({ preventScroll: true });
   });
   addEventListener("keydown", (e) => {
@@ -249,7 +251,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     if (el.closest("input, textarea, select, [contenteditable], .ring-wrap")) return;
     const r = section.getBoundingClientRect();
     if (r.top > innerHeight * 0.6 || r.bottom < innerHeight * 0.3) return;
-    go(cur + (e.key === "ArrowRight" ? 1 : -1));
+    go(cur + (e.key === "ArrowRight" ? 1 : -1), false, "keyboard");
   });
 
   // Deslizar en táctil.
@@ -267,7 +269,8 @@ const shapeVars = (s: (typeof services)[number]) =>
     if (x0 === null) return;
     const dx = e.changedTouches[0].clientX - x0;
     const dy = e.changedTouches[0].clientY - y0;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy))
+      go(cur + (dx < 0 ? 1 : -1), false, "swipe");
     x0 = null;
   });
 
@@ -286,7 +289,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     const k = services.findIndex((s) => s.id === id);
     if (k >= 0) {
       busy = false;
-      go(k);
+      go(k, false, "tiles");
     }
   });
 
@@ -300,7 +303,7 @@ const shapeVars = (s: (typeof services)[number]) =>
     if (k < 0) return;
     section.scrollIntoView({ behavior: reduce.matches ? "instant" : "smooth" });
     busy = false;
-    go(k);
+    go(k, false, "link");
   });
   // Sin degradado cuando ya se ve la última pestaña.
   const edge = () =>

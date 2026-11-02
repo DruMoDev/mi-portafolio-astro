@@ -1,0 +1,154 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteConfig } from "../data/site";
+---
+
+<BaseLayout
+  title="Privacidad y cookies · Dru Morera"
+  description="Qué datos recoge drumorera.com, para qué y cómo cambiar tu elección de cookies."
+>
+  <main class="wrap legal">
+    <a class="back" href="/">← Volver a la portada</a>
+    <h1 class="sec">Privacidad y cookies</h1>
+    <p class="lead">Sin publicidad y sin vender datos. Esto es todo lo que recoge esta web.</p>
+
+    <h2>Quién es el responsable</h2>
+    <p>
+      {siteConfig.realName} (Dru Morera). Para cualquier cosa sobre tus datos:
+      <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+    </p>
+
+    <h2>Si me escribes por el formulario</h2>
+    <p>
+      Tu nombre, tu email, tu mensaje y los servicios que marques me llegan por email para poder
+      responderte. Solo los uso para eso. La web no los guarda; se quedan en mi correo mientras
+      hablemos y el tiempo razonable después. El envío pasa por Cloudflare, que aloja la web.
+    </p>
+    <p>Si me escribes por WhatsApp o en redes, se aplica además la privacidad de esa plataforma.</p>
+
+    <h2>Analítica</h2>
+    <p>
+      Uso <a href="https://posthog.com/privacy" target="_blank" rel="noopener">PostHog</a>, con los
+      datos alojados en la Unión Europea, para saber qué partes de la web sirven y cuáles no.
+    </p>
+    <ul>
+      <li>
+        <strong>Si no aceptas las cookies</strong>, solo se cuentan estadísticas anónimas: páginas
+        vistas, clics, país y tipo de dispositivo. No se guarda nada en tu navegador y no se te
+        reconoce si vuelves.
+      </li>
+      <li>
+        <strong>Si las aceptas</strong>, se guarda un identificador para reconocer tus siguientes
+        visitas y se graba cómo navegas por la página (movimientos y clics) para encontrar lo que
+        confunde. Lo que escribes en el formulario aparece oculto en esas grabaciones.
+      </li>
+    </ul>
+
+    <h2>Cookies y almacenamiento</h2>
+    <div class="table">
+      <table>
+        <thead>
+          <tr><th>Nombre</th><th>Para qué</th><th>Duración</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cookies</code></td>
+            <td>Recordar si aceptaste o rechazaste las cookies. Siempre.</td>
+            <td>Hasta que borres los datos del navegador</td>
+          </tr>
+          <tr>
+            <td><code>ph_…_posthog</code></td>
+            <td>Analítica de PostHog. Solo si aceptas.</td>
+            <td>1 año</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Puedes cambiar tu elección cuando quieras:
+      <button type="button" class="link" data-cookies>configurar las cookies</button>.
+    </p>
+
+    <h2>Tus derechos</h2>
+    <p>
+      Puedes pedirme ver, corregir o borrar tus datos, u oponerte a su uso, escribiendo a
+      <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. Si crees que no los trato bien,
+      puedes reclamar ante la
+      <a href="https://www.aepd.es" target="_blank" rel="noopener"
+        >Agencia Española de Protección de Datos</a
+      >.
+    </p>
+  </main>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 720px;
+    padding: 48px 0 96px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #222;
+  }
+  .back {
+    font-size: 15px;
+    color: var(--soft);
+    text-decoration: none;
+  }
+  .back:hover {
+    color: var(--ink);
+  }
+  h1 {
+    margin: 22px 0 12px;
+  }
+  .lead {
+    font-size: 20px;
+    color: var(--soft);
+  }
+  h2 {
+    margin: 40px 0 10px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  p + p {
+    margin-top: 12px;
+  }
+  ul {
+    margin-top: 12px;
+    padding-left: 20px;
+    list-style: disc;
+  }
+  li + li {
+    margin-top: 10px;
+  }
+  a,
+  .link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .table {
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  th,
+  td {
+    padding: 10px 12px 10px 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  code {
+    font-size: 14px;
+  }
+</style>
