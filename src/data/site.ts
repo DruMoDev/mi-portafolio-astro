@@ -12,7 +12,7 @@ export const siteConfig: SiteConfig = {
   networks: {
     tiktok: "https://www.tiktok.com/@soydruia",
     instagram: "https://www.instagram.com/soydruia",
-    facebook: "https://www.facebook.com/people/Roger-Morera/61591256000892/",
+    facebook: "https://www.facebook.com/soydruia",
     youtube: "https://www.youtube.com/@soydruia",
   },
   extraLinks: {
