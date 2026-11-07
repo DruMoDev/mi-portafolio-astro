@@ -17,24 +17,14 @@ import { LEAD_KEY } from "../../lib/guias/muro";
 import { guideJsonLd } from "../../lib/guias/schema";
 import { fechaCorta, minutosDeLectura } from "../../lib/guias/formato";
 import { relatedGuides } from "../../lib/guias/related";
-import { readdirSync, readFileSync } from "node:fs";
 import { comprobarSitemap, comprobarSustitutas, slugsRetirados } from "../../lib/guias/retirada";
+import { leerGuiasEnBruto } from "../../lib/guias/ficheros";
 
 export async function getStaticPaths() {
   const guias = await getCollection("guias");
   comprobarSustitutas(guias);
   // El sitemap (astro.config.mjs) saca las retiradas leyendo el texto: tiene que ver las mismas.
-  const dir = "./src/content/guias";
-  comprobarSitemap(
-    guias,
-    slugsRetirados(
-      Object.fromEntries(
-        readdirSync(dir)
-          .filter((f) => f.endsWith(".md"))
-          .map((f) => [f, readFileSync(`${dir}/${f}`, "utf8")])
-      )
-    )
-  );
+  comprobarSitemap(guias, slugsRetirados(leerGuiasEnBruto()));
   return guias.map((guia) => ({
     params: { slug: guia.id },
     props: {
