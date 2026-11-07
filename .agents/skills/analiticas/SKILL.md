@@ -89,9 +89,30 @@ WHERE timestamp >= toDateTime('DESDE 00:00:00') AND timestamp < toDateTime('HAST
 
 Avisos de taxonomía sobre eventos que aún no existen (`contact_sent`, `who_picked`…) son normales: nadie los ha disparado todavía. Antes de dar el informe por bueno, mira con `read-data-schema` (`kind: events`) si han aparecido eventos nuevos (por ejemplo de las guías o de leads) que no estén en estas consultas: si los hay, cuéntalos en `notas` y propón añadirlos a esta skill.
 
-## 2. Search Console (si hay acceso)
+## 2. Search Console
 
-Si hay credenciales con el permiso `webmasters.readonly` (`gcloud auth application-default print-access-token` y una llamada a `https://www.googleapis.com/webmasters/v3/sites` que no dé 403), consulta `searchAnalytics/query` de `sc-domain:drumorera.com` (o `https://drumorera.com/`) por `query` y por `page`. Si no, deja `"google": null` y no insistas: el informe ya explica cómo conectarlo.
+Conectado con las credenciales de `gcloud` (ADC con el permiso `webmasters.readonly`) y `druai-509716` como proyecto de cuota, donde está activada la API. La propiedad es `sc-domain:drumorera.com`. Con `curl` hay que mandar el proyecto de cuota en una cabecera:
+
+```bash
+T=$(gcloud auth application-default print-access-token)
+for d in query page; do
+  curl -s -X POST -H "Authorization: Bearer $T" -H "x-goog-user-project: druai-509716" -H "Content-Type: application/json" \
+    "https://www.googleapis.com/webmasters/v3/sites/sc-domain%3Adrumorera.com/searchAnalytics/query" \
+    -d "{\"startDate\":\"DESDE\",\"endDate\":\"HASTA\",\"dimensions\":[\"$d\"],\"rowLimit\":15}"
+done
+```
+
+Para los totales, la misma llamada sin `dimensions`. Los datos llegan con 2 o 3 días de retraso. Con eso rellena:
+
+```json
+"google": {
+  "clics": 0, "impresiones": 0, "ctr": 0.0, "posicion": 0.0,
+  "consultas": [{ "consulta": "dru", "clics": 0, "impresiones": 0, "posicion": 10.3 }],
+  "paginas": [{ "ruta": "/", "clics": 0, "impresiones": 0, "posicion": 8.2 }]
+}
+```
+
+`ruta` es la URL sin `https://drumorera.com`. Si da 401 o `invalid_grant`, el permiso ha caducado: deja `"google": null`, avisa en `notas` y dile a Dru que ejecute `! gcloud auth application-default login --scopes=https://www.googleapis.com/auth/webmasters.readonly,https://www.googleapis.com/auth/cloud-platform` y después `! gcloud auth application-default set-quota-project druai-509716`.
 
 ## 3. Guías y leads
 
