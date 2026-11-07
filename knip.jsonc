@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["scripts/*.{mjs,ts}"],
+  "project": ["src/**/*.{ts,astro,mjs,css}", "scripts/**/*.{ts,mjs}"],
+  "ignoreDependencies": [
+    // Se usa como CLI (wrangler deploy, d1, secret), nunca desde código.
+    "wrangler",
+    // Tipos de Workers que da el adaptador de Cloudflare al runtime; no se importan por nombre.
+    "@cloudflare/workers-types",
+  ],
+}

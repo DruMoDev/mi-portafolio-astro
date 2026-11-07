@@ -1,0 +1,8 @@
+{
+  "src/lib/analytics.ts": 1,
+  "src/lib/contact-handler.test.ts": 4,
+  "src/lib/social-sync.test.ts": 2,
+  "src/lib/social.test.ts": 3,
+  "src/pages/api/contact.ts": 1,
+  "src/pages/relay/[...path].ts": 1
+}

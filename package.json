@@ -13,7 +13,9 @@
     "type-check": "astro check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "eslint .",
+    "typecheck": "astro sync && KIT_TSC=tsc node .agents-kit/tsc-base.mjs comprobar"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -29,10 +31,16 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261029.1",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.14.0",
     "husky": "^9.1.7",
+    "knip": "^6.44.2",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
+    "typescript-eslint": "^8.72.1",
     "vitest": "^4.0.18",
     "wrangler": "^4.155.0"
   }
