@@ -8,6 +8,9 @@ updatedAt: 2026-11-07
 service: consultoria
 keyword: "FABLE"
 gateAfter: 1
+retirada:
+  fecha: 2026-11-08
+  motivo: "El crédito de 100 $ de Fable 5 caducó el 17 de septiembre de 2026"
 videos:
   - title: "Fable 5, el modelo más potente de Claude, acaba de cambiar y afecta a tu plan"
     url: "https://youtu.be/ofZOx76loyk"

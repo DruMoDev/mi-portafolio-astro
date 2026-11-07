@@ -4,6 +4,11 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import cloudflare from "@astrojs/cloudflare";
 import { rehypeGuiaPasos } from "./src/lib/guias/pasos.ts";
+import { slugsRetirados } from "./src/lib/guias/retirada.ts";
+import { leerGuiasEnBruto } from "./src/lib/guias/ficheros.ts";
+
+// Las guías retiradas siguen publicadas, pero no van al sitemap.
+const retiradas = slugsRetirados(leerGuiasEnBruto());
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,7 +33,12 @@ export default defineConfig({
     ssr: { external: ["@resvg/resvg-js"] },
   },
 
-  integrations: [sitemap({ filter: (page) => !page.includes("/links") })],
+  integrations: [
+    sitemap({
+      filter: (page) =>
+        !page.includes("/links") && !retiradas.some((slug) => page.includes(`/guias/${slug}/`)),
+    }),
+  ],
 
   prefetch: {
     prefetchAll: false,

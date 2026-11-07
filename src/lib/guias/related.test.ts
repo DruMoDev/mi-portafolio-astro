@@ -23,6 +23,20 @@ describe("relatedGuides", () => {
     expect(ids(relatedGuides(todas, actual))).toEqual(["web"]);
   });
 
+  it("excluye las retiradas", () => {
+    const fable = {
+      id: "fable",
+      data: {
+        tema: "Claude Code",
+        updatedAt: new Date("2026-11-08"),
+        orphan: false,
+        retirada: { fecha: new Date("2026-11-08"), motivo: "caducó" },
+      },
+    };
+    const todas = [actual, fable, guia("web", "Webs", "2026-11-01")];
+    expect(ids(relatedGuides(todas, actual))).toEqual(["web"]);
+  });
+
   it("prioriza el mismo tema", () => {
     const todas = [
       actual,
