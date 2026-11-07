@@ -7,23 +7,31 @@ import Footer from "../../components/Footer.astro";
 import Icon from "../../components/Icon.astro";
 import GuiaToc from "../../components/guias/GuiaToc.astro";
 import GuiaGate from "../../components/guias/GuiaGate.astro";
+import GuiaService from "../../components/guias/GuiaService.astro";
+import GuiaRelated from "../../components/guias/GuiaRelated.astro";
+import ContactModal from "../../components/ContactModal.astro";
 import { siteConfig } from "../../data/site";
 import { hasVideoSection } from "../../lib/social";
 import { leerPasos } from "../../lib/guias/pasos";
 import { LEAD_KEY } from "../../lib/guias/muro";
 import { guideJsonLd } from "../../lib/guias/schema";
 import { fechaCorta, minutosDeLectura } from "../../lib/guias/formato";
+import { relatedGuides } from "../../lib/guias/related";
 
 export async function getStaticPaths() {
   const guias = await getCollection("guias");
-  return guias.map((guia) => ({ params: { slug: guia.id }, props: { guia } }));
+  return guias.map((guia) => ({
+    params: { slug: guia.id },
+    props: { guia, relacionadas: relatedGuides(guias, guia) },
+  }));
 }
 
 interface Props {
   guia: CollectionEntry<"guias">;
+  relacionadas: CollectionEntry<"guias">[];
 }
 
-const { guia } = Astro.props;
+const { guia, relacionadas } = Astro.props;
 const { data } = guia;
 const { Content, remarkPluginFrontmatter } = await render(guia);
 const pasos = leerPasos(remarkPluginFrontmatter);
@@ -84,10 +92,13 @@ const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
       <article class="guia-cuerpo">
         <Content />
       </article>
+      <GuiaService service={data.service} />
+      <GuiaRelated guias={relacionadas} />
     </GuiaToc>
     {cerrada && <GuiaGate />}
   </main>
   <Footer />
+  <ContactModal />
   <template data-copiar>
     <button type="button" class="copy">
       <span class="i-copy"><Icon name="copy" size={15} /></span>

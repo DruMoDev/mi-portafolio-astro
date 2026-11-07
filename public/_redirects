@@ -1,3 +1,6 @@
 /en / 301
 /en/* / 301
 /proyectos/* / 301
+# Enlace corto de las guías (comentarios de TikTok). Va directo a la URL canónica, con barra final.
+/g/:slug /guias/:slug/ 301
+/g/:slug/ /guias/:slug/ 301

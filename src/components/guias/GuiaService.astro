@@ -1,0 +1,149 @@
+---
+// Bloque de servicio al final de una guía: el servicio de su ficha (`service`), con el botón que
+// abre el modal de contacto con ese servicio ya marcado. La página tiene que incluir ContactModal.
+import { Image } from "astro:assets";
+import avatar from "../../assets/images/avatar.jpg";
+import { services, type ServiceId } from "../../data/services";
+
+interface Props {
+  service: ServiceId;
+}
+
+const { service } = Astro.props;
+const svc = services.find((s) => s.id === service);
+if (!svc) throw new Error(`Servicio desconocido en la guía: ${service}`);
+---
+
+<section class="svc" aria-labelledby={`svc-${svc.id}`}>
+  <div>
+    <div class="by">
+      <Image src={avatar} alt="" width={88} height={88} />
+      <span>Escrita por <b>Dru Morera</b>. Programo con IA desde hace cuatro años.</span>
+    </div>
+    <h2 id={`svc-${svc.id}`}>{svc.title}</h2>
+    <p class="one">{svc.one}</p>
+    <div class="actions">
+      <button type="button" class="cta" data-open data-svc={svc.id}>{svc.cta}</button>
+      <a class="linkish" href="/#servicios">Ver todos los servicios</a>
+    </div>
+  </div>
+  <div>
+    <h3>Es para ti si…</h3>
+    <ul>
+      {svc.fit.map((f): unknown => <li>{f}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .svc {
+    margin-top: 12vh;
+    padding: clamp(28px, 5vw, 56px);
+    border-radius: 28px;
+    background: #f2f2f4;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+  }
+  .by {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 15px;
+    color: var(--soft);
+  }
+  .by img {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .by b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  h2 {
+    margin-top: 22px;
+    font-size: clamp(30px, 3.6vw, 46px);
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    text-wrap: balance;
+  }
+  .one {
+    margin-top: 14px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #2a2a2e;
+    max-width: 40ch;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  ul {
+    list-style: none;
+    margin-top: 12px;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  li {
+    font-size: 16px;
+    line-height: 1.45;
+    padding-left: 18px;
+    position: relative;
+    color: #2a2a2e;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .cta {
+    cursor: pointer;
+    display: inline-block;
+    padding: 14px 22px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+  .cta:hover {
+    background: var(--accent);
+  }
+  .linkish {
+    font-size: 15px;
+    color: var(--soft);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .linkish:hover {
+    color: var(--ink);
+  }
+  @media (max-width: 760px) {
+    .svc {
+      grid-template-columns: 1fr;
+      gap: 26px;
+    }
+  }
+</style>
