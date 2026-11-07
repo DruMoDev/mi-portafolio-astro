@@ -23,6 +23,9 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // resvg es un binario nativo: solo lo usa /guias/<slug>/og.png (prerenderizada) en Node
+    // durante el build. Externo para que Vite no intente empaquetar el .node.
+    ssr: { external: ["@resvg/resvg-js"] },
   },
 
   integrations: [sitemap({ filter: (page) => !page.includes("/links") })],

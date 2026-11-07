@@ -46,6 +46,8 @@ const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
   title={`${data.title} · Dru Morera`}
   description={data.description}
   ogType="article"
+  image={`/guias/${guia.id}/og.png`}
+  imageAlt={data.title}
   jsonLd={jsonLd}
 >
   <script is:inline slot="head" define:vars={{ key: LEAD_KEY }}>

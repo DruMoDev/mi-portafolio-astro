@@ -9,10 +9,11 @@ interface Props {
   noindex?: boolean;
   ogType?: "website" | "article";
   image?: string;
+  imageAlt?: string;
   jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description, noindex, ogType, image, jsonLd } = Astro.props;
+const { title, description, noindex, ogType, image, imageAlt, jsonLd } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,6 +26,7 @@ const { title, description, noindex, ogType, image, jsonLd } = Astro.props;
       noindex={noindex}
       ogType={ogType}
       image={image}
+      imageAlt={imageAlt}
       jsonLd={jsonLd}
     />
   </head>
