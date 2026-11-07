@@ -9,16 +9,22 @@ type CloudflareEnv = {
   /** Solo fuera de Cloudflare (desarrollo): URL de DForge a la que llamar sin binding. */
   DFORGE_BASE_URL?: string;
   DFORGE_ANALYTICS_TOKEN?: string;
+  /** D1 propia de la web (`dru-web-leads`): leads del muro de las guías y sus visitas. */
+  LEADS?: import("@cloudflare/workers-types").D1Database;
 };
 
 type Runtime = import("@astrojs/cloudflare").Runtime<CloudflareEnv>;
 
 declare namespace App {
-  interface Locals extends Runtime {}
+  interface Locals {
+    runtime: Runtime["runtime"];
+  }
 }
 
 declare module "cloudflare:email" {
   export class EmailMessage {
+    readonly from: string;
+    readonly to: string;
     constructor(from: string, to: string, raw: string);
   }
 }

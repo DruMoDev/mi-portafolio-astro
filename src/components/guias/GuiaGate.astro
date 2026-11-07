@@ -2,11 +2,15 @@
 // Muro suave de una guía: la tarjeta "Sigue leyendo gratis" sobre la parte cerrada.
 // La guía entera va en el HTML; el difuminado solo existe con JS (`html.js`) y desaparece con
 // `html.lead-ok`, que el script del <head> pone antes de pintar si ya hay id guardado.
-// El script mueve la tarjeta y la nota de desbloqueo dentro de `.guia-cerrada`.
+// El script mueve la tarjeta y la nota de desbloqueo dentro de `.guia-cerrada`, manda el email a
+// /api/lead y, si ya hay id, registra la visita en /api/lead/visita.
 import Icon from "../Icon.astro";
+import { CONSENT_TEXT } from "../../lib/leads/consent";
+
+const guia = Astro.params.slug ?? "";
 ---
 
-<div class="gate" data-gate hidden>
+<div class="gate" data-gate data-guia={guia} hidden>
   <form class="gate-card" novalidate>
     <h2>Sigue leyendo gratis</h2>
     <p>Solo te pido el email. La guía sigue justo aquí debajo y no te lo vuelvo a pedir.</p>
@@ -23,9 +27,14 @@ import Icon from "../Icon.astro";
       />
       <button type="submit">Seguir leyendo</button>
     </div>
+    <!-- Campo trampa: las personas no lo ven ni lo rellenan. -->
+    <div class="trampa" aria-hidden="true">
+      <label for="gate-web">Web</label>
+      <input id="gate-web" name="website" tabindex="-1" autocomplete="new-password" />
+    </div>
     <div class="gate-err" id="gate-err" role="alert"></div>
     <p class="gate-legal">
-      Guardo tu email y qué guías lees para avisarte cuando saque cursos o guías nuevas. Sin spam.
+      {CONSENT_TEXT}
       <a href="/privacidad">Privacidad</a>
     </p>
   </form>
@@ -35,11 +44,25 @@ import Icon from "../Icon.astro";
 </div>
 
 <script>
-  import { isValidEmail, readLeadId, saveLeadId } from "../../lib/guias/muro";
+  import {
+    captureUtm,
+    isValidEmail,
+    readLeadId,
+    sendVisit,
+    unlockGuide,
+  } from "../../lib/guias/muro";
 
   function almacen(): Storage | null {
     try {
       return window.localStorage;
+    } catch {
+      return null;
+    }
+  }
+
+  function sesion(): Storage | null {
+    try {
+      return window.sessionStorage;
     } catch {
       return null;
     }
@@ -51,7 +74,10 @@ import Icon from "../Icon.astro";
   const gate = document.querySelector<HTMLElement>("[data-gate]");
   const nota = document.querySelector<HTMLElement>("[data-nota]");
   const form = gate?.querySelector("form");
-  const input = form?.querySelector("input");
+  const input = form?.querySelector<HTMLInputElement>("input[name=email]");
+  const trampa = form?.querySelector<HTMLInputElement>("input[name=website]");
+  const boton = form?.querySelector("button");
+  const guia = gate?.dataset.guia ?? "";
   const campo = form?.querySelector<HTMLElement>("[data-campo]");
   const err = form?.querySelector<HTMLElement>(".gate-err");
 
@@ -66,7 +92,13 @@ import Icon from "../Icon.astro";
     }
   }
 
-  if (readLeadId(almacen())) raiz.classList.add("lead-ok");
+  captureUtm(location.search, sesion());
+
+  const id = readLeadId(almacen());
+  if (id) {
+    raiz.classList.add("lead-ok");
+    if (guia) void sendVisit(id, guia, fetch, almacen());
+  }
 
   if (cerrada && veil && gate && nota && !raiz.classList.contains("lead-ok")) {
     cerrada.prepend(nota);
@@ -94,9 +126,11 @@ import Icon from "../Icon.astro";
       input.focus();
       return;
     }
-    // Id local provisional: la API de leads lo sustituye por el del servidor.
-    saveLeadId(almacen(), crypto.randomUUID());
-    desbloquear();
+    if (boton?.disabled) return;
+    if (boton) boton.disabled = true;
+    void unlockGuide(valor, guia, fetch, { local: almacen(), session: sesion() }, desbloquear, {
+      website: trampa?.value ?? "",
+    });
   });
 </script>
 
@@ -225,6 +259,17 @@ import Icon from "../Icon.astro";
   }
   .gate-form button:hover {
     background: var(--accent);
+  }
+  .trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .gate-form button:disabled {
+    cursor: progress;
+    opacity: 0.7;
   }
   .gate-err {
     min-height: 20px;

@@ -26,6 +26,23 @@ import { siteConfig } from "../data/site";
     </p>
     <p>Si me escribes por WhatsApp o en redes, se aplica además la privacidad de esa plataforma.</p>
 
+    <h2>Si me dejas tu email en una guía</h2>
+    <p>
+      Algunas guías piden el email para seguir leyendo. Si me lo dejas, guardo tu email, qué guías
+      lees y cuándo (la primera y la última vez, y cuántas veces), y de qué vídeo o red vienes si el
+      enlace lo indica. También guardo el texto que aceptaste y la fecha.
+    </p>
+    <p>
+      Lo uso solo para avisarte cuando saque cursos o guías nuevas, y para saber qué temas te
+      interesan. No te envío nada más, no lo comparto con nadie y no llega a la analítica.
+    </p>
+    <p>
+      Se guarda en una base de datos de Cloudflare propia de esta web, alojada en la Unión Europea,
+      hasta que me pidas borrarlo. Para borrarlo, escribe a
+      <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> desde ese email y lo elimino junto
+      con tu historial.
+    </p>
+
     <h2>Analítica</h2>
     <p>
       Uso <a href="https://posthog.com/privacy" target="_blank" rel="noopener">PostHog</a>, con los
@@ -60,6 +77,21 @@ import { siteConfig } from "../data/site";
             <td><code>ph_…_posthog</code></td>
             <td>Analítica de PostHog. Solo si aceptas.</td>
             <td>1 año</td>
+          </tr>
+          <tr>
+            <td><code>dru-lead-id</code></td>
+            <td>
+              Un identificador anónimo para no volver a pedirte el email en las guías y apuntar qué
+              guías lees. Solo si dejas el email.
+            </td>
+            <td>Hasta que borres los datos del navegador</td>
+          </tr>
+          <tr>
+            <td><code>dru-utm</code></td>
+            <td>
+              De qué vídeo o red llegaste a una guía, para guardarlo con tu email si me lo dejas.
+            </td>
+            <td>Hasta que cierres la pestaña</td>
           </tr>
         </tbody>
       </table>

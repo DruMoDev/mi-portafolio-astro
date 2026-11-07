@@ -16,6 +16,17 @@
   // El token de lectura se añade como secreto:
   //   npx wrangler secret put DFORGE_ANALYTICS_TOKEN
   "services": [{ "binding": "DFORGE", "service": "dforge-api" }],
+  // Leads del muro de las guías y su historial de visitas: D1 propia de la web (jurisdicción UE),
+  // nada en la de DForge. Esquema en migrations/:
+  //   npx wrangler d1 migrations apply dru-web-leads --remote
+  "d1_databases": [
+    {
+      "binding": "LEADS",
+      "database_name": "dru-web-leads",
+      "database_id": "0890cc0b-f9a8-4171-8398-74bb7f608424",
+      "migrations_dir": "migrations",
+    },
+  ],
   "vars": {
     "CONTACT_FROM": "web@drumorera.com",
   },
