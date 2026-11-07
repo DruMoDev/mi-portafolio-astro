@@ -206,6 +206,16 @@ describe("handleVisit", () => {
     expect((await handleVisit(visita({ id: "abc", guide: "../x" }), d)).status).toBe(400);
   });
 
+  it("límite por IP en visitas → 429 sin tocar la base", async () => {
+    const f = almacenFalso();
+    const spy = vi.spyOn(f.store, "recordVisit");
+    const d = { store: f.store, limiter: createRateLimiter(2, 60_000), now: () => 1 };
+    for (const guide of ["a", "b"]) await handleVisit(visita({ id: "abc", guide }), d);
+    const res = await handleVisit(visita({ id: "abc", guide: "c" }), d);
+    expect(res.status).toBe(429);
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+
   it("sin store → 503", async () => {
     const res = await handleVisit(visita({ id: "abc", guide: body.guide }), { now: () => 1 });
     expect(res.status).toBe(503);

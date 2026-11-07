@@ -28,6 +28,8 @@ export interface LeadDeps {
 
 export interface VisitDeps {
   store?: LeadStore | undefined;
+  /** Límite por IP antes de tocar la base: sin él, un bot con un id válido escribe sin freno. */
+  limiter?: RateLimiter | undefined;
   now: () => number;
 }
 
@@ -114,6 +116,10 @@ export async function handleVisit(request: Request, deps: VisitDeps): Promise<Re
   const guide = body?.guide;
   if (typeof id !== "string" || !id || id.length > LIMITS.id || !esGuia(guide)) {
     return json(400, { ok: false, error: "invalid" });
+  }
+  const ip = request.headers.get("cf-connecting-ip") ?? "local";
+  if (deps.limiter && !deps.limiter(ip, deps.now())) {
+    return json(429, { ok: false, error: "rate-limited" });
   }
   if (!deps.store) return json(503, { ok: false, error: "unavailable" });
 
