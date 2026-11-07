@@ -21,7 +21,8 @@ drumorera.com: la web de servicios de Dru Morera (programador freelance y creado
 - formato: `npm run format` / `npm run format:check`
 - build: `npm run build`
 - métricas de redes: `npm run social:sync`
-- desplegar: `npx wrangler deploy` (después de `npm run build`)
+- desplegar: automático con Workers Builds en cada push a `main` (ver README); a mano solo en una emergencia, `npm run build && npx wrangler deploy`
+- leads: `npm run leads`
 
 ## Mapa del código
 
