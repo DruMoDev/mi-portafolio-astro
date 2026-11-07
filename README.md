@@ -1,44 +1,27 @@
-# Astro Starter Kit: Minimal
+# drumorera.com
 
-```sh
-npm create astro@latest -- --template minimal
+Web de servicios de Dru Morera (@soydruia), con la sección de guías de los vídeos. Contexto del proyecto, comandos y reglas en [AGENTS.md](AGENTS.md); producto en [PRODUCT.md](PRODUCT.md); diseños y planes en `docs/superpowers/`.
+
+## Desarrollo
+
+```bash
+bash scripts/preparar-entorno.sh   # npm ci + hooks
+npm run dev
+npm run test && npm run lint && npm run typecheck && npm run type-check && npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+`astro preview` no sirve con el adaptador de Cloudflare: para probar el build con sus bindings, `npm run build && npx wrangler dev`.
 
-## 🚀 Project Structure
+## Despliegue
 
-Inside of your Astro project, you'll see the following folders and files:
+Workers Builds de Cloudflare, conectado a este repo en el Worker `dru-portfolio`:
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- Cada push a `main` construye (`npm run build`) y despliega (`npx wrangler deploy`) en producción, drumorera.com. No hay que desplegar a mano.
+- Las ramas que no son `main` no se construyen (builds de vista previa desactivados).
+- El estado del build sale como check `Workers Builds: dru-portfolio` en cada commit de `main`.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Guías y leads
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-# mi-portafolio-astro
+- Las guías son Markdown en `src/content/guias/` y se publican en `/guias/<slug>` (enlace corto `/g/<slug>`).
+- Los emails del muro van a la D1 propia `dru-web-leads` (binding `LEADS`, jurisdicción UE), con el historial de guías vistas por persona. Esquema en `migrations/`; una migración nueva se aplica con `npx wrangler d1 migrations apply dru-web-leads --remote`.
+- Ver los leads: `npm run leads` (añade `-- --json` para exportar).
