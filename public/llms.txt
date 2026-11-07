@@ -11,6 +11,10 @@
 - [Mentoría](https://drumorera.com/#mentoria): aprender a construir con IA y agentes sobre un proyecto real propio, por videollamada. Ahora mismo con lista de espera.
 - [Colaboraciones](https://drumorera.com/#colaboraciones): vídeos cortos (TikTok, Reels, Shorts) y largos (YouTube) para marcas de tecnología, IA o productividad, con un público adulto que trabaja y quiere aprender. Más de 5.000 seguidores entre Instagram, Facebook, YouTube y TikTok.
 
+## Guías
+
+- [Guías](https://drumorera.com/guias): guías paso a paso de lo que Dru explica en sus vídeos (Claude Code, skills, prompts, webs con IA), con los comandos y prompts listos para copiar.
+
 ## Contacto
 
 - Formulario en https://drumorera.com/#contacto

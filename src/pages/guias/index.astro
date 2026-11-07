@@ -1,0 +1,281 @@
+---
+// Índice de guías (vista "Índice /guias" del prototipo 2026-11-07-guias.html): la más nueva
+// destacada, el resto en lista con las huérfanas al final y un filtro por tema en el cliente.
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import ContactModal from "../../components/ContactModal.astro";
+import { siteConfig } from "../../data/site";
+import { hasVideoSection } from "../../lib/social";
+import { minutosDeLectura } from "../../lib/guias/formato";
+import { indexJsonLd, ordenarIndice, temasDe } from "../../lib/guias/indice";
+
+const guias = await getCollection("guias");
+const { destacada, resto } = ordenarIndice(guias);
+const enOrden = destacada ? [destacada, ...resto] : resto;
+// Con un solo tema el filtro no filtra nada: no se pinta.
+const temas = temasDe(enOrden);
+const conFiltro = temas.length > 1;
+const url = new URL(Astro.url.pathname, siteConfig.url).href;
+const minutos = (g: (typeof guias)[number]) => minutosDeLectura(g.body ?? "");
+---
+
+<BaseLayout
+  title="Guías de IA y Claude Code · Dru Morera"
+  description="Guías paso a paso de lo que explico en los vídeos: Claude Code, skills, prompts y webs con IA, con todo listo para copiar."
+  jsonLd={indexJsonLd(enOrden, url)}
+>
+  <Header showVideos={hasVideoSection()} base="/" />
+  <main class="wrap indice">
+    <section class="hero">
+      <h1>Guías</h1>
+      <p>Lo que explico en los vídeos, paso a paso y con todo listo para copiar.</p>
+    </section>
+    {
+      conFiltro && (
+        <div class="filtros" role="group" aria-label="Filtrar por tema" data-filtros>
+          <button type="button" aria-pressed="true" data-tema="">
+            Todas
+          </button>
+          {temas.map((t): unknown => (
+            <button type="button" aria-pressed="false" data-tema={t}>
+              {t}
+            </button>
+          ))}
+        </div>
+      )
+    }
+    {
+      destacada && (
+        <a class="feat" href={`/guias/${destacada.id}`} data-t={destacada.data.tema}>
+          <div>
+            <small>La más nueva · {destacada.data.tema}</small>
+            <h2>{destacada.data.title}</h2>
+          </div>
+          <div>
+            <p>{destacada.data.description}</p>
+            <span class="go">Leer la guía</span>
+          </div>
+        </a>
+      )
+    }
+    {
+      resto.length > 0 && (
+        <ul class="lista" data-lista>
+          {resto.map((g): unknown => (
+            <li data-t={g.data.tema}>
+              <a class="fila" href={`/guias/${g.id}`}>
+                <span class="t">{g.data.tema}</span>
+                <b>{g.data.title}</b>
+                <span class="d">{g.data.description}</span>
+                <em>{minutos(g)} min</em>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </main>
+  <Footer />
+  <ContactModal />
+</BaseLayout>
+
+<script>
+  // Filtro por tema: oculta lo que no es del tema elegido (destacada incluida).
+  const filtros = document.querySelector<HTMLElement>("[data-filtros]");
+  const botones = [...(filtros?.querySelectorAll<HTMLButtonElement>("[data-tema]") ?? [])];
+  const items = [...document.querySelectorAll<HTMLElement>(".indice [data-t]")];
+  const lista = document.querySelector<HTMLElement>("[data-lista]");
+  botones.forEach((boton) =>
+    boton.addEventListener("click", () => {
+      const tema = boton.dataset.tema ?? "";
+      botones.forEach((b) => b.setAttribute("aria-pressed", String(b === boton)));
+      items.forEach((el) => (el.hidden = tema !== "" && el.dataset.t !== tema));
+      // Sin filas visibles, la lista no deja su línea suelta.
+      lista?.classList.toggle("vacia", !lista.querySelector("li:not([hidden])"));
+    })
+  );
+</script>
+
+<style>
+  .indice {
+    padding-bottom: 18vh;
+  }
+  .hero {
+    padding: 7vh 0 5vh;
+  }
+  h1 {
+    font-size: clamp(44px, 7vw, 88px);
+    font-weight: 550;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+  }
+  .hero p {
+    margin-top: 16px;
+    font-size: clamp(18px, 2vw, 22px);
+    line-height: 1.45;
+    color: var(--soft);
+    max-width: 40ch;
+    text-wrap: pretty;
+  }
+
+  .filtros {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 26px;
+  }
+  .filtros button {
+    cursor: pointer;
+    padding: 9px 15px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--tint);
+    font: inherit;
+    font-size: 14px;
+    color: var(--soft);
+    transition:
+      background 0.25s,
+      color 0.25s;
+  }
+  .filtros button:hover {
+    color: var(--ink);
+  }
+  .filtros button[aria-pressed="true"] {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .feat {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: end;
+    padding: clamp(26px, 4vw, 48px);
+    border-radius: 28px;
+    background: #eceffc;
+    text-decoration: none;
+    transition: transform 0.45s var(--spring);
+  }
+  .feat:hover {
+    transform: translateY(-3px);
+  }
+  .feat[hidden],
+  .lista li[hidden] {
+    display: none;
+  }
+  .feat small {
+    font-size: 14px;
+    color: #3a46a8;
+  }
+  .feat h2 {
+    margin-top: 10px;
+    font-size: clamp(30px, 4vw, 50px);
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  .feat p {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #3b3f55;
+  }
+  .feat .go {
+    margin-top: 18px;
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s;
+  }
+  .feat:hover .go {
+    background: var(--accent);
+  }
+
+  .lista {
+    margin-top: 34px;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .lista.vacia {
+    border-top: 0;
+  }
+  .fila {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr) 140px;
+    gap: 6px 28px;
+    align-items: baseline;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    transition: padding 0.35s var(--ease);
+  }
+  .fila:hover {
+    padding-left: 10px;
+  }
+  .fila .t {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 14px;
+    color: var(--soft);
+  }
+  .fila b {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 550;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    transition: color 0.2s;
+  }
+  .fila .d {
+    grid-column: 2;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--soft);
+    max-width: 60ch;
+  }
+  .fila em {
+    grid-column: 3;
+    grid-row: 1;
+    font-style: normal;
+    font-size: 14px;
+    color: var(--soft);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .fila:hover b {
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .feat {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .fila {
+      grid-template-columns: 1fr;
+    }
+    .fila .t,
+    .fila b,
+    .fila .d,
+    .fila em {
+      grid-column: 1;
+      grid-row: auto;
+      text-align: left;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .feat,
+    .fila,
+    .filtros button {
+      transition: none;
+    }
+  }
+</style>

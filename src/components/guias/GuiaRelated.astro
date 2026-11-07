@@ -1,0 +1,75 @@
+---
+// "Sigue con": guías relacionadas al final de una guía (ver relatedGuides). Sin ninguna, no se pinta.
+import type { CollectionEntry } from "astro:content";
+import { minutosDeLectura } from "../../lib/guias/formato";
+
+interface Props {
+  guias: CollectionEntry<"guias">[];
+}
+
+const { guias } = Astro.props;
+---
+
+{
+  guias.length > 0 && (
+    <section class="related" aria-labelledby="sigue-con">
+      <h2 id="sigue-con">Sigue con</h2>
+      <div class="rel-list">
+        {guias.map((g): unknown => (
+          <a href={`/guias/${g.id}`}>
+            <b>{g.data.title}</b>
+            <span>{g.data.description}</span>
+            <em>{minutosDeLectura(g.body ?? "")} min</em>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .related {
+    margin-top: 10vh;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .rel-list {
+    margin-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  b {
+    font-size: 19px;
+    font-weight: 550;
+    letter-spacing: -0.015em;
+    transition: color 0.2s;
+  }
+  span {
+    grid-column: 1;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--soft);
+  }
+  em {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-self: center;
+    font-style: normal;
+    font-size: 14px;
+    color: var(--soft);
+    white-space: nowrap;
+  }
+  a:hover b {
+    color: var(--accent);
+  }
+</style>
