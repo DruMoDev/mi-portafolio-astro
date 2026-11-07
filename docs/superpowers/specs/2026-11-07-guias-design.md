@@ -129,4 +129,4 @@ El SEO tiene que estar al nivel del resto de la web ("brutal"), y las guías tie
 - `localStorage` o cookie para el id.
 - Cómo se marca el corte del muro en el Markdown (por defecto tras el primer `##`, con override).
 - El mecanismo de despliegue (ver arriba).
-- Diseño visual de índice, guía, tarjeta del muro y bloque de servicio: se hace en una fase de diseño con Dru antes de construir, con prototipos.
+- Diseño visual: **decidido** (2026-11-07). Referencia obligatoria: `docs/superpowers/prototypes/2026-11-07-guias.html`, variante **A · Recorrido** (pasos numerados, índice lateral fijo con línea de progreso en escritorio, barra fija "Paso N de M" en móvil, cabecera de la guía alineada con la columna del contenido), más su muro, bloque de servicio, "Sigue con" y la vista **Índice /guias**. Las variantes B y C quedan descartadas.

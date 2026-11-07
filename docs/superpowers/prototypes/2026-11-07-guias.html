@@ -140,7 +140,7 @@
 
   /* ====== A: recorrido por pasos ====== */
   .A-grid { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 64px; align-items: start; }
-  .A-toc { position: sticky; top: 28px; padding-top: 6px; }
+  .A-toc { position: sticky; top: 28px; padding-top: calc(6vh + 6px); }
   .A-toc p { font-size: 13px; color: var(--soft); margin-bottom: 12px; font-variant-numeric: tabular-nums; }
   .A-toc ol { list-style: none; position: relative; display: grid; gap: 2px; }
   .A-toc ol::before { content: ""; position: absolute; left: 11px; top: 14px; bottom: 14px; width: 2px; background: var(--line); }
@@ -426,11 +426,11 @@ function related() {
 function viewA() {
   const steps = (from, to) => S.slice(from, to).map((s, k) => { const i = from + k; return `<section class="A-step" id="A-${s.id}" data-step="${i}"><header><i>${i + 1}</i><h2>${s.title}</h2></header>${body(s, i)}</section>`; }).join('');
   const toc = S.map((s, i) => `<li><a href="#A-${s.id}" data-toc="${i}"><i>${i + 1}</i>${s.short}${i >= GATE_AFTER ? `<span data-lk>${icon('lock')}</span>` : ''}</a></li>`).join('');
-  return `${hero()}
-  <div class="A-bar"><div><b data-cur>${S[0].short}</b><span>Paso <span data-n>1</span> de ${S.length}</span></div><div class="track"><i></i></div></div>
-  <div class="A-grid">
+  return `<div class="A-grid">
     <aside class="A-toc"><p>${S.length} pasos · ${G.mins} min</p><ol><span class="fill"></span>${toc}</ol></aside>
     <div>
+      ${hero()}
+      <div class="A-bar"><div><b data-cur>${S[0].short}</b><span>Paso <span data-n>1</span> de ${S.length}</span></div><div class="track"><i></i></div></div>
       ${steps(0, GATE_AFTER)}
       <div class="locked guia-cerrada">${unlockedNote}<div class="veil">${steps(GATE_AFTER, S.length)}
         <section class="A-check"><h2>Checklist rápido</h2><div class="prose" style="margin-top:14px"><ul>${CHECK.map(c => `<li>${c}</li>`).join('')}</ul></div></section>
