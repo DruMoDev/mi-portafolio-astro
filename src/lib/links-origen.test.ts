@@ -1,3 +1,4 @@
+import { runInNewContext } from "node:vm";
 import { describe, expect, it } from "vitest";
 import { origenLinks, scriptOrigenLinks } from "./links-origen";
 
@@ -28,8 +29,11 @@ describe("scriptOrigenLinks", () => {
   // El script va inline en <head>, sin imports: tiene que funcionar suelto.
   const ejecutar = (search: string) => {
     const dataset: Record<string, string> = {};
-    const fn = new Function("location", "document", scriptOrigenLinks());
-    fn({ search }, { documentElement: { dataset } });
+    runInNewContext(scriptOrigenLinks(), {
+      URLSearchParams,
+      location: { search },
+      document: { documentElement: { dataset } },
+    });
     return dataset;
   };
 
