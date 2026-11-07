@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "leads": "wrangler d1 execute dru-web-leads --remote --command \"SELECT l.email, datetime(l.created_at / 1000, 'unixepoch') AS alta, l.utm_source AS red, l.utm_campaign AS video, count(v.guide) AS guias_vistas, sum(v.count) AS visitas, group_concat(v.guide || ' (' || v.count || ')', ', ') AS guias FROM leads l LEFT JOIN visitas v ON v.lead_id = l.id GROUP BY l.id ORDER BY l.created_at\"",
     "social:sync": "node --experimental-strip-types --no-warnings scripts/sync-social.mjs && prettier --write src/data/social.json",
     "astro": "astro",
     "format": "prettier --write \"src/**/*.{ts,js,astro,json,md,css}\"",

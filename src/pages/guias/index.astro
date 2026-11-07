@@ -82,6 +82,15 @@ const minutos = (g: (typeof guias)[number]) => minutosDeLectura(g.body ?? "");
 </BaseLayout>
 
 <script>
+  import { captureUtm } from "../../lib/guias/muro";
+
+  // Quien aterriza en el índice desde un vídeo conserva su UTM hasta dejar el email en una guía.
+  try {
+    captureUtm(location.search, window.sessionStorage);
+  } catch {
+    // Sin sessionStorage (navegación privada estricta): no hay UTM que guardar.
+  }
+
   // Filtro por tema: oculta lo que no es del tema elegido (destacada incluida).
   const filtros = document.querySelector<HTMLElement>("[data-filtros]");
   const botones = [...(filtros?.querySelectorAll<HTMLButtonElement>("[data-tema]") ?? [])];
