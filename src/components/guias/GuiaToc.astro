@@ -1,0 +1,284 @@
+---
+// Recorrido de una guía (variante A del prototipo): índice lateral fijo con línea de progreso
+// en escritorio y barra fija "Paso N de M" en el móvil. Envuelve la columna del contenido para
+// que la cabecera de la guía quede alineada con ella.
+import Icon from "../Icon.astro";
+import type { PasoIndice } from "../../lib/guias/pasos";
+
+interface Props {
+  pasos: PasoIndice[];
+  minutos: number;
+}
+
+const { pasos, minutos } = Astro.props;
+const total = pasos.length;
+const [primero] = pasos;
+
+/** El candado va pegado a la última palabra: nunca se queda solo en otra línea. */
+function partir(titulo: string): [string, string] {
+  const corte = titulo.lastIndexOf(" ");
+  return corte === -1 ? ["", titulo] : [titulo.slice(0, corte + 1), titulo.slice(corte + 1)];
+}
+---
+
+<div class:list={["recorrido", { "sin-pasos": total === 0 }]}>
+  {
+    total > 0 && (
+      <aside class="toc" aria-label="Pasos de la guía">
+        <p>
+          {total} pasos · {minutos} min
+        </p>
+        <div class="lista">
+          <span class="fill" data-fill aria-hidden="true" />
+          <ol>
+            {pasos.map((p, i): unknown => (
+              <li>
+                <a href={`#${p.id}`} data-toc={i} data-titulo={p.titulo}>
+                  <i aria-hidden="true">{i + 1}</i>
+                  <span>
+                    {partir(p.titulo)[0]}
+                    <span class="nw">
+                      {partir(p.titulo)[1]}
+                      {p.cerrado && (
+                        <span class="lk" data-lk>
+                          <Icon name="lock" size={12} />
+                          <span class="sr-only">(se desbloquea con tu email)</span>
+                        </span>
+                      )}
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </aside>
+    )
+  }
+  <div class="columna">
+    <slot name="cabecera" />
+    {
+      primero && (
+        <div class="barra" data-barra aria-hidden="true">
+          <div>
+            <b data-cur>{primero.titulo}</b>
+            <span>
+              Paso <span data-n>1</span> de {total}
+            </span>
+          </div>
+          <div class="track">
+            <i data-track />
+          </div>
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</div>
+
+<script>
+  // Progreso: el paso que cruza la franja alta de la pantalla es el actual.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc]")];
+  const fill = document.querySelector<HTMLElement>("[data-fill]");
+  const track = document.querySelector<HTMLElement>("[data-track]");
+  const cur = document.querySelector<HTMLElement>("[data-cur]");
+  const num = document.querySelector<HTMLElement>("[data-n]");
+  const pasos = [...document.querySelectorAll<HTMLElement>("section.paso[data-step]")];
+
+  function marcar(i: number) {
+    links.forEach((l, k) => {
+      l.classList.toggle("on", k === i);
+      l.classList.toggle("past", k < i);
+      if (k === i) l.setAttribute("aria-current", "step");
+      else l.removeAttribute("aria-current");
+    });
+    const a = links[i];
+    if (a && fill) fill.style.height = `${String(a.offsetTop + a.offsetHeight / 2 - 14)}px`;
+    if (cur) cur.textContent = a?.dataset.titulo ?? "";
+    if (num) num.textContent = String(i + 1);
+    if (track && pasos.length) track.style.width = `${String(((i + 1) / pasos.length) * 100)}%`;
+  }
+
+  if (pasos.length) {
+    const io = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas)
+          if (e.isIntersecting) marcar(Number(e.target.getAttribute("data-step")));
+      },
+      { rootMargin: "-35% 0px -60% 0px" }
+    );
+    pasos.forEach((s) => {
+      io.observe(s);
+    });
+    marcar(0);
+  }
+</script>
+
+<style>
+  .recorrido {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+  }
+  .recorrido.sin-pasos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .toc {
+    position: sticky;
+    top: var(--header-h);
+    padding-top: calc(6vh + 6px);
+  }
+  .toc p {
+    font-size: 13px;
+    color: var(--soft);
+    margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .lista {
+    position: relative;
+  }
+  .nw {
+    white-space: nowrap;
+  }
+  .toc ol {
+    list-style: none;
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+  }
+  .lista::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 14px;
+    bottom: 14px;
+    width: 2px;
+    background: var(--line);
+  }
+  .fill {
+    position: absolute;
+    left: 11px;
+    top: 14px;
+    width: 2px;
+    height: 0;
+    background: var(--ink);
+    transition: height 0.6s var(--ease);
+  }
+  .toc a {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 7px 0;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--soft);
+    transition: color 0.3s;
+  }
+  .toc a:hover {
+    color: var(--ink);
+  }
+  .toc a i {
+    position: relative;
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    flex: none;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: inset 0 0 0 1.5px #c9cbd3;
+    display: grid;
+    place-items: center;
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 600;
+    transition:
+      background 0.35s,
+      color 0.35s,
+      box-shadow 0.35s;
+  }
+  .toc a.past i,
+  .toc a.on i {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: none;
+  }
+  .toc a.on {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .lk {
+    display: inline-flex;
+    margin-left: 8px;
+    vertical-align: -1px;
+    color: #a1a1a6;
+  }
+  /* Sin JS no hay muro, y con el email ya dado tampoco: fuera candados. */
+  :global(html:not(.js)) .lk,
+  :global(html.lead-ok) .lk {
+    display: none;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .barra {
+    display: none;
+    position: sticky;
+    top: var(--header-h);
+    z-index: 20;
+    margin: 0 -16px;
+    padding: 12px 16px 0;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .barra > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .barra span {
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .barra b {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .track {
+    height: 2px;
+    margin-top: 10px;
+    background: var(--line);
+  }
+  .track i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--ink);
+    transition: width 0.6s var(--ease);
+  }
+  @media (max-width: 900px) {
+    .recorrido {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    .toc {
+      display: none;
+    }
+    :global(html.js) .barra {
+      display: block;
+    }
+  }
+</style>
