@@ -162,6 +162,13 @@ describe("rehypeGuiaPasos", () => {
     expect(pasos(tree).map((s) => s.properties.id)).toEqual(["paso", "paso-1"]);
   });
 
+  it("un sufijo nunca choca con otro título que ya se llama así", () => {
+    const { tree } = run(guia(h2("Paso"), h2("Paso"), h2("Paso 1")), { gateAfter: 9 });
+    const ids = pasos(tree).map((s) => s.properties.id);
+    expect(new Set(ids).size).toBe(3);
+    expect(ids).toEqual(["paso", "paso-1", "paso-1-1"]);
+  });
+
   it("marca los bloques copiables", () => {
     const tree = guia(
       h2("Uno"),

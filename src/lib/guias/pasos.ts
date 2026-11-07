@@ -119,11 +119,13 @@ export function rehypeGuiaPasos() {
       return;
     }
 
-    const usados = new Map<string, number>();
+    // Cada id final se reserva, para que un sufijo ("paso-1") no choque con un título que ya se llama así.
+    const usados = new Set<string>();
     const idUnico = (base: string) => {
-      const n = usados.get(base) ?? 0;
-      usados.set(base, n + 1);
-      return n ? `${base}-${String(n)}` : base;
+      let id = base;
+      for (let n = 1; usados.has(id); n++) id = `${base}-${String(n)}`;
+      usados.add(id);
+      return id;
     };
 
     const intro = hijos.slice(0, indice);
