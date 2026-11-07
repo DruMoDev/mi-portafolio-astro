@@ -27,6 +27,15 @@ const guias = defineCollection({
     gateAfter: z.number().int().min(0).default(1),
     /** Su vídeo se retiró: se publica pero no se destaca. */
     orphan: z.boolean().default(false),
+    /** Retirada: sigue publicada (con muro) pero con aviso, fuera del índice y de Google. */
+    retirada: z
+      .object({
+        fecha: z.coerce.date(),
+        motivo: z.string(),
+        /** Slug de la guía que la sustituye. */
+        sustituta: z.string().optional(),
+      })
+      .optional(),
     /** JSON-LD HowTo en vez de Article. */
     howTo: z.boolean().default(true),
   }),

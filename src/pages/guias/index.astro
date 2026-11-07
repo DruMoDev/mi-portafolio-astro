@@ -10,8 +10,9 @@ import { siteConfig } from "../../data/site";
 import { hasVideoSection } from "../../lib/social";
 import { minutosDeLectura } from "../../lib/guias/formato";
 import { indexJsonLd, ordenarIndice, temasDe } from "../../lib/guias/indice";
+import { enUso } from "../../lib/guias/retirada";
 
-const guias = await getCollection("guias");
+const guias = (await getCollection("guias")).filter(enUso);
 const { destacada, resto } = ordenarIndice(guias);
 const enOrden = destacada ? [destacada, ...resto] : resto;
 // Con un solo tema el filtro no filtra nada: no se pinta.

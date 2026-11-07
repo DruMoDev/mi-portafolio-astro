@@ -6,6 +6,8 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
+  /** URL canónica si no es la de la propia página (una guía retirada apunta a su sustituta). */
+  canonical?: string | undefined;
   ogType?: "website" | "article" | undefined;
   /** URL absoluta o ruta de la imagen para compartir. */
   image?: string | undefined;
@@ -19,13 +21,14 @@ const {
   title = "Dru Morera · Automatizaciones, webs e IA para tu negocio",
   description = "Programo con IA desde hace cuatro años. Automatizaciones, webs, tiendas Shopify, consultoría y mentoría de IA para negocios, y colaboraciones en vídeo con @soydruia.",
   noindex = false,
+  canonical,
   ogType = "website",
   image: imagePath = "/og-image.jpg",
   imageAlt = "Dru Morera: automatizaciones, webs e IA para tu negocio",
   jsonLd = [],
 } = Astro.props;
 
-const canonicalUrl = new URL(Astro.url.pathname, siteConfig.url).href;
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, siteConfig.url).href;
 const image = new URL(imagePath, siteConfig.url).href;
 const sameAs = [
   ...Object.values(siteConfig.networks),

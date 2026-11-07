@@ -17,9 +17,11 @@ import { LEAD_KEY } from "../../lib/guias/muro";
 import { guideJsonLd } from "../../lib/guias/schema";
 import { fechaCorta, minutosDeLectura } from "../../lib/guias/formato";
 import { relatedGuides } from "../../lib/guias/related";
+import { comprobarSustitutas } from "../../lib/guias/retirada";
 
 export async function getStaticPaths() {
   const guias = await getCollection("guias");
+  comprobarSustitutas(guias);
   return guias.map((guia) => ({
     params: { slug: guia.id },
     props: { guia, relacionadas: relatedGuides(guias, guia) },
@@ -40,6 +42,10 @@ const minutos = minutosDeLectura(guia.body ?? "");
 const [video] = data.videos;
 const url = new URL(Astro.url.pathname, siteConfig.url).href;
 const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
+const { retirada } = data;
+const sustituta = retirada?.sustituta
+  ? (await getCollection("guias")).find((g) => g.id === retirada.sustituta)
+  : undefined;
 ---
 
 <BaseLayout
@@ -49,6 +55,8 @@ const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
   image={`/guias/${guia.id}/og.png`}
   imageAlt={data.title}
   jsonLd={jsonLd}
+  noindex={Boolean(retirada) && !sustituta}
+  canonical={sustituta ? `/guias/${sustituta.id}/` : undefined}
 >
   <script is:inline slot="head" define:vars={{ key: LEAD_KEY }}>
     // Antes de pintar: con JS hay muro, y si ya dejó el email no se ve ni un instante.
@@ -64,6 +72,19 @@ const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
   <main class="wrap guia">
     <GuiaToc pasos={pasos} minutos={minutos}>
       <header class="g-hero" slot="cabecera">
+        {
+          retirada && (
+            <aside class="retirada" role="note">
+              <b>
+                {sustituta
+                  ? "Hay una versión más nueva de esta guía."
+                  : "Puede que esto ya no funcione."}
+              </b>
+              <span>{`${retirada.motivo} (retirada el ${fechaCorta(retirada.fecha)}).`}</span>
+              {sustituta && <a href={`/guias/${sustituta.id}/`}>Ver «{sustituta.data.title}»</a>}
+            </aside>
+          )
+        }
         <nav class="crumbs" aria-label="Migas">
           <a href="/guias">Guías</a><span aria-hidden="true">/</span><span>{data.tema}</span>
         </nav>
@@ -159,6 +180,25 @@ const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
   .guia .g-hero {
     padding: 6vh 0 4vh;
     max-width: 760px;
+  }
+  .guia .retirada {
+    display: grid;
+    gap: 4px;
+    margin: 0 0 22px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fff7e6;
+    color: #5b4300;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .guia .retirada b {
+    font-weight: 600;
+    color: #3d2d00;
+  }
+  .guia .retirada a {
+    font-weight: 600;
+    color: inherit;
   }
   .guia .crumbs {
     font-size: 14px;
