@@ -16,7 +16,14 @@
 
 <script>
   import type { PostHogInterface } from "posthog-js";
-  import { TRACK_EVENT, linkKind, networkOf, sectionOf, type TrackProps } from "../lib/analytics";
+  import {
+    TRACK_EVENT,
+    countryProps,
+    linkKind,
+    networkOf,
+    sectionOf,
+    type TrackProps,
+  } from "../lib/analytics";
 
   // Clave pública del proyecto: está pensada para ir en el navegador.
   const KEY = "phc_rnhUdM9umN22Vk7FPNce9Z8bBqVHU7Grg7i8KyJyzzrN";
@@ -128,8 +135,14 @@
     document.querySelectorAll("main section").forEach((s) => io.observe(s));
 
     // PostHog se carga cuando la página ya está lista, para no frenarla.
+    // El país va antes de arrancar, para que ya lo lleve la primera página vista.
+    const country = () =>
+      fetch("/api/pais")
+        .then((r) => r.json())
+        .then((j: { country?: unknown }) => countryProps(j.country))
+        .catch(() => ({}));
     const load = () =>
-      import("posthog-js").then(({ default: posthog }) => {
+      Promise.all([import("posthog-js"), country()]).then(([{ default: posthog }, geo]) => {
         posthog.init(KEY, {
           api_host: "/relay",
           ui_host: "https://eu.posthog.com",
@@ -140,6 +153,10 @@
           person_profiles: "identified_only",
           disable_surveys: true,
           session_recording: { maskAllInputs: true },
+          before_send: (ev) => {
+            if (ev && !ev.properties.$geoip_country_code) Object.assign(ev.properties, geo);
+            return ev;
+          },
           loaded: (p) => {
             ph = p;
             applyChoice(storage.get(CHOICE));

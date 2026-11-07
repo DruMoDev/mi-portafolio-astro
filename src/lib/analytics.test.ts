@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { linkKind, networkOf } from "./analytics";
+import { countryProps, linkKind, networkOf } from "./analytics";
 
 const origin = "https://drumorera.com";
 
@@ -32,5 +32,23 @@ describe("networkOf", () => {
     expect(networkOf("https://www.instagram.com/soydruia")).toBe("instagram");
     expect(networkOf("https://m.youtube.com/@soydruia")).toBe("youtube");
     expect(networkOf("https://youtu.be/x")).toBe("youtube");
+  });
+});
+
+describe("countryProps", () => {
+  it("da el código y el nombre en inglés, como el GeoIP de PostHog", () => {
+    expect(countryProps("ES")).toEqual({ $geoip_country_code: "ES", $geoip_country_name: "Spain" });
+    expect(countryProps("MX")).toEqual({
+      $geoip_country_code: "MX",
+      $geoip_country_name: "Mexico",
+    });
+  });
+
+  it("ignora lo que no es un país (desconocido, Tor, basura)", () => {
+    expect(countryProps("XX")).toEqual({});
+    expect(countryProps("T1")).toEqual({});
+    expect(countryProps("es")).toEqual({});
+    expect(countryProps(undefined)).toEqual({});
+    expect(countryProps("<script>")).toEqual({});
   });
 });
