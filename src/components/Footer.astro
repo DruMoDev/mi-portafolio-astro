@@ -16,13 +16,14 @@ const links = [
 <footer class="wrap">
   <span class="me">
     Dru Morera
+    <a href="/guias">Guías</a>
     <a href="/privacidad">Privacidad</a>
     <button type="button" data-cookies>Cookies</button>
   </span>
   <nav aria-label="Redes">
     <span>{cfg.handle}</span>
     {
-      links.map((l) => (
+      links.map((l): unknown => (
         <a href={l.href} target="_blank" rel="noopener me">
           {l.label}
         </a>

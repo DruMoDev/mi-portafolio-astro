@@ -4,10 +4,13 @@ import { getPublicConfig } from "../lib/config";
 
 interface Props {
   showVideos: boolean;
+  /** Prefijo de las anclas: "" en la portada, "/" en las páginas internas. */
+  base?: "" | "/";
 }
 
-const { showVideos } = Astro.props;
+const { showVideos, base = "" } = Astro.props;
 const cfg = getPublicConfig();
+const enGuias = Astro.url.pathname.startsWith("/guias");
 ---
 
 <div class="topbar" data-topbar>
@@ -18,9 +21,12 @@ const cfg = getPublicConfig();
     </a>
     <nav aria-label="Principal">
       <div class="links">
-        <a href="#servicios">Servicios</a>
-        {showVideos && <a href="#videos">Vídeos</a>}
-        <a href="#contacto">Contacto</a>
+        <a href={`${base}#servicios`}>Servicios</a>
+        {showVideos && <a href={`${base}#videos`}>Vídeos</a>}
+        <a href="/guias" class:list={{ on: enGuias }} aria-current={enGuias ? "page" : undefined}
+          >Guías</a
+        >
+        <a href={`${base}#contacto`}>Contacto</a>
       </div>
       {
         cfg.whatsappUrl && (
@@ -35,7 +41,7 @@ const cfg = getPublicConfig();
           </a>
         )
       }
-      <a href="#contacto" class="btn-sm" data-open>
+      <a href={`${base}#contacto`} class="btn-sm" data-open>
         Contactar
         <Icon name="right" size={16} />
       </a>
@@ -121,7 +127,8 @@ const cfg = getPublicConfig();
       color 0.2s,
       background 0.2s;
   }
-  .links a:hover {
+  .links a:hover,
+  .links a.on {
     color: var(--ink);
     background: #fff;
   }

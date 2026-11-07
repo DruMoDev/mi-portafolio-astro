@@ -1,0 +1,288 @@
+---
+// Muro suave de una guía: la tarjeta "Sigue leyendo gratis" sobre la parte cerrada.
+// La guía entera va en el HTML; el difuminado solo existe con JS (`html.js`) y desaparece con
+// `html.lead-ok`, que el script del <head> pone antes de pintar si ya hay id guardado.
+// El script mueve la tarjeta y la nota de desbloqueo dentro de `.guia-cerrada`.
+import Icon from "../Icon.astro";
+---
+
+<div class="gate" data-gate hidden>
+  <form class="gate-card" novalidate>
+    <h2>Sigue leyendo gratis</h2>
+    <p>Solo te pido el email. La guía sigue justo aquí debajo y no te lo vuelvo a pedir.</p>
+    <div class="gate-form" data-campo>
+      <input
+        type="email"
+        name="email"
+        inputmode="email"
+        autocomplete="email"
+        placeholder="tu@email.com"
+        aria-label="Tu email"
+        aria-describedby="gate-err"
+        required
+      />
+      <button type="submit">Seguir leyendo</button>
+    </div>
+    <div class="gate-err" id="gate-err" role="alert"></div>
+    <p class="gate-legal">
+      Guardo tu email y qué guías lees para avisarte cuando saque cursos o guías nuevas. Sin spam.
+      <a href="/privacidad">Privacidad</a>
+    </p>
+  </form>
+</div>
+<div class="unlocked-note" data-nota tabindex="-1" hidden>
+  <i><Icon name="check" size={14} /></i>Listo, ya es tuya. No te lo volveré a pedir.
+</div>
+
+<script>
+  import { isValidEmail, readLeadId, saveLeadId } from "../../lib/guias/muro";
+
+  function almacen(): Storage | null {
+    try {
+      return window.localStorage;
+    } catch {
+      return null;
+    }
+  }
+
+  const raiz = document.documentElement;
+  const cerrada = document.querySelector<HTMLElement>(".guia-cerrada");
+  const veil = cerrada?.querySelector<HTMLElement>(".veil");
+  const gate = document.querySelector<HTMLElement>("[data-gate]");
+  const nota = document.querySelector<HTMLElement>("[data-nota]");
+  const form = gate?.querySelector("form");
+  const input = form?.querySelector("input");
+  const campo = form?.querySelector<HTMLElement>("[data-campo]");
+  const err = form?.querySelector<HTMLElement>(".gate-err");
+
+  function desbloquear() {
+    raiz.classList.add("lead-ok");
+    cerrada?.classList.add("just");
+    if (veil) veil.inert = false;
+    gate?.remove();
+    if (nota) {
+      nota.hidden = false;
+      nota.focus({ preventScroll: true });
+    }
+  }
+
+  if (readLeadId(almacen())) raiz.classList.add("lead-ok");
+
+  if (cerrada && veil && gate && nota && !raiz.classList.contains("lead-ok")) {
+    cerrada.prepend(nota);
+    cerrada.append(gate);
+    gate.hidden = false;
+    // Lo difuminado no se alcanza con el tabulador hasta desbloquear.
+    veil.inert = true;
+  } else {
+    gate?.remove();
+    nota?.remove();
+  }
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!input || !err || !campo) return;
+    const valor = input.value.trim();
+    if (!isValidEmail(valor)) {
+      err.textContent = valor
+        ? "Revisa el email, parece que le falta algo."
+        : "Escribe tu email para seguir.";
+      input.setAttribute("aria-invalid", "true");
+      campo.classList.remove("shake");
+      void campo.offsetWidth;
+      campo.classList.add("shake");
+      input.focus();
+      return;
+    }
+    // Id local provisional: la API de leads lo sustituye por el del servidor.
+    saveLeadId(almacen(), crypto.randomUUID());
+    desbloquear();
+  });
+</script>
+
+<style>
+  /* El difuminado: margen y relleno laterales para que el desenfoque se expanda dentro de la
+     caja (sin recortes en los bordes) y una máscara solo vertical para entrar y salir suave. */
+  :global(.guia-cerrada) {
+    position: relative;
+  }
+  :global(.guia-cerrada .veil) {
+    margin: 0 -48px;
+    padding: 0 48px 40px;
+    transition:
+      filter 0.9s var(--out),
+      opacity 0.9s var(--out);
+  }
+  :global(html.js:not(.lead-ok) .guia-cerrada .veil) {
+    filter: blur(8px);
+    opacity: 0.5;
+    user-select: none;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.25) 0,
+      #000 140px,
+      #000 calc(100% - 220px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.25) 0,
+      #000 140px,
+      #000 calc(100% - 220px),
+      transparent 100%
+    );
+  }
+  @media (max-width: 900px) {
+    :global(.guia-cerrada .veil) {
+      margin: 0 -16px;
+      padding: 0 16px 40px;
+    }
+  }
+
+  /* La tarjeta acompaña al lector, centrada en pantalla, mientras dure la parte cerrada. */
+  .gate {
+    position: absolute;
+    z-index: 5;
+    inset: 0;
+    padding: 40px 4px 120px;
+    pointer-events: none;
+  }
+  .gate[hidden],
+  :global(html.lead-ok) .gate {
+    display: none;
+  }
+  .gate-card {
+    pointer-events: auto;
+    position: sticky;
+    top: calc(50vh - 170px);
+    margin: 0 auto;
+    width: min(460px, 100%);
+    padding: 28px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow:
+      0 30px 70px -30px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+    animation: rise 0.7s var(--out) both;
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+  .gate-card h2 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  .gate-card p {
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--soft);
+  }
+  .gate-form {
+    margin-top: 18px;
+    display: flex;
+    gap: 8px;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--tint);
+    box-shadow: inset 0 0 0 1px transparent;
+    transition: box-shadow 0.2s;
+  }
+  .gate-form:focus-within {
+    box-shadow: inset 0 0 0 1.5px var(--accent);
+    background: #fff;
+  }
+  .gate-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 14px;
+    font-size: 16px;
+    background: transparent;
+    border: 0;
+    outline: none;
+    caret-color: var(--accent);
+  }
+  .gate-form input::placeholder {
+    color: #767680;
+  }
+  .gate-form button {
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .gate-form button:hover {
+    background: var(--accent);
+  }
+  .gate-err {
+    min-height: 20px;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #b42318;
+  }
+  .gate-card .gate-legal {
+    font-size: 12.5px;
+    line-height: 1.45;
+    margin-top: 4px;
+  }
+  .gate-legal a {
+    color: var(--soft);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .gate-legal a:hover {
+    color: var(--ink);
+  }
+  .shake {
+    animation: shake 0.4s;
+  }
+  @keyframes shake {
+    20%,
+    60% {
+      transform: translateX(-6px);
+    }
+    40%,
+    80% {
+      transform: translateX(6px);
+    }
+  }
+
+  .unlocked-note {
+    display: none;
+    margin: 0 0 22px;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: var(--ok);
+    font-weight: 600;
+    outline: none;
+  }
+  :global(.guia-cerrada.just) .unlocked-note:not([hidden]) {
+    display: flex;
+    animation: rise 0.6s var(--out) both;
+  }
+  .unlocked-note i {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--ok);
+    color: #fff;
+    display: grid;
+    place-items: center;
+  }
+  .unlocked-note i :global(svg) {
+    stroke-width: 2.5;
+  }
+</style>
