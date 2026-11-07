@@ -33,11 +33,30 @@ export function comprobarSustitutas(guias: readonly ConRetirada[]): void {
 }
 
 /**
+ * Rompe el build si la lista de retiradas que usa el sitemap (leída del texto de los ficheros)
+ * no coincide con la de la colección: así una forma rara de escribir `retirada` no se cuela.
+ */
+export function comprobarSitemap(guias: readonly ConRetirada[], delTexto: readonly string[]): void {
+  const deColeccion = guias
+    .filter((g) => !enUso(g))
+    .map((g) => g.id)
+    .sort();
+  const leidas = [...delTexto].sort();
+  if (deColeccion.join() !== leidas.join()) {
+    throw new Error(
+      `Retiradas de la colección (${deColeccion.join(", ")}) y del sitemap (${leidas.join(", ")}) no coinciden: revisa cómo está escrito \`retirada\` en el frontmatter.`
+    );
+  }
+}
+
+/**
  * Slugs de las guías retiradas a partir del texto de sus ficheros (nombre → contenido). Lo usa
  * la configuración del sitemap, que corre antes de que exista la colección.
  */
 export function slugsRetirados(ficheros: Record<string, string>): string[] {
   return Object.entries(ficheros)
-    .filter(([, texto]) => /^retirada:/m.test(texto.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? ""))
+    .filter(([, texto]) =>
+      /^["']?retirada["']?\s*:/m.test(texto.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "")
+    )
     .map(([nombre]) => nombre.replace(/\.md$/, ""));
 }

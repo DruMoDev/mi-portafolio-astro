@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { comprobarSustitutas, enUso, slugsRetirados } from "./retirada";
+import { comprobarSitemap, comprobarSustitutas, enUso, slugsRetirados } from "./retirada";
 
 const g = (id: string, retirada?: { fecha: Date; motivo: string; sustituta?: string }) => ({
   id,
@@ -51,5 +51,25 @@ describe("slugsRetirados", () => {
       "b.md": "---\ntitle: B\n---\nretirada: esto es cuerpo",
     };
     expect(slugsRetirados(ficheros)).toEqual(["a"]);
+  });
+
+  it("tolera saltos CRLF y la clave entre comillas", () => {
+    const ficheros = {
+      "a.md": "---\r\ntitle: A\r\nretirada:\r\n  motivo: x\r\n---\r\ncuerpo",
+      "b.md": '---\ntitle: B\n"retirada": { motivo: x }\n---\n',
+    };
+    expect(slugsRetirados(ficheros)).toEqual(["a", "b"]);
+  });
+});
+
+describe("comprobarSitemap", () => {
+  it("pasa si coinciden y falla si el texto no ve una retirada", () => {
+    const guias = [g("a", r()), g("b")];
+    expect(() => {
+      comprobarSitemap(guias, ["a"]);
+    }).not.toThrow();
+    expect(() => {
+      comprobarSitemap(guias, []);
+    }).toThrow(/no coinciden/);
   });
 });

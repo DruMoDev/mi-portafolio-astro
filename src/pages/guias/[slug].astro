@@ -17,23 +17,41 @@ import { LEAD_KEY } from "../../lib/guias/muro";
 import { guideJsonLd } from "../../lib/guias/schema";
 import { fechaCorta, minutosDeLectura } from "../../lib/guias/formato";
 import { relatedGuides } from "../../lib/guias/related";
-import { comprobarSustitutas } from "../../lib/guias/retirada";
+import { readdirSync, readFileSync } from "node:fs";
+import { comprobarSitemap, comprobarSustitutas, slugsRetirados } from "../../lib/guias/retirada";
 
 export async function getStaticPaths() {
   const guias = await getCollection("guias");
   comprobarSustitutas(guias);
+  // El sitemap (astro.config.mjs) saca las retiradas leyendo el texto: tiene que ver las mismas.
+  const dir = "./src/content/guias";
+  comprobarSitemap(
+    guias,
+    slugsRetirados(
+      Object.fromEntries(
+        readdirSync(dir)
+          .filter((f) => f.endsWith(".md"))
+          .map((f) => [f, readFileSync(`${dir}/${f}`, "utf8")])
+      )
+    )
+  );
   return guias.map((guia) => ({
     params: { slug: guia.id },
-    props: { guia, relacionadas: relatedGuides(guias, guia) },
+    props: {
+      guia,
+      relacionadas: relatedGuides(guias, guia),
+      sustituta: guias.find((g) => g.id === guia.data.retirada?.sustituta),
+    },
   }));
 }
 
 interface Props {
   guia: CollectionEntry<"guias">;
   relacionadas: CollectionEntry<"guias">[];
+  sustituta: CollectionEntry<"guias"> | undefined;
 }
 
-const { guia, relacionadas } = Astro.props;
+const { guia, relacionadas, sustituta } = Astro.props;
 const { data } = guia;
 const { Content, remarkPluginFrontmatter } = await render(guia);
 const pasos = leerPasos(remarkPluginFrontmatter);
@@ -43,9 +61,6 @@ const [video] = data.videos;
 const url = new URL(Astro.url.pathname, siteConfig.url).href;
 const jsonLd = guideJsonLd({ ...data, cerrada, pasos }, url);
 const { retirada } = data;
-const sustituta = retirada?.sustituta
-  ? (await getCollection("guias")).find((g) => g.id === retirada.sustituta)
-  : undefined;
 ---
 
 <BaseLayout

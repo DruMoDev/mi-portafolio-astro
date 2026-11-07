@@ -1,9 +1,10 @@
 // "Sigue con": las guías que se proponen al final de una guía.
+import { enUso, type Retirada } from "./retirada";
 
 /** Lo mínimo de una entrada de la colección para ordenarla. */
 export interface GuiaOrdenable {
   id: string;
-  data: { tema: string; updatedAt: Date; orphan: boolean; retirada?: unknown };
+  data: { tema: string; updatedAt: Date; orphan: boolean; retirada?: Retirada | undefined };
 }
 
 const masReciente = (a: GuiaOrdenable, b: GuiaOrdenable) =>
@@ -19,7 +20,7 @@ export function relatedGuides<T extends GuiaOrdenable>(
   current: GuiaOrdenable,
   n = 3
 ): T[] {
-  const candidatas = all.filter((g) => g.id !== current.id && !g.data.orphan && !g.data.retirada);
+  const candidatas = all.filter((g) => g.id !== current.id && !g.data.orphan && enUso(g));
   const mismoTema = candidatas.filter((g) => g.data.tema === current.data.tema).sort(masReciente);
   const otras = candidatas.filter((g) => g.data.tema !== current.data.tema).sort(masReciente);
   return [...mismoTema, ...otras].slice(0, n);
