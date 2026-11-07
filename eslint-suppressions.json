@@ -34,14 +34,6 @@
       "count": 1
     }
   },
-  "src/env.d.ts": {
-    "@typescript-eslint/no-empty-object-type": {
-      "count": 1
-    },
-    "@typescript-eslint/no-extraneous-class": {
-      "count": 1
-    }
-  },
   "src/lib/contact-handler.test.ts": {
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 1
