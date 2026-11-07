@@ -58,7 +58,7 @@ const networks = (Object.keys(cfg.networks) as Network[]).filter((n) => cfg.netw
       <h2 id="l-services">Servicios</h2>
       <ul class="list">
         {
-          services.map((s) => (
+          services.map((s): unknown => (
             <li>
               <a href={`/#${s.id}`}>
                 <span class="ico">
@@ -103,7 +103,7 @@ const networks = (Object.keys(cfg.networks) as Network[]).filter((n) => cfg.netw
         <section aria-labelledby="l-nets">
           <h2 id="l-nets">Redes</h2>
           <div class="nets">
-            {networks.map((n) => (
+            {networks.map((n): unknown => (
               <a href={cfg.networks[n]} target="_blank" rel="noopener me">
                 {networkNames[n]}
               </a>
