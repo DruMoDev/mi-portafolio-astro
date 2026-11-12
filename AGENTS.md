@@ -31,7 +31,7 @@ drumorera.com: la web de servicios de Dru Morera (programador freelance y creado
 - `src/lib/`: lógica pura y testeada (validación y envío de contacto, redes, configuración, analítica).
 - `src/data/`: datos editables (`site.ts`, `services.ts`, `social.json`).
 - `src/styles/`, `src/assets/`: estilos globales e imágenes.
-- `public/`: estáticos servidos tal cual (`_redirects`, `llms.txt`, `robots.txt`, iconos).
+- `public/`: estáticos servidos tal cual (`_redirects`, `robots.txt`, iconos); `llms.txt` lo genera `src/pages/llms.txt.ts`.
 - `scripts/`: preparación del entorno y sincronización de métricas.
 - `docs/superpowers/`: diseños (`specs/`), planes (`plans/`) y prototipos HTML aprobados (`prototypes/`).
 

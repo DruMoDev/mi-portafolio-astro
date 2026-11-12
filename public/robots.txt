@@ -8,10 +8,24 @@ Allow: /
 Sitemap: https://drumorera.com/sitemap-index.xml
 
 # Allow AI crawlers for better visibility in AI search engines
-User-agent: GPTBot
+# OpenAI: búsqueda de ChatGPT, visitas de usuarios y entrenamiento
+User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# Anthropic: búsqueda de Claude, visitas de usuarios y entrenamiento
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
 Allow: /
 
 User-agent: Google-Extended
@@ -20,13 +34,10 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
 User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
 Allow: /
 
 User-agent: Applebot-Extended
