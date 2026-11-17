@@ -1,10 +1,10 @@
 ---
 title: "Haz la web de tu negocio con IA (y que sea tuya)"
-description: "Cómo hacer la web de tu negocio con IA sin saber programar: diseño en Claude Design, Astro, Claude Code y Netlify gratis. Con los tres textos para copiar."
-lede: "La guía del vídeo, paso a paso: diseñas la web, Claude Code la construye con Astro y la subes gratis a Netlify. Con los tres textos que uso, listos para copiar: el prompt del diseño, el archivo con los datos del negocio y el prompt que construye la web."
+description: "Haz la web de tu negocio con IA sin saber programar: diseño en Claude Design, Claude Code la construye con Astro y la subes gratis a Netlify. Prompts listos."
+lede: "La guía del vídeo en cuatro prompts para copiar y pegar: diseñas la web, Claude Code monta el proyecto con tus datos y tus fotos, la construye con Astro y la sube a internet. Tú no tocas la terminal."
 tema: "Webs"
 publishedAt: 2026-08-01
-updatedAt: 2026-11-07
+updatedAt: 2026-11-17
 service: webs
 keyword: "WEB"
 gateAfter: 1
@@ -13,24 +13,22 @@ videos:
     url: "https://youtu.be/Wq99zKi8WhY"
 ---
 
-La diferencia con las herramientas que te hacen la web en un clic es que aquí la web es tuya de verdad: vive en tu carpeta, la subes tú a donde quieras y dentro de un año puedes cambiar un precio sin depender de nadie.
+La diferencia con las herramientas que te hacen la web en un clic es que aquí la web es tuya de verdad: vive en una carpeta de tu ordenador, la subes tú a donde quieras y dentro de un año puedes cambiar un precio sin depender de nadie.
 
-Usas tres textos. Los dos primeros los editas con lo tuyo. El tercero no se toca nunca: es el mismo para cualquier negocio.
+Y no vas a escribir ni un comando. Copias prompts, los pegas y revisas lo que sale: instalar, crear el proyecto, mover archivos y subir la web lo hace el agente.
 
-## Lo que necesitas
+Necesitas:
 
-- **Node.js**, gratis y se instala una vez en la vida. Descárgalo de [nodejs.org](https://nodejs.org/en/download), elige tu sistema operativo e instala la versión LTS dándole a todo que sí.
-- **La app de escritorio de Claude** ([claude.com/download](https://claude.com/download)), con Claude Code, que está en la pestaña **Code**. Es la parte de pago y es la que construye la web.
-- **Una cuenta de GitHub y otra de Netlify**, las dos gratis. Las necesitas al final, para subir la web.
-- **Claude Design** es opcional: si no lo tienes, el paso del diseño se hace con capturas de 2 o 3 webs que te gusten.
+- **Claude**, con Claude Design para el diseño (está en todos los planes, también el gratis) y **Claude Code** para construir la web, que es la parte de pago: no entra en el plan gratis y el más barato que lo incluye es Pro. Lo más cómodo es la app de escritorio ([claude.com/download](https://claude.com/download)), pestaña **Code**. Los prompts también deberían servirte en Codex, aunque yo los uso en Claude Code.
+- **Una cuenta de GitHub y otra de Netlify**, las dos gratis. Solo hacen falta al final, para subir la web.
 
-## Diseña primero
+## Diseña la web en Claude Design
 
-Antes de pedirle nada a la IA, decide cómo se ve la web. Es el paso que casi todo el mundo se salta, y la razón número uno de que las webs hechas con IA queden genéricas: si no le dices cómo se ve, se lo inventa, y siempre se inventa lo mismo.
+Antes de pedirle código a nadie, decide cómo se ve la web. Es el paso que casi todo el mundo se salta, y la razón número uno de que las webs hechas con IA queden genéricas: si no le dices cómo se ve, se lo inventa, y siempre se inventa lo mismo.
 
-Abre Claude Design y crea un diseño nuevo: en Claude, en la pestaña Artifacts, con la plantilla **Design**, o desde un chat eligiendo Output > Design. Pega este prompt cambiando el negocio, las secciones y la paleta por lo tuyo.
+Abre un diseño nuevo en Claude: en un chat, **Output > Design**, o en la pestaña **Artifacts** con una plantilla de Design. Pega este prompt cambiando el negocio, las secciones y la paleta por lo tuyo.
 
-> En el vídeo lo hago en claude.ai/design con la plantilla Prototype. Anthropic ha metido Claude Design dentro de Claude y esa web independiente se cierra el 14 de diciembre de 2026: el prompt sirve igual en la versión nueva.
+> En el vídeo lo hago en claude.ai/design, la web independiente de Claude Design. Anthropic la ha metido dentro de Claude y esa web cierra el 14 de diciembre de 2026: el prompt sirve igual en la versión nueva.
 
 ```prompt title="Prompt 1: el diseño (edítalo con lo tuyo)"
 Diseña la landing page de una barbería de barrio. Una sola página con scroll,
@@ -78,68 +76,59 @@ Sin fotos de stock de gente en traje sonriendo.
 No me hagas preguntas: dame ya la primera versión y la iteramos.
 ```
 
-Cuando te dé la primera versión, itera. Pídele cambios hasta que te guste de verdad: colores, orden de secciones, tipografía, que una sección sea un carrusel en móvil. Míralo también en tamaño móvil. Aquí merece la pena pasar un rato, porque esto es exactamente lo que Claude Code va a construir, y cambiarlo después en código cuesta más.
+Cuando te dé la primera versión, itera en el mismo chat hasta que te guste de verdad: colores, orden de secciones, tipografía, que una sección sea un carrusel en móvil. Míralo también en tamaño móvil. Aquí merece la pena pasar un rato, porque esto es exactamente lo que se va a construir, y cambiarlo después en código cuesta más.
 
-Cuando lo tengas, expórtalo con **Export > Export as standalone HTML**. Te descarga un único archivo HTML con todo dentro: es la referencia visual de tu web.
+Cuando lo tengas, pulsa **Export > Export as standalone HTML** (arriba a la derecha). Te descarga un único archivo HTML con todo dentro: es la referencia visual de tu web. Déjalo en Descargas, que de ahí lo coge el agente.
 
-## Crea el proyecto con Astro
+## Prepara el proyecto con tus datos y tus fotos
 
-1. Abre la app de Claude, ve a la pestaña **Code** y elige como carpeta del proyecto una carpeta nueva y vacía (por ejemplo `barberia`). Ahí vivirá tu web.
-2. Abre la terminal integrada (botón **Terminal** de la sesión, o Ctrl+`) y pega este comando:
+Abre la app de Claude, ve a la pestaña **Code**, crea una sesión nueva y elige como carpeta del proyecto una carpeta nueva y vacía (por ejemplo `barberia`). Ahí vivirá tu web.
 
-```bash title="Crea el proyecto con Astro y Tailwind"
-npm create astro@latest . -- --add tailwind
-```
+En este prompt cambia los datos de la barbería por los de tu negocio y párate un rato a completarlos: cuanto más concreto, mejor queda la web. Si algo no aplica, bórralo. Aquí no se habla de la web (ni secciones, ni colores): solo datos, por eso te vale aunque mañana cambies el diseño entero. Pon también dónde tienes las fotos del negocio.
 
-3. Te hace un par de preguntas: plantilla **minimal**, instalar dependencias **sí** y crear un repositorio git **sí**.
+```prompt title="Prompt 2: prepara el proyecto (edita los datos)"
+Prepárame en esta carpeta el proyecto de la web de mi negocio. Hazlo tú todo y no
+me pidas que ejecute nada; si necesitas mi contraseña o que acepte algo en
+pantalla, dime exactamente qué pulsar.
 
-Uso Astro porque para la web de un negocio es la mejor opción hoy: envía cero JavaScript por defecto, carga al instante incluso en un móvil con mala cobertura y Google la entiende bien. Los archivos que genera no hace falta que los entiendas.
+1. Comprueba que tengo Node.js 22 o superior (versión LTS). Si no, instálalo tú.
+2. Crea aquí un proyecto de Astro con Tailwind, plantilla minimal, con las
+   dependencias instaladas y un repositorio git. Sigue la documentación oficial
+   (https://docs.astro.build/en/install-and-setup/ y
+   https://docs.astro.build/en/guides/styling/#tailwind) y usa los flags del
+   instalador para que no se quede esperando mis respuestas. Si no puedes leer
+   esas páginas, dímelo.
+3. Busca en mi carpeta de Descargas el HTML que exporté de Claude Design (el .html
+   más reciente) y cópialo tal cual a una carpeta nueva llamada diseno. Si no lo
+   encuentras o hay dudas de cuál es, pregúntame.
+4. Copia mis fotos del negocio desde <carpeta donde tienes las fotos> a una carpeta
+   nueva llamada fotos. Si lo dejo así, pregúntame dónde están.
+5. Crea negocio.md con este contenido exacto:
 
-## Mete el diseño, tus datos y tus fotos
-
-El prompt que construye la web espera tres cosas en la carpeta del proyecto. Todo esto se lo puedes pedir a Claude en el chat.
-
-### El diseño, en `diseno/`
-
-Adjunta en el chat el HTML que exportaste y dile: «Añade este HTML exacto a una carpeta nueva llamada diseno». Sin la ñ, que a veces se lía con ella.
-
-### Tus datos, en `negocio.md`
-
-Aquí no se habla de la web: ni secciones, ni colores, ni fotos. Solo datos. Por eso el mismo archivo te vale aunque mañana cambies el diseño entero.
-
-Cambia los datos de la barbería por los de tu negocio y párate un rato a completarlo: cuanto más concreto, mejor queda la web. Si algo no aplica, bórralo; si quieres añadir algo, mejor. Luego pégalo en el chat y dile: «Crea un documento negocio.md con este contenido exacto».
-
-```markdown title="negocio.md (cámbialo por lo tuyo)"
 # negocio.md
 
-> Este es el único archivo que tienes que tocar. Borra los datos de la barbería y
-> pon los de tu negocio. No hables aquí de cómo quieres la web ni de qué secciones
-> tiene: esto son solo los datos. Cuanto más concreto seas, mejor queda la web.
-> Si algo no aplica a tu negocio, borra la sección entera.
-
 ## Identidad
-
-- **Nombre:** Barbería Nogal
-- **Qué es, en una frase:** Barbería de barrio para hombre, con cita previa, especializada en corte clásico y arreglo de barba.
-- **Desde:** 2016
-- **Ciudad / barrio:** Valencia, barrio de Ruzafa
+- Nombre: Barbería Nogal
+- Qué es, en una frase: Barbería de barrio para hombre, con cita previa,
+  especializada en corte clásico y arreglo de barba.
+- Desde: 2016
+- Ciudad / barrio: Valencia, barrio de Ruzafa
 
 ## A quién le habla
-
-Hombres de 25 a 55 años del barrio y alrededores. Van cada 3 o 4 semanas, no quieren esperar cola y valoran que siempre les atienda el mismo barbero. Muchos reservan desde el móvil, de noche, después de trabajar.
+Hombres de 25 a 55 años del barrio y alrededores. Van cada 3 o 4 semanas, no
+quieren esperar cola y valoran que siempre les atienda el mismo barbero. Muchos
+reservan desde el móvil, de noche, después de trabajar.
 
 ## Tono
-
-Cercano y directo, de tú. Nada de lenguaje corporativo ni de "excelencia y pasión por el servicio". Frases cortas. Oficio y confianza, no lujo. Sin exclamaciones y sin emojis.
+Cercano y directo, de tú. Nada de lenguaje corporativo ni de "excelencia y pasión
+por el servicio". Frases cortas. Oficio y confianza, no lujo. Sin exclamaciones y
+sin emojis.
 
 ## Qué queremos que haga el visitante
-
-**Reservar por WhatsApp.** Todo lo demás existe para que acabe pulsando ese botón.
+Reservar por WhatsApp. Todo lo demás existe para que acabe pulsando ese botón.
 
 ## Servicios
-
 | Servicio                       | Precio | Duración |
-| ------------------------------ | ------ | -------- |
 | Corte de pelo                  | 15 €   | 30 min   |
 | Corte + barba                  | 22 €   | 45 min   |
 | Arreglo de barba               | 10 €   | 20 min   |
@@ -147,52 +136,47 @@ Cercano y directo, de tú. Nada de lenguaje corporativo ni de "excelencia y pasi
 | Corte infantil (hasta 12 años) | 12 €   | 25 min   |
 
 ## Equipo
-
-- **Marcos**: fundador. 15 años de oficio. Corte clásico y degradados.
-- **Iván**: barbas y afeitado a navaja.
-- **Rubén**: degradados y diseños.
+- Marcos: fundador. 15 años de oficio. Corte clásico y degradados.
+- Iván: barbas y afeitado a navaja.
+- Rubén: degradados y diseños.
 
 ## Horario
-
 - Lunes a viernes: 9:30 a 20:00
 - Sábado: 9:30 a 14:00
 - Domingo: cerrado
 
 ## Dónde y cómo contactar
-
-- **Dirección:** Carrer de Cadis 42, 46006 Valencia
-- **Teléfono:** 960 00 00 00
-- **WhatsApp:** +34 600 000 000
-- **Email:** hola@barberianogal.es
-- **Instagram:** @barberianogal
+- Dirección: Carrer de Cadis 42, 46006 Valencia
+- Teléfono: 960 00 00 00
+- WhatsApp: +34 600 000 000
+- Email: hola@barberianogal.es
+- Instagram: @barberianogal
 
 ## Lo que nos hace distintos
-
 - Siempre te atiende el mismo barbero si quieres.
 - Cita previa de verdad: no esperas.
 - Producto propio de barba a la venta en el local.
 
 ## Reseñas
-
 - "Llevo cuatro años viniendo y nunca me han fallado un corte." (Javi R.)
 - "Pides cita y entras a la hora. Eso ya no lo hace nadie." (Dani M.)
 - "El afeitado a navaja de Iván no tiene comparación." (Sergio P.)
 
 ## Preguntas frecuentes
+- ¿Hace falta cita? Sí, trabajamos solo con cita previa. Se pide por WhatsApp.
+- ¿Se puede pagar con tarjeta? Sí, tarjeta y Bizum.
+- ¿Cortáis a niños? Sí, hasta 12 años tienen precio especial.
+- ¿Hay parking? Hay zona azul en la misma calle.
 
-- **¿Hace falta cita?** Sí, trabajamos solo con cita previa. Se pide por WhatsApp.
-- **¿Se puede pagar con tarjeta?** Sí, tarjeta y Bizum.
-- **¿Cortáis a niños?** Sí, hasta 12 años tienen precio especial.
-- **¿Hay parking?** Hay zona azul en la misma calle.
+Todavía no construyas la web. Cuando acabes, dime en pocas líneas qué has
+instalado y qué hay en diseno, fotos y negocio.md.
 ```
 
-### Tus fotos, en `fotos/`
+Revisa el resumen: que el HTML de `diseno/` sea el tuyo y que estén todas las fotos.
 
-Crea una carpeta `fotos` dentro del proyecto y mete ahí todas las fotos del negocio. Lo más fácil es hacerlo a mano desde el Finder (o el Explorador de Windows): arrastrarlas al chat a veces falla porque Claude no encuentra los archivos originales.
+## Construye la web
 
-## El prompt que construye la web
-
-Éste se pega tal cual en el chat de Claude Code, sin tocar nada.
+Éste se pega tal cual en el mismo chat, sin tocar nada: es el mismo para cualquier negocio.
 
 ```prompt title="Prompt 3: construye la web (no lo toques)"
 Eres el desarrollador de esta web. Vas a construir la landing page de un negocio
@@ -306,54 +290,66 @@ CÓMO QUIERO QUE TRABAJES
 3. Al terminar, arranca `npm run dev` y dime la URL.
 ```
 
-Antes de empezar te resume lo que ha entendido y las secciones que va a montar. Revísalo, confírmale y espera unos minutos a que construya la web entera. Te la enseña en vista previa dentro de la app. Mírala también en móvil y pídele los cambios que quieras.
+Antes de empezar te resume lo que ha entendido y las secciones que va a montar. Revísalo, confírmale y espera unos minutos a que construya la web entera. Te la enseña en el panel **Browser** de la sesión. Mírala también en móvil y pídele en el chat los cambios que quieras.
 
-Si otro día vuelves para cambiar algo y quieres verla en local, pídeselo a Claude o ejecuta en la terminal:
-
-```bash title="Ver la web en local"
-npm run dev
-```
+Si otro día vuelves y quieres verla en local, pídeselo: «arranca la web en local».
 
 ## Súbela a internet con Netlify
 
-La web se conecta a GitHub y Netlify la publica. A partir de ahí, cada cambio que hagas se publica solo.
+La web va a GitHub y Netlify la publica desde ahí. A partir de ese momento, cada cambio que subas se publica solo.
 
-1. **GitHub.** Crea tu cuenta en [github.com](https://github.com). En tu perfil, ve a Repositories > New, ponle un nombre (por ejemplo `barberia`), visibilidad **Private** y créalo.
-2. En la página del repositorio recién creado, copia el bloque de comandos «…or push an existing repository from the command line», pégalo en la terminal del proyecto y ejecútalo. Ya tienes todo tu proyecto en GitHub.
-3. **Netlify.** Entra en [netlify.com](https://www.netlify.com) (Netlify, no Netflix) e inicia sesión. Ve a **Add new project > Import an existing project**, elige **GitHub**, autoriza el acceso y selecciona tu repositorio.
-4. Deja la configuración que detecta sola (reconoce Astro) y confirma.
-5. Vuelve al chat de Claude y dile «Pushea todo a main». Sube a GitHub la web que ha construido, Netlify la publica y en un minuto la tienes en una URL pública.
+Lo único que haces tú en este paso: crear las cuentas gratis de [GitHub](https://github.com) y de [Netlify](https://www.netlify.com) (Netlify, no Netflix), iniciar sesión cuando te lo pida el agente y conectar el repositorio en Netlify. Lo demás, este prompt:
 
-> Si la web te sale como privada, cámbiala a pública en la configuración de visibilidad del proyecto en Netlify.
+```prompt title="Prompt 4: sube la web a GitHub"
+Sube este proyecto a un repositorio PRIVADO nuevo en mi cuenta de GitHub, llamado
+<nombre del repositorio>. Si lo dejo así, usa el nombre de esta carpeta.
 
-### Cómo se actualiza a partir de ahora
-
-Cada vez que cambies algo con Claude (un precio, una sección, una foto), termina diciéndole:
-
-```prompt title="Para publicar cada cambio"
-Pushea todo a main
+Hazlo tú con la CLI oficial de GitHub (gh): si no la tengo, instálala; si tengo que
+iniciar sesión, dime exactamente qué hacer y espera. Haz commit de todo lo que haya
+y súbelo a la rama main. Cuando acabes, dame el enlace del repositorio.
 ```
 
-Eso sube los cambios a GitHub, Netlify los detecta y en unos segundos están en vivo.
+Luego, en Netlify:
 
-### Tu dominio
+1. **Add new project > Import an existing project**.
+2. Elige **GitHub**, autoriza el acceso y selecciona tu repositorio.
+3. Deja la configuración que detecta sola (reconoce Astro) y confirma con **Publish**.
 
-Si es para un negocio, conecta tu dominio propio: en Netlify, **Domain management > Production domains > Add a domain**. Puedes comprarlo ahí mismo o añadir uno que ya tengas.
+En un minuto la tienes en una URL pública. Si te sale como privada, cámbiala a pública en la visibilidad del proyecto en Netlify.
 
-## Checklist rápido
+## Cambia lo que quieras cuando quieras
 
-- Node.js instalado y la pestaña Code de la app de Claude abierta en una carpeta vacía.
-- Diseño iterado hasta que te guste y exportado como HTML standalone.
-- Proyecto creado con `npm create astro@latest . -- --add tailwind`.
-- `diseno/`, `negocio.md` y `fotos/` dentro del proyecto.
-- El prompt 3 pegado sin tocar.
-- Repositorio en GitHub e importado en Netlify.
-- Cada cambio, con «pushea todo a main».
+Pídele el cambio a Claude Code en la carpeta del proyecto (un precio, una sección, una foto) y termina con:
+
+```prompt title="Para publicar cada cambio"
+Haz commit de los cambios y súbelos a main.
+```
+
+Netlify lo detecta y en unos segundos está en vivo. Para cambiar datos del negocio, lo más limpio es pedirle que actualice `negocio.md` y que la web lo refleje.
+
+**Tu dominio.** Si es para un negocio, conecta un dominio propio. Esto también es manual, porque se paga y va con tu cuenta: en Netlify, **Domain management > Production domains > Add a domain**. Puedes comprarlo ahí mismo o añadir uno que ya tengas.
+
+## Por qué así (Astro, Netlify y tres textos)
+
+- **Astro** porque para la web de un negocio es la mejor opción hoy: envía cero JavaScript por defecto, carga al instante incluso con mala cobertura y Google la entiende bien. Los archivos que genera no hace falta que los entiendas.
+- **Netlify** porque el plan Free cuesta 0 € para siempre, incluye dominio propio con SSL y publica solo cada vez que subes un cambio a GitHub.
+- **Tres textos separados**: el diseño dice cómo se ve, `negocio.md` dice qué se cuenta y el prompt 3 dice cómo se construye. Por eso puedes rehacer el diseño sin tocar tus datos, o cambiar un precio sin tocar el diseño.
+
+## Checklist
+
+- Diseño iterado en Claude Design y exportado como HTML standalone.
+- Prompt 2 con tus datos: proyecto de Astro creado con `diseno/`, `fotos/` y `negocio.md`.
+- Prompt 3 pegado sin tocar y la web revisada en móvil.
+- Repositorio privado en GitHub e importado en Netlify.
+- Cada cambio, con «haz commit y súbelo a main».
 
 ## Fuentes
 
-- [Astro: instalar y crear un proyecto](https://docs.astro.build/en/install-and-setup/)
-- [Astro: Tailwind](https://docs.astro.build/en/guides/styling/#tailwind)
-- [Claude Design: primeros pasos](https://support.claude.com/en/articles/14604416-get-started-with-claude-design)
-- [Claude Code en la app de escritorio](https://code.claude.com/docs/en/desktop)
-- [Netlify: desplegar desde un repositorio](https://docs.netlify.com/start/quickstarts/deploy-from-repository/)
+- Claude Help Center, [Get started with Claude Design](https://support.claude.com/en/articles/14604416-get-started-with-claude-design): acceso desde Output > Design y Artifacts, Export as standalone HTML, disponible en todos los planes y cierre de claude.ai/design el 14-dic-2026 (consultado el 17-nov-2026).
+- Claude, [precios](https://claude.com/pricing): Claude Code no está en Free; el plan más barato que lo incluye es Pro (consultado el 17-nov-2026).
+- Claude Code Docs, [Claude Code en la app de escritorio](https://code.claude.com/docs/en/desktop): pestaña Code, carpeta del proyecto, terminal integrada y panel Browser con el servidor de desarrollo (consultado el 17-nov-2026).
+- Astro Docs, [instalar y crear un proyecto](https://docs.astro.build/en/install-and-setup/) (Node.js 22 o superior) y el [README de create-astro](https://github.com/withastro/astro/blob/main/packages/create-astro/README.md) con los flags `--template`, `--install`, `--git`, `--add` y `--yes` (consultados el 17-nov-2026).
+- Astro Docs, [Tailwind](https://docs.astro.build/en/guides/styling/#tailwind): crea `src/styles/global.css` y hay que importarlo en el layout (consultado el 17-nov-2026).
+- Astro Docs, [desplegar en Netlify](https://docs.astro.build/en/guides/deploy/netlify/): Netlify detecta Astro y un sitio estático no necesita adaptador (consultado el 17-nov-2026).
+- GitHub CLI, [gh repo create](https://cli.github.com/manual/gh_repo_create): `--private`, `--source` y `--push` (consultado el 17-nov-2026).
+- Netlify Docs, [desplegar desde un repositorio](https://docs.netlify.com/start/quickstarts/deploy-from-repository/) y [precios](https://www.netlify.com/pricing/): plan Free a 0 € con dominio propio y SSL, proyectos privados hasta que los publicas (consultado el 17-nov-2026).

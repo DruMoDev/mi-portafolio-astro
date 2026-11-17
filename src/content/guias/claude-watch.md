@@ -1,10 +1,10 @@
 ---
 title: "Claude /watch: instalación y uso"
-description: "Cómo instalar /watch (claude-video) en Claude Code, Claude Desktop o Codex y usarlo para preguntarle a Claude por cualquier vídeo o grabación de pantalla."
-lede: "claude-video añade a Claude el comando /watch: le pasas un enlace o un archivo local y analiza subtítulos, audio y fotogramas para responder a lo que le preguntes. Así lo instalo y así lo uso."
+description: "Instala /watch (claude-video) en Claude Code o Codex copiando un prompt y pregúntale a tu IA por cualquier vídeo o grabación de pantalla."
+lede: "claude-video le da a tu agente la skill /watch: le pasas un enlace o un archivo de vídeo y responde a lo que le preguntes. Lo instala el propio agente con un prompt; tú no tocas la terminal."
 tema: "Claude Code"
 publishedAt: 2026-07-11
-updatedAt: 2026-11-07
+updatedAt: 2026-11-17
 service: automatizaciones
 keyword: "WATCH"
 gateAfter: 1
@@ -15,114 +15,115 @@ videos:
     url: "https://www.tiktok.com/@soydruia/video/7661078167397911830"
 ---
 
-`claude-video` es un proyecto abierto que añade a Claude la capacidad de analizar vídeos a partir de subtítulos, audio y fotogramas. Puedes usar una URL pública compatible o un archivo local.
+`claude-video` es un proyecto abierto que le añade a tu agente la skill `watch`: le das una URL pública o un archivo de vídeo y responde a tus preguntas sobre él, con timestamps. Aquí no escribes comandos: copias un prompt y tu agente lo instala, lo configura y lo usa.
 
-## Instálalo en Claude Code
+Funciona en **Claude Code** (terminal, pestaña Code de Claude Desktop o VS Code) y en **Codex**. No funciona en el chat de claude.ai ni en Cowork.
 
-Ejecuta estos dos comandos dentro de una sesión de Claude Code:
+## Pídele a tu agente que lo instale
 
-```text title="Instalar /watch"
-/plugin marketplace add bradautomates/claude-video
-/plugin install watch@claude-video
+En **Claude Code**, pega esto:
+
+```prompt title="Instalar /watch en Claude Code"
+Instálame el plugin "watch" del repositorio bradautomates/claude-video.
+Lee antes su README: https://github.com/bradautomates/claude-video
+Si no puedes leerlo, dímelo y te lo pego.
+
+- Hazlo tú desde tu terminal con los comandos de shell de Claude Code (claude plugin marketplace add bradautomates/claude-video y luego claude plugin install watch@claude-video), en ámbito de usuario para tenerlo en todos mis proyectos. No me pidas que ejecute nada.
+- Comprueba con claude plugin list que watch@claude-video aparece instalado.
+- Añade a tus instrucciones globales (~/.claude/CLAUDE.md) una línea: cuando te pase un enlace a un vídeo o un archivo de vídeo y te pregunte por él, usa la skill watch.
+
+Cuando acabes, dime en dos líneas qué has instalado y qué tengo que hacer para que se active en esta sesión.
 ```
 
-Si prefieres hacerlo desde la terminal normal, sin abrir Claude Code:
+En **Codex**, este:
 
-```bash title="Desde la terminal"
-claude plugin marketplace add bradautomates/claude-video
-claude plugin install watch@claude-video
+```prompt title="Instalar /watch en Codex"
+Usa $skill-installer para instalar la skill watch desde:
+https://github.com/bradautomates/claude-video/tree/main/skills/watch
+
+Hazlo tú, no me pidas que ejecute nada. Si no puedes descargarla, dímelo y te digo qué hacer.
+Después añade a tus instrucciones globales (~/.codex/AGENTS.md) una línea: cuando te pase un enlace a un vídeo o un archivo de vídeo y te pregunte por él, usa la skill watch.
+Cuando acabes, dime en dos líneas qué has instalado.
 ```
 
-Para actualizarlo más adelante:
+Lo único que haces tú: en Claude Code, escribe `/reload-plugins` en el chat o abre una sesión nueva; en Codex, si la skill no aparece, reinicia Codex.
 
-```text title="Actualizar"
-/plugin update watch@claude-video
+En cualquier otro agente compatible con Agent Skills (Cursor, Copilot…), pídele que la instale él con `npx skills add bradautomates/claude-video -g --skill watch -y` y que lo reinicies al acabar.
+
+## Tu primer vídeo
+
+Pásale el enlace y la pregunta en el mismo mensaje:
+
+```prompt title="Primer vídeo"
+Usa la skill watch con este vídeo: <URL de YouTube o ruta del archivo>
+¿Qué hook utiliza en los primeros cinco segundos?
 ```
 
-> Como viene en un plugin, en el menú de comandos te aparece como `/watch:watch`.
+La primera vez te hace unas preguntas de configuración. La importante es **cómo quieres que vea los vídeos**:
 
-## Otras formas de instalarlo
+- **Gemini** (la que recomienda el proyecto): el modelo de vídeo de Google ve el vídeo entero, con audio, y le pasa la respuesta a tu agente. Necesita una clave de [Google AI Studio](https://aistudio.google.com/apikey), que según el README es gratuita. Sacarla es lo único que haces tú, porque pide tu cuenta de Google; luego se la pegas en el chat o le pides que te abra el archivo de configuración para pegarla tú. Ojo: los vídeos de YouTube van directos a Google y los archivos locales se suben a Google y se borran tras la respuesta.
+- **Local**: saca fotogramas y transcript en tu ordenador, sin clave y sin que el vídeo salga de tu máquina. Si faltan `ffmpeg` o `yt-dlp`, la propia skill los instala (en Mac, con Homebrew).
 
-### Claude Desktop
+Si no quieres decidir ahora, elige local con detalle `balanced` y sin transcripción de respaldo: es lo más rápido para ver que funciona.
 
-1. Abre **Customize → Plugins → Add → Add marketplace → Add from a repository**.
-2. Pega `https://github.com/bradautomates/claude-video` y pulsa **Sync**.
-3. Instala **Watch** y úsalo en una sesión de **Code**.
-
-> No funciona dentro de tareas de Cowork, y tampoco en el chat de claude.ai: subir `watch.skill` como skill personalizada ya no está soportado.
-
-### Codex y otros agentes
-
-En Codex, con la CLI:
-
-```bash title="Codex"
-codex plugin marketplace add bradautomates/claude-video
-codex plugin add watch@claude-video
-```
-
-En cualquier otro agente compatible con Agent Skills:
-
-```bash title="Otros agentes"
-npx skills add bradautomates/claude-video -g --skill watch
-```
-
-## Primer uso
-
-Pásale un enlace y la pregunta en el mismo mensaje:
-
-```prompt title="Con una URL"
-/watch https://youtube.com/watch?v=... ¿qué hook utiliza en los primeros cinco segundos?
-```
-
-También admite archivos locales:
-
-```prompt title="Con un archivo local"
-/watch ~/Movies/bug.mov ¿en qué segundo falla la interfaz y qué puede estar causándolo?
-```
+En Claude Code también puedes escribir `/watch` y elegir `/watch:watch` del menú: es la misma skill.
 
 ## Pregunta por cosas concretas
 
 No le pidas «resúmelo» sin más. Pregunta por momentos, decisiones o mecanismos:
 
 ```prompt title="Solo lo que no es obvio"
-/watch [URL] dime únicamente las ideas que no sean obvias
+Usa watch con <URL> y dime únicamente las ideas que no sean obvias.
 ```
 
 ```prompt title="Cambios visuales"
-/watch [URL] ¿qué cambia visualmente durante los primeros diez segundos?
+Usa watch con <URL>: ¿qué cambia visualmente durante los primeros diez segundos?
 ```
 
 ```prompt title="Notas con timestamps"
-/watch [URL] convierte este vídeo en notas estructuradas con timestamps
+Usa watch con <URL> y conviértelo en notas estructuradas con timestamps.
 ```
 
 ```prompt title="Localizar un error"
-/watch [archivo] encuentra el momento exacto donde aparece el error
+Usa watch con <ruta de la grabación de pantalla> y encuentra el momento exacto en que aparece el error y qué puede estar causándolo.
 ```
 
 ## Vídeos largos
 
-Para ganar precisión, limita el intervalo:
+La precisión es mejor en vídeos de menos de diez minutos. En uno largo, dile el tramo:
 
-```text title="Analizar solo un tramo"
-/watch [URL] --start 2:15 --end 2:45
+```prompt title="Analizar solo un tramo"
+Usa watch con <URL> solo entre el minuto 2:15 y el 2:45 y dime qué explica ahí.
 ```
 
-Y elige el nivel de detalle con `--detail`:
+Con el motor local también puedes pedirle el nivel de detalle:
 
-- `transcript`: solo el texto.
+- `transcript`: solo el texto, sin fotogramas.
 - `efficient`: pasada visual rápida (hasta 50 fotogramas).
 - `balanced`: el análisis normal (hasta 100 fotogramas).
 - `token-burner`: sin límite de fotogramas. Gasta mucho contexto; úsalo solo en tramos cortos.
 
+Si el vídeo tiene texto en pantalla que se lee mal, pídele que suba la resolución de los fotogramas.
+
 ## Costes y límites
 
-- Si el vídeo tiene subtítulos, el transcript sale gratis.
-- Si no los tiene, tira de Whisper: en local con `whisperx` (sin clave de API) o en la nube con Groq (`GROQ_API_KEY`) u OpenAI (`OPENAI_API_KEY`). Las claves van en `~/.config/watch/.env`.
-- No todos los vídeos privados ni todas las plataformas cerradas son accesibles.
-- En vídeos largos, una ventana concreta funciona mejor que analizarlo todo.
+- Si el vídeo tiene subtítulos, el transcript sale de ahí y no cuesta nada.
+- Si no los tiene y usas el motor local, tira de Whisper: en tu ordenador con WhisperX (sin clave, unos 3 GB de disco y 8 GB de RAM) o en la nube con Groq u OpenAI (con su clave). Las claves y ajustes viven en `~/.config/watch/.env`, y de eso se encarga el agente.
+- Con Gemini no hay fallback silencioso: si falla, el agente te lo dice y te ofrece repetirlo en local.
+- No todos los vídeos privados ni todas las plataformas cerradas son accesibles. Si un vídeo es privado o no debe salir de tu ordenador, pídele que use el motor local.
+
+## Actualizarlo
+
+```prompt title="Actualizar /watch"
+Actualiza el plugin watch@claude-video a la última versión (en Claude Code, con claude plugin update watch@claude-video desde tu terminal). Hazlo tú y dime qué versión queda instalada.
+```
+
+Después, otra vez `/reload-plugins` o una sesión nueva. En Codex, pídele que actualice la skill watch desde el mismo repositorio.
 
 ## Fuentes
 
-- [Repositorio de claude-video en GitHub](https://github.com/bradautomates/claude-video)
-- [Última release](https://github.com/bradautomates/claude-video/releases/latest)
+- bradautomates, [repositorio de claude-video en GitHub](https://github.com/bradautomates/claude-video): instalación por agente, motores Gemini y local, niveles de detalle y requisitos de WhisperX (consultado el 17-nov-2026).
+- bradautomates, [CHANGELOG y release v0.3.2](https://github.com/bradautomates/claude-video/releases/latest), del 25-sep-2026: motor Gemini desde la v0.3.0 (consultado el 17-nov-2026).
+- Anthropic, [Install and manage plugins](https://code.claude.com/docs/en/discover-plugins): `claude plugin marketplace add`, `claude plugin install` en ámbito de usuario por defecto, `/reload-plugins` y nombres `/<plugin>:<skill>` (consultado el 17-nov-2026).
+- OpenAI, [Build skills](https://learn.chatgpt.com/docs/build-skills): `$skill-installer` y reinicio de Codex si la skill no aparece (consultado el 17-nov-2026).
+- Vercel Labs, [Skills CLI](https://github.com/vercel-labs/skills/blob/main/docs/commands.md): opciones `-g`, `--skill` y `-y` de `npx skills add` (consultado el 17-nov-2026).
