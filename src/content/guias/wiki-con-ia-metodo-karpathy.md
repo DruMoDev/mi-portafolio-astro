@@ -1,107 +1,94 @@
 ---
 title: "La wiki de Karpathy: haz que la IA te escriba tu segundo cerebro"
-description: "Cómo montar la LLM Wiki de Karpathy con Codex o Claude Code: el archivo llm-wiki.md, el prompt de arranque en español y cómo verla en Obsidian."
-lede: "Deja de subirle PDFs a la IA. Este es el archivo que Andrej Karpathy publicó para que tu agente te escriba y te mantenga una wiki que crece sola, y el prompt en español con el que la monto."
+description: "Monta la LLM Wiki de Karpathy con Codex o Claude Code copiando un prompt: tu agente lee su documento, crea la wiki y la usa como memoria."
+lede: "Deja de subirle PDFs a la IA. Copias un prompt y tu agente lee el documento de Andrej Karpathy, te monta una wiki y la convierte en su memoria. Sin tocar la terminal."
 tema: "IA"
 publishedAt: 2026-11-12
-updatedAt: 2026-11-12
+updatedAt: 2026-11-17
 service: automatizaciones
 keyword: "WIKI"
 gateAfter: 1
 videos: []
 ---
 
-Cuando le subes un PDF a ChatGPT, la IA lo busca desde cero en cada pregunta y no acumula nada. La idea de Karpathy es la contraria: le das a tu agente una carpeta con tus fuentes y él te escribe una wiki en markdown, con una página por tema y enlaces entre ellas, que actualiza cada vez que añades algo. Tú lees; la IA escribe y mantiene.
+Cuando le subes un PDF a ChatGPT, la IA lo busca desde cero en cada pregunta y no acumula nada. La idea de Karpathy es la contraria: tu agente te escribe una wiki con una página por tema y enlaces entre ellas, y la actualiza cada vez que le das algo nuevo. Tú lees; la IA escribe y mantiene. Aquí no vas a crear carpetas ni escribir comandos: todo lo hace tu agente.
 
-## Cómo funciona la LLM Wiki
+Necesitas **Codex** o **Claude Code**, cualquiera de los dos agentes que trabajan con archivos de tu ordenador.
 
-Karpathy lo publicó en GitHub como un "idea file", un archivo de texto pensado para pegárselo a tu agente (él cita Codex, Claude Code, OpenCode y Pi). No es una app: describe el patrón y tu agente construye los detalles contigo. Tiene tres capas:
+## Pídele a tu agente que te monte la wiki
 
-- **Fuentes en bruto** (`raw/`): artículos, PDFs, notas, imágenes. La IA las lee pero no las modifica nunca. Son tu fuente de verdad.
-- **La wiki** (`wiki/`): páginas en markdown que escribe la IA entera (resúmenes, personas, conceptos, comparaciones), con enlaces entre ellas.
-- **El esquema**: un archivo de reglas (`AGENTS.md` para Codex, `CLAUDE.md` para Claude Code) que le dice al agente cómo está organizada la wiki y qué hacer en cada operación.
-
-Y tres operaciones:
-
-- **Ingest**: metes una fuente nueva y la IA la lee, escribe su resumen y actualiza todas las páginas a las que afecta. Según Karpathy, una sola fuente puede tocar 10 o 15 páginas.
-- **Query**: le preguntas y responde a partir de la wiki, citando páginas. Lo que casi nadie hace: **las buenas respuestas se guardan como páginas nuevas**, así que cada pregunta deja la wiki más completa.
-- **Lint**: de vez en cuando le pides una revisión: contradicciones, datos que una fuente nueva ha dejado viejos, páginas huérfanas sin enlaces.
-
-Dos archivos fijos la ordenan: `index.md`, el catálogo de todas las páginas con una línea de resumen, y `log.md`, el registro de lo que se ha hecho y cuándo.
-
-La razón de fondo está en su frase: "Humans abandon wikis because the maintenance burden grows faster than the value". Las wikis se abandonan porque mantenerlas cuesta más de lo que aportan. Aquí el mantenimiento lo hace la IA.
-
-## Lo que necesitas
-
-- Un agente que trabaje con archivos de tu ordenador: **Codex** (el agente de ChatGPT) o **Claude Code**.
-- **Obsidian** (opcional, pero es lo que la hace brillar). Es gratis, también para uso comercial.
-- Una carpeta vacía para la wiki. La mía se llama `mi-wiki`.
-
-## Descarga el archivo de Karpathy
-
-Es el archivo `llm-wiki.md` de su gist público. Puedes abrirlo y copiarlo desde el navegador, o descargarlo directamente dentro de tu carpeta:
-
-```bash title="Crea la carpeta y descarga llm-wiki.md"
-mkdir -p ~/mi-wiki && cd ~/mi-wiki
-curl -L https://gist.githubusercontent.com/karpathy/442a6bf555914893e9891c11519de94f/raw -o llm-wiki.md
-```
-
-Está en inglés y no hace falta traducirlo: tu agente lo entiende igual y te contestará en español si se lo pides.
-
-## Pídele que te monte la wiki
-
-Abre Codex o Claude Code dentro de `~/mi-wiki` y pégale esto:
+Abre Codex o Claude Code y pega esto:
 
 ```prompt title="Prompt de arranque"
-Lee llm-wiki.md: es el patrón de Andrej Karpathy para una wiki personal mantenida por un LLM. Móntamela en esta carpeta:
+Lee el documento "LLM Wiki" de Andrej Karpathy: https://gist.githubusercontent.com/karpathy/442a6bf555914893e9891c11519de94f/raw
+Si no puedes leerlo entero, dímelo y te lo pego aquí.
 
-1. Crea raw/ para mis fuentes (nunca modifiques nada de raw/) y wiki/ para las páginas que escribes tú.
-2. Crea wiki/index.md (catálogo de páginas con una línea de resumen cada una, por categorías) y wiki/log.md (registro con entradas que empiecen por "## [AAAA-MM-DD] tipo | título").
-3. Escribe el esquema en AGENTS.md (si eres Codex) o en CLAUDE.md (si eres Claude Code): estructura de carpetas, formato de las páginas con enlaces [[así]] para Obsidian, y los pasos exactos de ingest, query y lint.
-4. Escribe todo en español.
+Luego móntame esa wiki en mi ordenador:
 
-Cuando acabes, enséñame el árbol de carpetas y dime en una frase cómo te paso mi primera fuente.
+- Ubicación: <carpeta donde la quieres>. Si la dejo así, créala en una carpeta llamada mi-wiki dentro de mi carpeta de usuario.
+- Haz tú todo lo que haga falta (carpetas, archivos, el esquema con las reglas de la wiki). No me pidas que ejecute nada.
+- Escríbelo todo en español y usa enlaces [[así]] entre páginas para que pueda verla en Obsidian.
+- Conviértela en mi memoria: añade a tus instrucciones globales (las que lees en cualquier carpeta) que mi wiki está ahí, que la consultes antes de responder cuando la pregunta toque algo que pueda estar en ella, y que cuando en una conversación salga algo que valga la pena conservar, lo guardes en la wiki siguiendo su esquema y me avises en una línea de qué has guardado.
+
+Cuando acabes, dime en pocas líneas dónde está, qué has creado y qué has añadido a tus instrucciones globales.
 ```
 
-Revisa el esquema que te propone: es el archivo que hace que el agente se porte como un bibliotecario disciplinado y no como un chat cualquiera. Cámbiale lo que no te encaje; Karpathy dice que se va ajustando con el uso.
+El documento está en inglés y no hace falta traducirlo. Karpathy lo escribió justo para esto: dice que es un "idea file" pensado para pasárselo a tu agente, que construye los detalles contigo.
 
-## Mete tu primera fuente
+Las instrucciones globales son las que tu agente lee siempre, trabajes donde trabajes: en Claude Code es `~/.claude/CLAUDE.md` y en Codex, `~/.codex/AGENTS.md`. Por eso la wiki deja de ser una carpeta que tienes que acordarte de abrir y pasa a ser la memoria de tu agente.
 
-Copia un artículo, un PDF o tus apuntes en `raw/` y pídeselo así:
+Si algo del esquema que te propone no te encaja, díselo en el mismo chat ("quiero una página por persona", "no guardes nada sin preguntarme"). Se va ajustando con el uso.
 
-```prompt title="Ingest"
-He añadido raw/<nombre-del-archivo>. Haz el ingest: léelo, cuéntame en 5 líneas lo más importante, escribe su página de resumen, actualiza todas las páginas de la wiki a las que afecta, el índice y el log.
+## Úsala sin pensar en ella
+
+A partir de aquí no tienes que decir "mete esto en la wiki" ni "mira en mi wiki". Trabaja normal con tu agente: cuando le cuentes algo o le pases un artículo que valga la pena, lo guardará y te avisará; cuando preguntes algo que ya está en la wiki, la consultará.
+
+Para meter algo a fondo (un PDF largo, un libro, un artículo clave), sí conviene pedirlo:
+
+```prompt title="Meter una fuente a fondo"
+Mete esto a fondo en mi wiki: guarda la fuente original, cuéntame en 5 líneas lo más importante, escribe su página de resumen y actualiza todas las páginas a las que afecta.
+
+<pega aquí el enlace o el texto, o adjunta el archivo>
 ```
 
-Karpathy prefiere meter las fuentes de una en una y leer lo que cambia, para guiar a la IA en lo que importa. Cuando tengas unas cuantas, prueba a preguntar:
+Mejor de una en una: lees lo que cambia y le corriges el rumbo si se va por donde no te interesa.
 
-```prompt title="Query"
-Usando solo la wiki, respóndeme: <tu pregunta>. Cita las páginas en las que te basas. Si la respuesta es buena, guárdala como página nueva y enlázala desde las relacionadas.
+## Pásale una revisión de vez en cuando
+
+```prompt title="Revisar la wiki"
+Revisa mi wiki: busca contradicciones entre páginas, datos que una fuente más nueva ha dejado viejos, páginas sin enlaces y conceptos que se mencionan pero no tienen página. Arregla lo que sea seguro y dime lo que necesite mi decisión.
 ```
 
-Y de vez en cuando:
+## Mírala en Obsidian (opcional)
 
-```prompt title="Lint"
-Haz un lint de la wiki: busca contradicciones entre páginas, afirmaciones que una fuente más nueva ha dejado viejas, páginas sin enlaces entrantes y conceptos que se mencionan pero no tienen página. Arregla lo que sea seguro y lístame lo que necesite mi decisión.
-```
+Este es el único paso que haces tú. [Obsidian](https://obsidian.md) es gratis.
 
-## Ábrela en Obsidian y mira el mapa
-
-1. Abre Obsidian y, en la ventana de bóvedas, elige **Open folder as vault** y selecciona `~/mi-wiki`.
+1. En la ventana de bóvedas elige **Open folder as vault** y selecciona la carpeta de tu wiki. Si no sabes dónde está, pregúntaselo a tu agente.
 2. Pulsa **Open graph view** en la barra lateral izquierda.
 
-Ese grafo es el mapa de todo lo que sabes: cada punto es una página y cada línea un enlace. Las páginas más conectadas son tus temas centrales, y los puntos sueltos son lo que el lint debería enlazar. Karpathy trabaja así: el agente abierto en un lado y Obsidian en el otro, viendo cómo la wiki cambia en tiempo real.
+Cada punto del grafo es una página y cada línea, un enlace. Lo más conectado son tus temas centrales. Karpathy trabaja así: el agente abierto a un lado y Obsidian al otro, viendo cómo cambia la wiki en tiempo real.
+
+## Cómo funciona por dentro
+
+Si te pica la curiosidad, esto es lo que te ha montado el agente siguiendo el documento:
+
+- **Fuentes** (`raw/`): lo que le das. Las lee pero no las toca nunca.
+- **La wiki** (`wiki/`): las páginas que escribe y mantiene él, más un índice (`index.md`) y un registro de cambios (`log.md`).
+- **El esquema** (`AGENTS.md` en Codex, `CLAUDE.md` en Claude Code): las reglas que hacen que se porte como un bibliotecario disciplinado y no como un chat cualquiera.
+
+La razón de fondo la da Karpathy: "Humans abandon wikis because the maintenance burden grows faster than the value". Las wikis se abandonan porque mantenerlas cuesta más de lo que aportan. Aquí el mantenimiento lo hace la IA.
 
 ## Checklist
 
-- `llm-wiki.md` en tu carpeta.
-- `raw/`, `wiki/`, `index.md`, `log.md` y el esquema (`AGENTS.md` o `CLAUDE.md`) creados.
-- Primera fuente ingerida y páginas actualizadas.
-- Una buena respuesta guardada como página nueva.
-- La carpeta abierta como bóveda en Obsidian.
+- Prompt de arranque pegado y wiki creada.
+- La wiki añadida a las instrucciones globales de tu agente.
+- Una primera fuente metida a fondo.
+- (Opcional) La carpeta abierta como bóveda en Obsidian.
 
 ## Fuentes
 
-- Andrej Karpathy, [LLM Wiki (llm-wiki.md)](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), gist público en GitHub, consultado el 12-nov-2026 (más de 5.000 estrellas ese día).
+- OpenAI, [Custom instructions with AGENTS.md](https://developers.openai.com/codex/guides/agents-md): instrucciones globales en `~/.codex/AGENTS.md` (consultado el 17-nov-2026).
+- Anthropic, [Manage Claude's memory](https://code.claude.com/docs/en/memory): instrucciones de usuario en `~/.claude/CLAUDE.md` (consultado el 17-nov-2026).
+- Andrej Karpathy, [LLM Wiki (llm-wiki.md)](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), gist público en GitHub, consultado el 17-nov-2026.
 - Obsidian, [precios](https://obsidian.md/pricing): gratis, sin licencia obligatoria para uso comercial (consultado el 12-nov-2026).
 - Obsidian Help, [Manage vaults](https://obsidian.md/help/manage-vaults) y [Graph view](https://obsidian.md/help/plugins/graph).
